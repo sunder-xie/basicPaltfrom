@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="alluser" extends="kintiger-default">
+		<action name="allUserAction" class="allUserAction">
+			<result name="SUCCESS">/platform/alluser/searchAddressBook.vm</result>
+			<result name="userManage">/platform/alluser/userInfo.vm</result>
+			<result name="toCreateUser">/platform/alluser/createUser.vm</result>
+			<result name="updateUserInfo">/platform/alluser/updateUserInfo.vm</result>
+			<result name="searchStationUser">/platform/alluser/searchStationUser.vm</result>	
+			<result name="searchAddressBookPre">/platform/alluser/searchAddressBook.vm</result>	
+			<result name="searchStationUser4Book">/platform/alluser/searchStationUser4Book.vm</result>	
+			<result name="searchAllUserInfo">/platform/alluser/searchAllUserInfo.vm</result>
+			<result name="toShowUserByOrgIdMain">/platform/alluser/selectUserByOrgMain.vm</result>
+			<result name="toViewOfUserInfo">/platform/alluser/viewOfUserInfo.vm</result>
+			
+			<result name="toCreateKunnrUser">/platform/alluser/createKunnrUser.vm</result>
+			<result name="KunnruserManage">/platform/alluser/KunnruserInfo.vm</result>
+			<result name="updateKunnrUserInfo">/platform/alluser/updateKunnrUserInfo.vm</result>
+			<result name="toViewOfKunnrUserInfo">/platform/alluser/viewOfKunnrUserInfo.vm</result>
+			<result name="rtx">/platform/alluser/rtx.vm</result>
+		</action>
+	</package>
+	<package name="alluser1" extends="struts-default,json-default">
+         		<result-types>
+			<result-type name="json"
+				class="com.kintiger.platform.framework.util.JSONResult" />
+		</result-types>
+		<action name="allUserAction1" class="allUserAction">
+			<result name="sendMailPre">/platform/alluser/sendMail.vm</result>
+			<result name="toUpdatePassPre">/platform/password/updatePassword.vm</result>
+		    <result name="warnMegs">/platform/alluser/sendMailInfo.vm</result>
+			<result name="jsonresult" type="json"></result>
+			<result name="resultMessage">/platform/common/resultMessage.vm</result>
+		   
+		</action>
+	</package>
+</struts>

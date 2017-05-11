@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+	
+	<bean id="fileAction" class="com.kintiger.platform.file.action.FileAction"
+		parent="baseAction" scope="request">
+		<property name="fileService" ref="fileService"></property>
+		<property name="eventService" ref="eventService"></property>
+		<property name="dictService" ref="dictService" />
+		<property name="wfeDownloadPath">
+			<value>${wfe.upload.filePath}</value>
+		</property>
+		<property name="imgUploadPath">
+			<value>${wfe.upload.filePath}</value>
+		</property>
+		<property name="imgUploadPathUrl">
+			<value>${wfe.upload.filePath}</value>
+		</property>
+		<property name="openOfficeHome">
+			<value>${open.office.home}</value>
+		</property>
+		<property name="pdf2swfHome">
+			<value>${pdf2swf.home}</value>
+		</property>
+		<property name="readOnlinePath">
+			<value>${read.online.path}</value>
+		</property>
+		<property name="officePath">
+			<value>${office.contract.path}</value>
+		</property>
+	</bean>
+
+	<bean id="fileService"
+		class="com.kintiger.platform.file.service.impl.FileServiceImpl">
+		<property name="fileDao" ref="fileDao" />
+	</bean>
+	
+	<bean id="fileDao" class="com.kintiger.platform.file.dao.impl.FileDaoImpl" parent="baseDao"></bean>
+	
+</beans>

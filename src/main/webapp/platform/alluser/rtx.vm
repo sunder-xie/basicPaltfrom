@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body class="easyui-layout">
+    <div data-options="region:'center',title:'通讯录',tools:'#all'">
+		<div id='all'>
+		<a href="javascript:void(0)" class="icon-collapse" onclick="collapseAll()"></a>
+		</div>
+		<ul id="orgTree" class="easyui-tree">
+		</ul>	
+	</div>
+	<div data-options="region:'east',split:true,title:'个人信息'" style="width:560px;" >
+		<form method="post" >
+			<table style="margin:auto;" width="100%" border="0" cellpadding="10" cellspacing="1">
+        			<tr>
+        				<td class="head" noWrap>用户姓名:</td>
+        				<td ><input class="easyui-validatebox"  id="userName"  readonly /></td>
+						<td class="head" noWrap>性别:</td>
+						<td>
+                        <select id="sex">
+							<option value="M"   readonly>男</option>
+							<option value="F"   readonly>女</option>
+						</select>			
+						</td>	
+					</tr>
+        			<tr>
+						<td class="head" noWrap>组织:</td>
+        				<td>
+        				<input class="easyui-validatebox"  id="orgName" readonly >
+						</td>
+						<td class="head" noWrap>岗位:</td>
+        				<td>
+							<input class="easyui-validatebox" id="stationNames" readonly >
+                            </input>
+						</td>
+        			</tr>
+					<tr>
+						<td class="head" noWrap>手机:</td>
+        				<td>
+        				<input class="easyui-validatebox"  id="busMobilephone" readonly ></td>
+						<td class="head" noWrap>办公电话:</td>
+        				<td><input class="easyui-validatebox"  id="phone" readonly ></td>
+        			</tr>
+        			<tr>
+        				<td class="head" noWrap>邮箱地址:</td>
+        				<td>
+        				<input class="easyui-validatebox"  id="email" readonly ></td>
+						<td class="head" noWrap>办公传真:</td>
+        				<td><input class="easyui-validatebox"  id="workFax" readonly ></td>	
+        			</tr>
+        			<!--<tr>
+        				<td class="head" noWrap>通信地址:</td>
+						<td colspan="3">
+							<input style="width:95%" class="easyui-validatebox"  id="address" readonly >
+						</td>
+        			</tr>-->
+		    </table>
+		</form>
+	</div> 
+</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/alluser/rtx.js"></script>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body>
+		<form method="post" target="hideFrame">
+			<div style="overflow:auto;width:280px;float:left">
+			<input class="easyui-searchbox" searcher="searchPerson"  prompt="输入名字检索" style="width:200px"></input> 
+				<input type="hidden" id="eventId" name="eventId" value="$!{eventId}" >
+				<input type="hidden" id="userIds" name="userIds"/>
+				<!--<input type="hidden" id="orgId" name="orgId" />
+				<input type="hidden" id="orgName" name="orgName" />-->
+				<ul id="orgTree" class="easyui-tree"/>
+				<div id="treeMenu" class="easyui-menu" style="width:120px;"> 
+					<div name="update">select</div>
+				</div> 
+			</div>
+			<div style="width:325px;float:right"> 
+				<table id="datagrid">  
+				</table> 
+			</div>
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+	</body>
+	<script type="text/javascript" src="$!{env.imgUrl}/js/platform/wfe/authorizeEvent/authorizeAddMain.js?T=201505211112"></script>
+</html>

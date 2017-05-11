@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+	
+	<bean id="eventAction" class="com.kintiger.platform.wfe.action.EventAction"
+		parent="baseAction" scope="request">
+		<property name="webService" ref="webService"></property>
+		<property name="eventService" ref="eventService"></property>
+		<property name="modelAttributeService" ref="modelAttributeService"></property>
+		<property name="orgService" ref="orgService"></property>
+		<property name="xmlFilePath">
+			<value>${wfe.xml.filePath}</value>
+		</property>
+		<property name="appUrl">
+			<value>${appUrl}</value>
+		</property>
+	</bean>
+	
+	<bean id="eventService"
+		class="com.kintiger.platform.wfe.service.impl.EventServiceImpl">
+		<property name="eventDao" ref="eventDao" />
+		<property name="webService" ref="webService"></property>
+		<property name="allUserService" ref="allUserService"></property>
+		<property name="transactionTemplate" ref="transactionTemplate" />
+		<property name="appUrl">
+			<value>${appUrl}</value>
+		</property>
+		<property name="imgUrl">
+			<value>${imgUrl}</value>
+		</property>
+		<property name="wfeUploadPath">
+			<value>${wfe.upload.filePath}</value>
+		</property>
+		<property name="wfeDownloadPath">
+			<value>${wfe.upload.filePath}</value>
+		</property>
+	</bean>
+	
+	<bean id="eventDao" class="com.kintiger.platform.wfe.dao.impl.EventDaoImpl" parent="baseDao"></bean>
+	
+	
+	<bean id="authorizeEventAction" class="com.kintiger.platform.wfe.action.AuthorizeEventAction" 
+		  parent="baseAction" scope="request">
+		<property name="authorizeEventService" ref="authorizeEventService"></property>
+	</bean>
+	
+	<bean id="authorizeEventService" 
+		  class="com.kintiger.platform.wfe.service.impl.AuthorizeEventServiceImpl">
+		<property name="authorizeEventDao" ref="authorizeEventDao"></property>
+	</bean>
+	
+	<bean id="authorizeEventDao" 
+		  class="com.kintiger.platform.wfe.dao.impl.AuthorizeEventDaoImpl" parent="baseDao">
+	</bean>
+	
+	
+	<bean id="processChooseAction" class="com.kintiger.platform.wfe.action.ProcessChooseAction"
+		  parent="baseAction" scope="request">
+		<property name="stationService" ref="stationService"></property>
+		<property name="modelService" ref="modelService"></property>
+		<property name="dictService" ref="dictService" />
+		<property name="modelAttributeService" ref="modelAttributeService"></property>
+	</bean>
+	
+	<bean id="modelAttributeAction" class="com.kintiger.platform.wfe.action.ModelAttributeAction"
+		  parent="baseAction" scope="request">
+		<property name="modelAttributeService" ref="modelAttributeService"></property>
+	</bean>
+	
+	<bean id="modelService" class="com.kintiger.platform.wfe.service.impl.ModelServiceImpl">
+		<property name="modelDao" ref="modelDao"></property>
+	</bean>
+	
+	<bean id="modelAttributeService" class="com.kintiger.platform.wfe.service.impl.ModelAttributeServiceImpl">
+		<property name="planAttributeDao" ref="planAttributeDao"></property>
+	</bean>
+	
+	<bean id="modelDao" class="com.kintiger.platform.wfe.dao.impl.ModelDaoImpl" parent="baseDao"></bean>
+	<bean id="planAttributeDao" class="com.kintiger.platform.wfe.dao.impl.PlanAttributeDaoImpl" parent="baseDao"></bean>
+	
+</beans>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="addresslist">
+	<typeAlias alias="addressLists"
+		type="com.kintiger.platform.addressList.pojo.AddressLists" />
+
+	<select id="searchAddressLists" parameterClass="addressLists"
+		resultClass="addressLists">
+		<include refid="global.paginationStart" /> 
+	<![CDATA[
+	select ro.org_name||'-'||po.org_name||'-'||o.org_name adgroupName,
+       o.org_id orgId,
+       o.org_name orgName,
+       s.emp_id userId,
+       s.emp_name userName,
+       s.emp_code userCode,
+       s.emp_mobile_phone empMobilePhone,
+       s.bus_mobilephone busMobilePhone,
+       s.st_mobile stMobile,
+       s.emp_email userEmail,
+       p.emp_post_name empPostName,
+       ss.station_name stationName
+  from basis.basis_tb_salesemp_info s
+  left join basis.basis_tb_org o on s.org_id = o.org_id
+  left join basis.basis_tb_org po on o.org_parent_id = po.org_id
+  left join basis.basis_tb_org ro on po.org_parent_id = ro.org_id
+  left join basis.basis_tb_emp_post p on p.emp_post_id=s.emp_post_id
+  left join basis.basis_tb_station_user u on s.emp_id=u.user_id
+  left join basis.basis_tb_stations ss on u.station_id=ss.station_id
+ where u.is_main_station ='Y'
+   and s.emp_state in ('Y','S')
+	]]>
+		<dynamic>
+			<isNotEmpty property="userCode" prepend="and">
+			<![CDATA[ s.emp_code like #userCode,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="userName" prepend="and">
+			<![CDATA[ s.emp_name like #userName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isEmpty property="bhxjFlag" prepend="and">
+			<![CDATA[ s.org_id = #orgId# ]]>
+			</isEmpty>
+			<isNotEmpty property="bhxjFlag" prepend="and">
+			<![CDATA[ s.org_id in
+       (select oo.org_id
+          from basis.basis_tb_org oo
+         start with oo.org_id =#orgId#
+        connect by nocycle prior oo.org_id = oo.org_parent_id)]]>
+			</isNotEmpty>
+			<!-- isNotEmpty property="orgIds" prepend="and"> <![CDATA[ t.org_id in 
+				]]> <iterate property="orgIds" open="(" close=")" conjunction=",">#orgIds[]# 
+				</iterate> </isNotEmpty -->
+		</dynamic>
+		<include refid="global.paginationEnd" />
+	</select>
+
+
+
+
+	<select id="searchAddressListsCount" parameterClass="addressLists"
+		resultClass="java.lang.Integer">
+	<![CDATA[
+select  count(s.emp_id) 
+  from basis.basis_tb_salesemp_info s
+  left join basis.basis_tb_org o on s.org_id = o.org_id
+  left join basis.basis_tb_emp_post p on p.emp_post_id=s.emp_post_id
+  left join basis.basis_tb_station_user u on s.emp_id=u.user_id
+  left join basis.basis_tb_stations ss on u.station_id=ss.station_id
+ where u.is_main_station ='Y'
+   and s.emp_state in ('Y','S')
+	]]>
+		<dynamic>
+			<isNotEmpty property="userCode" prepend="and">
+			<![CDATA[ s.emp_code like #userCode,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="userName" prepend="and">
+			<![CDATA[ s.emp_name like #userName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isEmpty property="bhxjFlag" prepend="and">
+			<![CDATA[ s.org_id = #orgId# ]]>
+			</isEmpty>
+			<isNotEmpty property="bhxjFlag" prepend="and">
+			<![CDATA[ s.org_id in
+       (select oo.org_id
+          from basis.basis_tb_org oo
+         start with oo.org_id =#orgId#
+        connect by nocycle prior oo.org_id = oo.org_parent_id)]]>
+			</isNotEmpty>
+			<!-- isNotEmpty property="orgIds" prepend="and"> <![CDATA[ t.org_id in 
+				]]> <iterate property="orgIds" open="(" close=")" conjunction=",">#orgIds[]# 
+				</iterate> </isNotEmpty -->
+		</dynamic>
+	</select>
+
+	<select id="getOrgName" parameterClass="java.lang.String"
+		resultClass="java.lang.String">
+	<![CDATA[
+ select  o.org_name orgName
+  from basis.basis_tb_org o
+ where o.org_id = #orgId#
+	]]>
+	</select>
+<!-- 首页通讯录 -->	
+	<select id="searchMailLists" parameterClass="java.lang.String"
+		resultClass="addressLists">
+		<![CDATA[
+	select  o.org_name orgName,   
+	       s.emp_name userName,
+	       s.emp_mobile_phone empMobilePhone,
+	       s.bus_mobilephone busMobilePhone,
+	       s.st_mobile stMobile
+	   from basis.basis_tb_salesemp_info s
+	  left join basis.basis_tb_org o on s.org_id = o.org_id
+	 where  s.emp_state in ('Y','S') 
+	 and (s.emp_name=#_parameter# 
+	 or s.emp_mobile_phone=#_parameter#
+	 or s.bus_mobilephone=#_parameter#
+	 or s.st_mobile=#_parameter# )
+		]]>
+	</select>
+</sqlMap>

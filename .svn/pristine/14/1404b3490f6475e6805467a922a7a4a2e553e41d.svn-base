@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+		<STYLE TYPE="text/css">
+			BODY {
+			background-repeat: no-repeat;
+			background-attachment: fixed;}
+		</STYLE>
+	</head>
+	<body  background="$!{env.imgUrl}/images/login/initCon.jpg" >
+		<form id="ff" method="post" target="hideFrame">
+			<div region="center" class="easyui-panel"  data-options="iconCls:'icon-edit'" >
+				<input type="hidden" id="passport" name="passport"  value="$!{passport}"/>
+				<input type="hidden" id="password" name="password" />
+			</div>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+		 <div id="updatePwd" icon="icon-save" style="padding:5px;width:400px;height:200px;">
+			<p>
+				<td class="head" noWrap>&nbsp;&nbsp;新密码<font color='red'>*</font>:</td>
+        				<td>
+        				<input class="easyui-validatebox"  type="password" id="passWd" value='' name="allUsers.passWd" data-options="required:true" validType="length[6,99]" missingMessage="请输入6位及以上的密码" invalidMessage="请输入6位及以上的密码"/>
+                            <font color='green'>请输入6位及以上的密码</font>
+				</td>
+			</p>
+			<p>
+				<td class="head" noWrap>确认密码<font color='red'>*</font>:</td>
+        				<td>
+        				<input class="easyui-validatebox" type="password" id="repassWd" value='' name="statirepassWdonId" validType="equalTo['#passWd']" invalidMessage="两次输入密码不匹配"></td>
+                            <font color='green'>请确认两次输入的密码相同</font>
+				</td>
+			</p>
+		 </div>
+		 </form>
+	</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/login/kunnrchangePassword.js"></script>
+</html>

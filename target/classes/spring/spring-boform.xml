@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+
+<bean id="boformAction" class="com.kintiger.platform.boform.action.BoformAction"
+		scope="request" parent="baseAction">
+		<property name="boformService" ref="boformService" />
+		<property name="orgService" ref="orgService" />
+		<property name="roleService" ref="roleService" />
+		<property name="stationService" ref="stationService" />
+		 <property name="bo4url">
+			<value>${bo4.reip}</value>
+		</property>
+		<property name="bo4use">
+			<value>${bo4.use}</value>
+		</property>
+		<property name="bo4pwd">
+			<value>${bo4.pwd}</value>
+		</property>
+		<property name="bo4dev">
+			<value>${bo4.dev}</value>
+		</property>
+		<property name="bo4enterp">
+			<value>${bo4.enterp}</value>
+		</property>
+	<!--	<property name="bo3url">
+			<value>${bo3.reip}</value>
+		</property>
+		<property name="bo3use">
+			<value>${bo3.use}</value>
+		</property>
+		<property name="bo3pwd">
+			<value>${bo3.pwd}</value>
+		</property>
+		<property name="bo3dev">
+			<value>${bo3.dev}</value>
+		</property>
+		<property name="bo3enterp">
+			<value>${bo3.enterp}</value>
+		</property>
+		 -->
+	</bean>
+	
+	<bean id="fineReportAction" class="com.kintiger.platform.boform.action.FineReportAction"
+		scope="request" parent="baseAction">
+		<property name="boformService" ref="boformService" />
+	</bean>
+	
+	<bean id="boformService"
+		class="com.kintiger.platform.boform.service.impl.BoformServiceImpl">
+		<property name="boformDao" ref="boformDao" />
+	</bean>
+
+	<bean id="boformDao" class="com.kintiger.platform.boform.dao.impl.BoformDaoImpl" parent="baseDao">
+	</bean>
+	
+</beans>

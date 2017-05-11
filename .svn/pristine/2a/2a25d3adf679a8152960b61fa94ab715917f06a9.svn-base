@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui", "ckeditor", "upload"])
+		#JS_ENV_VAL()
+	</head>
+	<body>
+		<form method="post" enctype="multipart/form-data" target="hideFrame">
+			<div class="easyui-panel" title="导入" data-options="collapsible:true,iconCls:'icon-edit'">
+				<table  width="100%" border="0" cellpadding="0" cellspacing="1">
+					<tr>
+						<td class="head" noWrap>附件:</td>
+						<td>
+							<input type="file" name="uploadFile" id="uploadFile" />
+						</td>
+					</tr>
+		    	</table>
+				</br>
+				<div region="south" border="false" style="text-align:right;height:30px;line-height:30px;padding-right:20px;">
+					<a class="easyui-linkbutton" icon="icon-redo" href="javascript:importData()">导入</a>
+				</div>
+            </div>
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+	</body>
+	<script type="text/javascript" src="$!{env.imgUrl}/js/platform/account/importFinancialDocNum.js"></script>
+</html>

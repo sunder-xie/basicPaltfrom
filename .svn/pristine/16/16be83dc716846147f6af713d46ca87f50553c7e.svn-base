@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="conpoint" extends="kintiger-default">
+		<default-interceptor-ref name="kintigerInterceptor" />
+		<action name="conpoint" class="conpointAction">
+			<result name="searchConpoint">/platform/conpoint/searchConpoint.vm</result>
+			<result name="foraddconpoing">/platform/conpoint/createConpoint.vm</result> 
+		  <!--   <result name="foraddconpoing">/platform/conpoint/jqueryUitest.vm</result>  -->
+			<result name="searchRole4Config">/platform/role/searchRole4Config.vm</result>
+			<result name="formodify">/platform/conpoint/updateConpoint.vm</result>
+			<result name="searchRoleConpoint">/platform/conpoint/searchRoleConpoint.vm</result>
+			<result name="createPrepare">/platform/conpoint/createRoleConpoint.vm</result>
+			<result name="updatePrepare">/platform/conpoint/updateRoleConpoint.vm</result>
+
+		</action>
+
+	</package>
+</struts>

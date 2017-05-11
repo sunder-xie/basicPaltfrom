@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="evtstatisticsAction" extends="kintiger-default">
+		<action name="evtstatisticsAction" class="evtstatisticsAction">
+			<result name="toSearchOverTimeEvtDtl">/platform/evtstatistics/searchOverTimeEvtDtl.vm</result>
+			<result name="toSearchOverTimeEvt">/platform/evtstatistics/searchOverTimeEvt.vm</result>
+			<result name="toSearchEventModel">/platform/evtstatistics/searchEventModel.vm</result>
+			<result name="toSearchEvent">/platform/evtstatistics/searchEvent.vm</result>
+			<result name="toSearchEventModelHr">/platform/evtstatistics/searchEventModelHr.vm</result>
+			<result name="toSearchEventModelHrDetail">/platform/evtstatistics/searchEventModelHrDetail.vm</result>
+			<result name="toSearchHrOverTimeEvtDtl">/platform/evtstatistics/searchHrOverTimeEvtDtl.vm</result>
+		</action>
+	</package>
+	
+</struts>

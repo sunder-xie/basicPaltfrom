@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<body>
+		<form>
+			<div region="center" class="easyui-panel" title="人员信息">
+			<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="8">
+				<tr>
+					<td valign="top">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0" >
+							<tr>
+								<td colspan="2">
+									<table width="100%" border="0" cellpadding="0" cellspacing="1" class=outer>
+										<tr>
+    										<td class="head1" noWrap style="text-align: right" width="110">
+    											用户ID
+    										</td>
+											<td class="even" noWrap>
+												$!{allUsers.loginId}
+											
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head1" noWrap style="text-align: right">
+    											用户姓名
+    										</td>
+											<td class="even" noWrap>
+												$!{allUsers.userName}
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head1" noWrap style="text-align: right">
+    											显示名
+    										</td>
+											<td class="even" noWrap>
+												$!{allUsers.userShowName}
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head1" noWrap style="text-align: right">
+    											身份证号码
+    										</td>
+											<td class="even" noWrap>
+												$!{allUsers.idCard}
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head1" noWrap style="text-align: right">
+    											办公电话
+    										</td>
+											<td class="even" noWrap>
+												$!{allUsers.phone}
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head1" noWrap style="text-align: right">
+    											办公传真
+    										</td>
+											<td class="even" noWrap>
+												$!{allUsers.workFax}
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head1" noWrap style="text-align: right">
+    											手机
+    										</td>
+											<td class="even" noWrap>
+												$!{allUsers.busMobilephone}
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head1" noWrap style="text-align: right">
+    											宅电
+    										</td>
+											<td class="even" noWrap>
+												$!{allUsers.homePhone}
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head1" noWrap style="text-align: right">
+    											开始工作时间
+    										</td>
+											<td class="even" noWrap>
+												$!{allUsers.startDate}
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head1" noWrap style="text-align: right">
+    											通信地址
+    										</td>
+											<td class="even" noWrap>
+												$!{allUsers.address}
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head1" noWrap style="text-align: right">
+    											邮箱地址
+    										</td>
+											<td class="even" noWrap>
+												$!{allUsers.email}
+											</td>
+                                    	</tr>
+										
+										<tr>
+    										<td class="head1" noWrap style="text-align: right">
+    											性别
+    										</td>
+											<td class="even" noWrap>
+												#if($!{allUsers.sex} == 'M')
+													男
+												#else
+													女
+												#end
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head1" noWrap style="text-align: right">
+    											岗位
+    										</td>
+											<td class="even" noWrap>
+												$!{allUsers.posName}
+											</td>
+                                    	</tr>
+										 <!--<tr>
+											<td class="head1" noWrap  style="text-align: right">
+												兼职职位
+											</td>
+											<td class="even" noWrap>
+												$!{imgPosStr}
+                                           </td>
+										 </tr>-->
+										<tr>
+    										<td class="head1" noWrap style="text-align: right">
+    											是否开通邮箱
+    										</td>
+											<td class="even" noWrap>
+												#if($!{allUsers.haveMail} == '1')
+													是
+												#else
+													否
+												#end
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head1" noWrap style="text-align: right">
+    											组织
+    										</td>
+											<td class="even" noWrap>
+												<textarea type='text' cols="30" id="orgStr">$!{orgStr}</textarea>
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head1" noWrap style="text-align: right">
+    											备注
+    										</td>
+											<td class="even" noWrap>
+												$!{allUsers.remark}
+											</td>
+                                    	</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			</div>
+		</form>
+	</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body class="easyui-layout">	
+		<form method="post"  target="hideFrame"> 
+		 <div id="p_add" region="center" class="easyui-panel"
+			title="字典创建"
+			data-options="iconCls:'icon-edit'">
+				<input type="hidden" id="dictTypeId" name="cmsTbDict.dictTypeId" value="$!{dictTypeId}" />
+									<table width="100%" border="0" cellspacing="1" >
+                                        <tr>
+											<td  class="head" nowrap>
+												名称<font color='red'>*</font>：
+											</td>
+											<td  nowrap>
+												<input id="itemName" name="cmsTbDict.itemName" class="easyui-validatebox"
+								data-options="required:true" validType="length[0,70]"/>
+											</td>
+                                         </tr>
+                                        <tr>
+                                            <td  class="head" nowrap>
+												值<font color='red'>*</font>：
+											</td>
+											<td  nowrap>
+												<input id="itemValue" name="cmsTbDict.itemValue" class="easyui-validatebox"
+								data-options="required:true" validType="length[0,1000]"/>
+											</td>
+                                        </tr>
+										<tr>
+											<td  class="head" nowrap>
+												描述：
+											</td>
+											<td  nowrap >
+												<input class="easyui-validatebox" validType="length[0,100]" name="cmsTbDict.itemDescription" id="itemDescription" />
+											</td>
+										</tr>
+										<tr>
+											<td  class="head" nowrap>
+												备注：
+											</td>
+											<td nowrap >
+												 <textarea class="easyui-validatebox" name="cmsTbDict.remark" id="remark" cols ="26" rows = "2" validType="length[0,200]"></textarea>
+											</td>
+										</tr>
+									</table>
+						  </div>
+		<div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+				<a class="easyui-linkbutton" icon="icon-ok" href="javascript:save_dict()">确定</a>
+				<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:cencel()">取消</a>
+			</div>
+	
+		 </form>
+			<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+	</body>
+
+       <script type="text/javascript" src="$!{env.imgUrl}/js/platform/dict/dictCreate.js"></script>
+
+</html>

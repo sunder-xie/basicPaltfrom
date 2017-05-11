@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+
+	<body  >
+		<form id="from2"  method="post">
+			<input type="hidden" id="sids" name="sids"/>
+			
+						<table width="100%" border="0" cellspacing="0" cellpadding="0" >
+							<tr>
+								<td colspan="3" >
+                                    <div region="center" class="easyui-panel" title="新增角色" data-options="iconCls:'icon-edit'">
+									<table width="100%" border="0" cellpadding="0" cellspacing="1" >
+    									<tr>
+    										<td class="head" noWrap style="text-align: center">
+    											选择角色
+    										</td>
+											<td class="even" noWrap>
+										<select  id="roleIds" name="roleIds"  style="width:250px;" >
+                                        </select>
+										
+											</td>
+											<td class="even" noWrap>
+												<a href="javascript:selectRole()" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存新增角色</a>
+											</td>
+                                    	</tr>
+									</table>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3" class="home_title">
+									                                    <div region="center" class="easyui-panel" title="查询条件" data-options="iconCls:'icon-edit'">
+																		<table width="100%" border="0" cellpadding="0" cellspacing="1" >
+    									<tr>
+    										<td class="head" noWrap style="text-align: center">
+    											角色编号
+    										</td>
+                                     		<td class="even" noWrap >
+    											<input type="text" class="easyui-validatebox" name="roleId" id="roleId" />
+    			    						</td>
+    										<td class="head" noWrap style="text-align: center">
+    											角色名称
+    										</td>
+											<td class="even" noWrap>
+												<input type='text' class="easyui-validatebox" id='roleName' name="roleName" />
+												<a href="javascript:search()"   class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
+											</td>
+                                    	</tr>
+									</table>
+																		
+																		</div>
+								</td>
+							</tr>
+						</table>
+				
+              <table id="datagridRole"></table>
+
+			<input type='hidden' id='roleList' name='roleList'></input>
+			<input type='hidden' id='stationId' name='stationId' value='$!{stationId}' ></input>
+			<div id="toolbar" class="datagrid-toolbar" >
+		<input id="ss" class="easyui-searchbox" searcher="searcher" prompt="请填写查询条件" menu="#mm" style="width:300px"></input>		
+		</div>
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+	</body>
+</html>
+<script type="text/javascript">
+var stationId='$!{stationId}'
+</script>
+	<script type="text/javascript" src="$!{env.imgUrl}/js/platform/role/searchSelectedRole.js"></script>

@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui", "ckeditor", "upload"])
+		#JS_ENV_VAL()	
+	</head>
+	<body>
+		<form id="ff" method="post" enctype="multipart/form-data" target="hideFrame">
+		<div class="easyui-panel" title="事务提交" data-options="collapsible:true,collapsed:false,iconCls:'icon-edit'">
+			<table width="80%" border="0" cellpadding="0" cellspacing="1">
+				<tr>
+					<td class="head" noWrap style="text-align: right">
+    					&nbsp;标题
+    				</td>
+					<td noWrap>
+						<input style="width:364px;" class="easyui-validatebox" type='text' id='eventTitle' name="title" data-options ="required:true, missingMessage:'不能为空'"/>
+					</td>				
+    				<td class="head" noWrap style="text-align: right">
+    					提交者
+    				</td>
+					<td noWrap>
+						<input class="easyui-validatebox" type='text' value='$!{userName}' readonly />
+						<input type='hidden' id='curUserId' name="userId" value='$!{userId}' />
+					</td>
+					<td class="head" noWrap style="text-align: right">
+    					选择流程
+    				</td>
+					<td noWrap>
+						<input style="width:100px;" id='modelId' name='key' readonly/>
+					</td>
+					
+                </tr>
+				<tr>
+  ##   				<td class="head" noWrap style="text-align: right">
+  ##  					内容
+  ##  				</td>
+					<td id="addContent" noWrap></td>
+                 </tr>
+
+				
+				<tr>
+    				<td class="head" noWrap style="text-align: right">
+    					审批意见
+    				</td>
+					<td noWrap>
+						<textarea  id="editor1" name="editor1" rows="2" cols="49"></textarea>
+					</td>  
+						<td class="head" noWrap style="text-align: right">
+    					附件上传
+    				</td>
+					<td noWrap>
+						<div id="input">
+							<input class="easyui-validatebox" name="upload" id="file0" type="file" value="添加附件" onchange="addFile()" />
+							<font size="2.5" color="red">继续点击添加多个附件</font>
+						</div>
+						<div id="_file"></div>
+					</td>
+				</tr>
+				<tr id="nextinfolist">
+
+					<td class="head" noWrap style="text-align:right">
+						处理人
+					</td>
+					<td noWrap>
+						<input id="nextUserName" name="nextUserName" class="easyui-validatebox" type="text" readonly/>
+						&nbsp;<a class="easyui-linkbutton" href="javascript:createProEventReader();">选择</a>
+						&nbsp;&nbsp;<a class="easyui-linkbutton" href="javascript:searchLinkMan();">常用联系人</a>
+						<input type="hidden" id="nextUserId" name="nextUserId" />
+						<input type="hidden" id="nextOrgId" name="nextOrgId" />
+					</td> 
+				</tr> 
+				<tr>
+				</tr>
+		    </table>
+		    </div>
+		    
+			<div class="easyui-panel" title="计划申报填写" data-options="collapsible:true,collapsed:false,iconCls:'icon-edit'">
+			<table width="100%">
+				<tr>
+					<td>
+						<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+							<tr>
+								<td class="head" align="left">
+									事务类别：
+								</td>
+								<td colspan="3" class="even">
+									<input id="planTypeName" name="planAttId" data-options ="required:true"/>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td align="center">
+						<div id="result"/>	
+					</td>
+				</tr>
+			</table>
+			</div>
+			<input type='hidden' id='eventContent' name='eventContent' />			
+		
+		
+		<div region="south" border="false" style="text-align:center;height:30px;line-height:30px;">
+		    <a class="easyui-linkbutton" icon="icon-email_go" href="javascript:cc()">抄送</a>
+			<a class="easyui-linkbutton" icon="icon-ok" href="javascript:saveXML()">提交</a>
+			<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:reset()">取消</a>
+		</div>
+		
+		<input type="hidden" name="userList" id="userList"  />
+		<input type="hidden" name="userNameList" id="userNameList"  />
+		<input type="hidden" id="modelKey" name="modelKey"  />
+		<input type="hidden" id="modelValues" name="modelValues"  />
+		<input type="hidden" id="memo" name="memo" />
+		<input type="hidden" id="xmlTemp_FileName" name="xmlTemp_FileName" value="$!{xmlTemp_FileName}" />
+		<input type="hidden" id="projectId" name="projectId" />
+		<input type="hidden" id="ccList" name="ccList">
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+		<div id="maintEvent"/>
+	</body>
+	<script type="text/javascript" src="$!{env.imgUrl}/js/platform/wfe/event/createEvent.js"></script>
+	##<script type="text/javascript">
+	##	var editor = CKEDITOR.replace('editor2');
+	##	var flag = false;
+   ## </script>
+</html>

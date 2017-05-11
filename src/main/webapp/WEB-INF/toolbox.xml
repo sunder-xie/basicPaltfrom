@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="GB2312"?>
+<toolbox>
+	<tool>
+		<key>dateUtil</key>
+		<scope>application</scope>
+		<class>com.kintiger.platform.framework.util.DateUtil</class>
+	</tool>
+	<tool>
+		<key>stringUtil</key>
+		<scope>application</scope>
+		<class>org.apache.commons.lang.StringUtils</class>
+	</tool>
+	<tool>
+		<key>countUtil</key>
+		<scope>application</scope>
+		<class>com.kintiger.platform.framework.content.listener.OnlineCounter
+		</class>
+	</tool>
+	<tool>
+		<key>velocityMath</key>
+		<scope>application</scope>
+		<class>org.apache.velocity.tools.generic.MathTool</class>
+	</tool>
+	<tool>
+		<key>date</key>
+		<scope>application</scope>
+		<class>org.apache.velocity.tools.generic.DateTool</class>
+	</tool>
+</toolbox>

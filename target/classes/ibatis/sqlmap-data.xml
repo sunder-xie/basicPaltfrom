@@ -1,0 +1,750 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="data">
+	<typeAlias alias="tableInfo" type="com.kintiger.platform.data.pojo.TableInfo" />
+	<typeAlias alias="allUser" type="com.kintiger.platform.allUser.pojo.AllUsers" />
+	<typeAlias alias="tableAuthorization" type="com.kintiger.platform.data.pojo.TableAuthorization" />
+	<typeAlias alias="tableColumn" type="com.kintiger.platform.data.pojo.TableColumn" />
+	
+	<select id="getCountByUserName" parameterClass="java.lang.String" resultClass="java.lang.Integer">
+		<![CDATA[
+			select count(1) from all_users t where t.username = upper(#userName#) 
+		]]>
+	</select>
+	
+	<select id="getCountByTabelName" parameterClass="java.lang.String" resultClass="java.lang.Integer">
+		<![CDATA[
+			select count(1) from all_tables t where t.owner || '.' || t.table_name = upper(#tableName#)
+		]]>
+	</select>
+	
+	<update id="createTable" parameterClass="tableInfo">
+		<dynamic>
+			<![CDATA[
+				create table $tableName$
+			  		(
+			]]>
+			<isNotEmpty property="fieldDetail1" prepend="">
+				<![CDATA[ $fieldDetail1$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail2" prepend=",">
+				<![CDATA[ $fieldDetail2$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail3" prepend=",">
+				<![CDATA[ $fieldDetail3$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail4" prepend=",">
+				<![CDATA[ $fieldDetail4$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail5" prepend=",">
+				<![CDATA[ $fieldDetail5$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail6" prepend=",">
+				<![CDATA[ $fieldDetail6$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail7" prepend=",">
+				<![CDATA[ $fieldDetail7$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail8" prepend=",">
+				<![CDATA[ $fieldDetail8$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail9" prepend=",">
+				<![CDATA[ $fieldDetail9$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail10" prepend=",">
+				<![CDATA[ $fieldDetail10$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail11" prepend=",">
+				<![CDATA[ $fieldDetail11$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail12" prepend=",">
+				<![CDATA[ $fieldDetail12$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail13" prepend=",">
+				<![CDATA[ $fieldDetail13$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail14" prepend=",">
+				<![CDATA[ $fieldDetail14$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail15" prepend=",">
+				<![CDATA[ $fieldDetail15$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail16" prepend=",">
+				<![CDATA[ $fieldDetail16$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail17" prepend=",">
+				<![CDATA[ $fieldDetail17$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail18" prepend=",">
+				<![CDATA[ $fieldDetail18$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail19" prepend=",">
+				<![CDATA[ $fieldDetail19$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail20" prepend=",">
+				<![CDATA[ $fieldDetail20$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail21" prepend=",">
+				<![CDATA[ $fieldDetail21$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail22" prepend=",">
+				<![CDATA[ $fieldDetail22$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail23" prepend=",">
+				<![CDATA[ $fieldDetail23$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail24" prepend=",">
+				<![CDATA[ $fieldDetail24$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail25" prepend=",">
+				<![CDATA[ $fieldDetail25$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail26" prepend=",">
+				<![CDATA[ $fieldDetail26$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail27" prepend=",">
+				<![CDATA[ $fieldDetail27$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail28" prepend=",">
+				<![CDATA[ $fieldDetail28$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail29" prepend=",">
+				<![CDATA[ $fieldDetail29$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail30" prepend=",">
+				<![CDATA[ $fieldDetail30$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail31" prepend=",">
+				<![CDATA[ $fieldDetail31$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail32" prepend=",">
+				<![CDATA[ $fieldDetail32$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail33" prepend=",">
+				<![CDATA[ $fieldDetail33$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail34" prepend=",">
+				<![CDATA[ $fieldDetail34$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail35" prepend=",">
+				<![CDATA[ $fieldDetail35$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail36" prepend=",">
+				<![CDATA[ $fieldDetail36$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail37" prepend=",">
+				<![CDATA[ $fieldDetail37$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail38" prepend=",">
+				<![CDATA[ $fieldDetail38$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail39" prepend=",">
+				<![CDATA[ $fieldDetail39$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail40" prepend=",">
+				<![CDATA[ $fieldDetail40$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail41" prepend=",">
+				<![CDATA[ $fieldDetail41$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail42" prepend=",">
+				<![CDATA[ $fieldDetail42$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail43" prepend=",">
+				<![CDATA[ $fieldDetail43$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail44" prepend=",">
+				<![CDATA[ $fieldDetail44$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail45" prepend=",">
+				<![CDATA[ $fieldDetail45$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail46" prepend=",">
+				<![CDATA[ $fieldDetail46$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail47" prepend=",">
+				<![CDATA[ $fieldDetail47$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail48" prepend=",">
+				<![CDATA[ $fieldDetail48$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail49" prepend=",">
+				<![CDATA[ $fieldDetail49$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="fieldDetail50" prepend=",">
+				<![CDATA[ $fieldDetail50$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="primaryKey" prepend=",">
+				<![CDATA[ primary key ($primaryKey$) ]]>
+			</isNotEmpty>
+			<![CDATA[
+			 	 )
+			]]>
+		</dynamic>
+	</update>
+	
+	<update id="createComment" parameterClass="tableColumn">
+		<![CDATA[ 
+			comment on column $columnName$ is $comments$ 
+		]]>
+	</update>
+	
+	<select id="getAllUserCount" parameterClass="allUser" resultClass="java.lang.Integer">
+		<![CDATA[
+			select count(1)
+			from basis.basis_tb_salesemp_info t
+			where t.emp_state='Y'
+		]]>
+		<dynamic>
+			<isNotEmpty property="search" prepend="and">
+				<![CDATA[
+					(t.emp_id like '%'||#search#||'%'
+					or t.emp_code like #search,handler=wildcard# escape '\'
+					or t.emp_name like #search,handler=wildcard# escape '\'
+					)
+				]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getAllUserList" parameterClass="allUser" resultClass="allUser">
+		<include refid="global.paginationStart" />
+		<![CDATA[
+			select  t.emp_id		userId,
+					t.emp_code		loginId,
+					t.emp_name		userName
+			from basis.basis_tb_salesemp_info t
+			where t.emp_state='Y'
+		]]>
+		<dynamic>
+			<isNotEmpty property="search" prepend="and">
+			<![CDATA[
+				(t.emp_id like '%'||#search#||'%'
+				or t.emp_code like #search,handler=wildcard# escape '\'
+				or t.emp_name like #search,handler=wildcard# escape '\'
+				)
+			]]>
+			</isNotEmpty>
+		</dynamic>
+		<include refid="global.paginationEnd" />
+	</select>
+	
+	<select id="getTableNameCount" parameterClass="tableInfo" resultClass="java.lang.Integer">
+		<![CDATA[
+			select count(1) from all_tables t where 1=1 
+		]]>
+		<dynamic>
+			<isNotEmpty property="tableName" prepend="and">
+				<![CDATA[
+					t.owner || '.' || t.table_name like #tableName,handler=wildcard# escape '\'
+				]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getTableNameList" parameterClass="tableInfo" resultClass="tableInfo">
+		<include refid="global.paginationStart" />
+		<![CDATA[
+			select t.owner || '.' || t.table_name tableName from all_tables t where 1=1 
+		]]>
+		<dynamic>
+			<isNotEmpty property="tableName" prepend="and">
+				<![CDATA[
+					t.owner || '.' || t.table_name like #tableName,handler=wildcard# escape '\'
+				]]>
+			</isNotEmpty>
+		</dynamic>
+		<![CDATA[ order by t.owner, t.table_name ]]>
+		<include refid="global.paginationEnd" />
+	</select>
+	
+	<select id="getAuthorizationCount" parameterClass="tableAuthorization" resultClass="java.lang.Integer">
+		<![CDATA[
+			select count(1) from basis.basis_tb_table_authorization t where t.emp_id=#empId# and t.table_name=#tableName#
+		]]>
+	</select>
+	
+	<insert id="addAuthorization" parameterClass="tableAuthorization">
+		<selectKey resultClass="java.lang.Long" keyProperty="id">
+			<![CDATA[
+				select basis.basis_seq_table_authorization.nextval id from dual
+			]]>
+		</selectKey>
+		<![CDATA[
+			insert into basis.basis_tb_table_authorization(id, emp_id, table_name, authorizer, authorize_date)
+			values(#id#, #empId#, #tableName#, #authorizer#, sysdate)
+		]]>
+	</insert>
+	
+	<select id="getTableAuthorizationCount" parameterClass="tableAuthorization" resultClass="java.lang.Integer">
+		<![CDATA[
+			select count(1) from basis.basis_tb_table_authorization t where 1=1
+		]]>
+		<dynamic>
+			<isNotEmpty property="empId" prepend="and">
+				<![CDATA[
+					t.emp_id = #empId#
+				]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getTableAuthorizationList" parameterClass="tableAuthorization" resultClass="tableAuthorization">
+		<include refid="global.paginationStart" />
+		<![CDATA[
+			select  t.id				id,
+					t.emp_id			empId,
+					o.emp_name			empName,
+					t.table_name		tableName,
+					t.authorizer		authorizer,
+					s.emp_name			authorizerName,
+					t.authorize_date	authorizeDate
+			from basis.basis_tb_table_authorization t
+				left join basis.basis_tb_salesemp_info o on t.emp_id = o.emp_id
+				left join basis.basis_tb_salesemp_info s on t.authorizer = s.emp_id
+			where 1=1
+		]]>
+		<dynamic>
+			<isNotEmpty property="empId" prepend="and">
+				<![CDATA[
+					t.emp_id = #empId#
+				]]>
+			</isNotEmpty>
+		</dynamic>
+		<![CDATA[ order by t.id desc ]]>
+		<include refid="global.paginationEnd" />
+	</select>
+	
+	<delete id="cancelAuthorization" parameterClass="java.lang.String">
+		<![CDATA[
+			delete from basis.basis_tb_table_authorization t where t.id in ($ids$)
+		]]>
+	</delete>
+	
+	<select id="getTableColumns" parameterClass="java.lang.String" resultClass="tableColumn">
+		<![CDATA[
+ 			select  t.COLUMN_ID       as columnId,
+       				t.COLUMN_NAME     as columnName,
+       				t.DATA_TYPE       as dataType,
+       				t.DATA_LENGTH     as dataLength,
+       				t.DATA_PRECISION  as dataPrecision,
+       				t.NULLABLE        as nullable,
+       				p.COMMENTS        as comments,
+       				b.CONSTRAINT_NAME as constraintName,
+       				b.CONSTRAINT_TYPE as primaryKey
+  			from all_tab_columns t
+  				left join all_col_comments p on t.OWNER || '.' || t.TABLE_NAME =
+                	p.OWNER || '.' || p.TABLE_NAME and t.COLUMN_NAME = p.COLUMN_NAME
+                		left join all_cons_columns a on t.OWNER || '.' || t.TABLE_NAME =
+                			a.OWNER || '.' || a.TABLE_NAME and t.COLUMN_NAME = a.COLUMN_NAME
+                				left join all_constraints b on  a.OWNER || '.' || a.TABLE_NAME =
+                					b.OWNER || '.' || b.TABLE_NAME and a.CONSTRAINT_NAME = b.CONSTRAINT_NAME
+ 			where t.OWNER || '.' || t.TABLE_NAME = upper(#tableName#)
+ 			order by t.COLUMN_ID asc
+		]]>
+	</select>
+	
+	<select id="getCountByPrimaryKey" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+		<![CDATA[
+			select count(1) from $tableName$ where $primaryKeys$
+		]]>
+	</select>
+	
+	<insert id="createDataInfo" parameterClass="tableInfo">
+		<dynamic>
+		<![CDATA[
+			insert into $tableName$
+			  ($parameter1$
+		]]>
+			<isNotEmpty property="parameter2" prepend=",">
+			<![CDATA[ $parameter2$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter3" prepend=",">
+			<![CDATA[ $parameter3$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter4" prepend=",">
+			<![CDATA[ $parameter4$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter5" prepend=",">
+			<![CDATA[ $parameter5$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter6" prepend=",">
+			<![CDATA[ $parameter6$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter7" prepend=",">
+			<![CDATA[ $parameter7$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter8" prepend=",">
+			<![CDATA[ $parameter8$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter9" prepend=",">
+			<![CDATA[ $parameter9$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter10" prepend=",">
+			<![CDATA[ $parameter10$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter11" prepend=",">
+			<![CDATA[ $parameter11$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter12" prepend=",">
+			<![CDATA[ $parameter12$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter13" prepend=",">
+			<![CDATA[ $parameter13$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter14" prepend=",">
+			<![CDATA[ $parameter14$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter15" prepend=",">
+			<![CDATA[ $parameter15$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter16" prepend=",">
+			<![CDATA[ $parameter16$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter17" prepend=",">
+			<![CDATA[ $parameter17$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter18" prepend=",">
+			<![CDATA[ $parameter18$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter19" prepend=",">
+			<![CDATA[ $parameter19$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter20" prepend=",">
+			<![CDATA[ $parameter20$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter21" prepend=",">
+			<![CDATA[ $parameter21$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter22" prepend=",">
+			<![CDATA[ $parameter22$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter23" prepend=",">
+			<![CDATA[ $parameter23$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter24" prepend=",">
+			<![CDATA[ $parameter24$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter25" prepend=",">
+			<![CDATA[ $parameter25$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter26" prepend=",">
+			<![CDATA[ $parameter26$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter27" prepend=",">
+			<![CDATA[ $parameter27$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter28" prepend=",">
+			<![CDATA[ $parameter28$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter29" prepend=",">
+			<![CDATA[ $parameter29$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter30" prepend=",">
+			<![CDATA[ $parameter30$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter31" prepend=",">
+			<![CDATA[ $parameter31$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter32" prepend=",">
+			<![CDATA[ $parameter32$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter33" prepend=",">
+			<![CDATA[ $parameter33$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter34" prepend=",">
+			<![CDATA[ $parameter34$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter35" prepend=",">
+			<![CDATA[ $parameter35$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter36" prepend=",">
+			<![CDATA[ $parameter36$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter37" prepend=",">
+			<![CDATA[ $parameter37$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter38" prepend=",">
+			<![CDATA[ $parameter38$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter39" prepend=",">
+			<![CDATA[ $parameter39$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter40" prepend=",">
+			<![CDATA[ $parameter40$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter41" prepend=",">
+			<![CDATA[ $parameter41$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter42" prepend=",">
+			<![CDATA[ $parameter42$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter43" prepend=",">
+			<![CDATA[ $parameter43$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter44" prepend=",">
+			<![CDATA[ $parameter44$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter45" prepend=",">
+			<![CDATA[ $parameter45$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter46" prepend=",">
+			<![CDATA[ $parameter46$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter47" prepend=",">
+			<![CDATA[ $parameter47$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter48" prepend=",">
+			<![CDATA[ $parameter48$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter49" prepend=",">
+			<![CDATA[ $parameter49$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter50" prepend=",">
+			<![CDATA[ $parameter50$ ]]>
+			</isNotEmpty>
+		<![CDATA[
+			  )
+			values
+			  ($value1$
+		]]>
+			<isNotEmpty property="parameter2" prepend=",">
+			<![CDATA[ $value2$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter3" prepend=",">
+			<![CDATA[ $value3$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter4" prepend=",">
+			<![CDATA[ $value4$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter5" prepend=",">
+			<![CDATA[ $value5$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter6" prepend=",">
+			<![CDATA[ $value6$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter7" prepend=",">
+			<![CDATA[ $value7$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter8" prepend=",">
+			<![CDATA[ $value8$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter9" prepend=",">
+			<![CDATA[ $value9$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter10" prepend=",">
+			<![CDATA[ $value10$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter11" prepend=",">
+			<![CDATA[ $value11$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter12" prepend=",">
+			<![CDATA[ $value12$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter13" prepend=",">
+			<![CDATA[ $value13$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter14" prepend=",">
+			<![CDATA[ $value14$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter15" prepend=",">
+			<![CDATA[ $value15$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter16" prepend=",">
+			<![CDATA[ $value16$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter17" prepend=",">
+			<![CDATA[ $value17$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter18" prepend=",">
+			<![CDATA[ $value18$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter19" prepend=",">
+			<![CDATA[ $value19$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter20" prepend=",">
+			<![CDATA[ $value20$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter21" prepend=",">
+			<![CDATA[ $value21$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter22" prepend=",">
+			<![CDATA[ $value22$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter23" prepend=",">
+			<![CDATA[ $value23$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter24" prepend=",">
+			<![CDATA[ $value24$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter25" prepend=",">
+			<![CDATA[ $value25$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter26" prepend=",">
+			<![CDATA[ $value26$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter27" prepend=",">
+			<![CDATA[ $value27$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter28" prepend=",">
+			<![CDATA[ $value28$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter29" prepend=",">
+			<![CDATA[ $value29$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter30" prepend=",">
+			<![CDATA[ $value30$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter31" prepend=",">
+			<![CDATA[ $value31$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter32" prepend=",">
+			<![CDATA[ $value32$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter33" prepend=",">
+			<![CDATA[ $value33$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter34" prepend=",">
+			<![CDATA[ $value34$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter35" prepend=",">
+			<![CDATA[ $value35$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter36" prepend=",">
+			<![CDATA[ $value36$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter37" prepend=",">
+			<![CDATA[ $value37$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter38" prepend=",">
+			<![CDATA[ $value38$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter39" prepend=",">
+			<![CDATA[ $value39$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter40" prepend=",">
+			<![CDATA[ $value40$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter41" prepend=",">
+			<![CDATA[ $value41$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter42" prepend=",">
+			<![CDATA[ $value42$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter43" prepend=",">
+			<![CDATA[ $value43$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter44" prepend=",">
+			<![CDATA[ $value44$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter45" prepend=",">
+			<![CDATA[ $value45$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter46" prepend=",">
+			<![CDATA[ $value46$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter47" prepend=",">
+			<![CDATA[ $value47$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter48" prepend=",">
+			<![CDATA[ $value48$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter49" prepend=",">
+			<![CDATA[ $value49$ ]]>
+			</isNotEmpty>
+			<isNotEmpty property="parameter50" prepend=",">
+			<![CDATA[ $value50$ ]]>
+			</isNotEmpty>
+		<![CDATA[
+			  )
+		]]>
+		</dynamic>
+	</insert>
+	
+	<select id="getFACTORY_PERSON_NUM" parameterClass="tableInfo" resultClass="java.lang.Integer">
+	    <![CDATA[select count(*) from basis.factory_person_num
+	             where 1=1 ]]>
+	    <isNotEmpty property="parameter1" prepend="and">
+			<![CDATA[ $parameter1$ =$value1$]]>
+		</isNotEmpty>
+		<isNotEmpty property="parameter2" prepend="and">
+			<![CDATA[ $parameter2$ =$value2$]]>
+		</isNotEmpty>
+	</select>
+	
+	<update id="updateFACTORY_PERSON_NUM" parameterClass="tableInfo">
+	    <![CDATA[ update basis.factory_person_num set $parameter3$=$value3$
+	              where 1=1 ]]>
+	    <isNotEmpty property="parameter1" prepend="and">
+			<![CDATA[ $parameter1$ =$value1$]]>
+		</isNotEmpty>
+		<isNotEmpty property="parameter2" prepend="and">
+			<![CDATA[ $parameter2$ =$value2$]]>
+		</isNotEmpty>
+	</update>
+	
+	<select id="getDataCount" parameterClass="java.lang.String" resultClass="java.lang.Integer">
+		<![CDATA[
+			select count(1) from $tableName$
+		]]>
+	</select>
+	
+	<select id="getDataList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap" remapResults="true">
+		<include refid="global.paginationStart" />
+		<![CDATA[
+			select * from $tableName$
+		]]>
+		<include refid="global.paginationEnd" />
+	</select>
+	
+	<select id="getDataListNoPage" parameterClass="java.lang.String" resultClass="java.util.HashMap" remapResults="true">
+		<![CDATA[
+			select * from $tableName$
+		]]>
+	</select>
+	
+	<insert id="createTableLog" parameterClass="java.util.HashMap">
+		<selectKey resultClass="java.lang.Long" keyProperty="id">
+			<![CDATA[
+				select basis.basis_seq_create_table_log.nextval as id from dual
+			]]>
+		</selectKey> 
+		<![CDATA[
+			insert into basis.basis_tb_create_table_log(id, creator, table_name, create_date)
+			values(#id#, #userId#, #tableName#, sysdate)
+		]]>	
+	</insert>
+	
+	<insert id="createUploadLog" parameterClass="java.util.HashMap">
+		<selectKey resultClass="java.lang.Long" keyProperty="id">
+			<![CDATA[
+				select basis.basis_seq_upload_log.nextval as id from dual
+			]]>
+		</selectKey> 
+		<![CDATA[
+			insert into basis.basis_tb_upload_log(id, user_id, table_name, upload_date, count)
+			values(#id#, #userId#, #tableName#, sysdate, #count#)
+		]]>	
+	</insert>
+	
+	<delete id="deleteData" parameterClass="java.lang.String">
+		<![CDATA[
+			delete from $tableName$
+		]]>
+	</delete>
+	
+	<insert id="createDeleteLog" parameterClass="java.util.HashMap">
+		<selectKey resultClass="java.lang.Long" keyProperty="id">
+			<![CDATA[
+				select basis.basis_seq_delete_log.nextval as id from dual
+			]]>
+		</selectKey> 
+		<![CDATA[
+			insert into basis.basis_tb_delete_log(id, user_id, table_name, delete_date)
+			values(#id#, #userId#, #tableName#, sysdate)
+		]]>	
+	</insert>
+	
+</sqlMap>

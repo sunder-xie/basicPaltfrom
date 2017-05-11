@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+#CSSM(["easyui","style"])
+#JSM(["jquery", "easyui"])
+#JS_ENV_VAL()
+<title>香飘飘Exp系统登录</title>
+<style type="text/css">
+/**************public*******************/
+html{*overflow:auto;_overflow-y:scroll;}
+body{cursor:default;-webkit-text-size-adjust:none;font-size:12px;font-family:Arial;-webkit-text-size-adjust:none;background:#ffffff url($!{env.imgUrl}/images/xpp/img01.png) no-repeat center top;height:665px;}
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td{padding:0;margin:0;}
+table{border-collapse:collapse;border-spacing:0;}
+fieldset,img{border:0;}
+address,caption,cite,code,dfn,em,th,var{font-weight:normal;font-style:normal;}
+strong{font-style:normal;}
+ol,ul,li{list-style:none outside none;}
+caption{text-align:left;}
+h1,h2,h3,h4,h5,h6{font-weight:normal;font-size:100%;}
+q:before,q:after{content:'';}
+abbr,acronym{border:0;} 
+##a{outline:none;cursor:pointer;*outline:expression(this.hideFocus=true);text-decoration:none;}
+img,object{vertical-align:top;}
+input{outline:none;*outline:expression(this.hideFocus=true);}
+button::-moz-focus-inner, input[type="reset"]::-moz-focus-inner, input[type="button"]::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="file"] > input[type="button"]::-moz-focus-inner{border:none;padding:0;}
+.clear{zoom:1;}
+.clear:after{visibility:hidden;display:block;font-size:0;content:"1";clear:both;height:0;}
+.fl{float:left;_display:inline;}
+.fr{float:right;_display:inline;}
+
+/******************内容*********************/
+.bodyer{width:1120px;margin:auto;}
+.bodyer .login{padding:36px 0 170px 243px;}
+.main{width:347px;padding-left:53px;}
+.main h1{padding:1px 0 2px 0;}
+.main .innermain input{background:url($!{env.imgUrl}/images/xpp/input_bg.png) no-repeat;width:170px;height:28px;line-height:21px;padding:0 5px;border:0;margin-bottom:16px;}
+.main .innermain input.sub_btn{padding:0;background:url($!{env.imgUrl}/images/xpp/sub_btn.png) no-repeat;width:90px;height:27px;cursor:pointer;margin:10px 0 0 60px;}
+.main .innermain input.con_btn{padding:0;background:url($!{env.imgUrl}/images/xpp/sub_btn.png) no-repeat;width:90px;height:27px;cursor:pointer;margin:10px 0 0 0px;}
+.mainleft{padding:10px 30px 0 0;}
+.nav { width:80px; height: 80px; border: 1px solid #D4CD49; position:fixed;left:50px;top:2%; background-image:url($!{env.imgUrl}/images/xpp/appurl.png);background-size:contain;}
+</style>
+</head>
+
+<body>
+<div class="nav"></div>
+<form action="loginAction!login.jspa" method="post">
+<div class="bodyer">
+	<div class="content fr">
+    	<div class="login">
+    	<br/>
+    	<br/>
+    	<br/>
+    	<br/>
+    	<br/>
+    	<br/>
+    	<br/>
+    	<br/>
+    	<br/>
+    	<br/></div>
+        <div class="main">
+            <div class="innermain">
+            	<div class="clear">
+                    <div class="fl">
+                       <span style="font-size:14px;font-weight:bold;">&nbsp;&nbsp;账&nbsp;&nbsp;号&nbsp;&nbsp;</span>
+					   <input  type="text" maxLength='50' id='passport' name='passport' autocomplete="on" value="$!{passport}"></input><br/>
+                       <span style="font-size:14px;font-weight:bold;">&nbsp;&nbsp;密&nbsp;&nbsp;码&nbsp;&nbsp;</span>
+					   <input type="password"  maxLength='50' name='password' autocomplete="off"/>
+                    </div>
+                </div>
+		</br>
+				<input type="submit" style="color:#ffffff;font-size:13px;font-weight:bold" value="登   录" name="" id="" class="sub_btn" onclick="sumbit()"/>
+				<input type="button" style="color:#ffffff;font-size:13px;font-weight:bold" value="联系信息部" name="" id="" class="mainleft con_btn" onclick="openView()"/>
+				<br/>
+				<br/>
+				<span id="logfail" style="color:#e81331;font-size:14px;">$!{failMessage}</span>
+				<br/>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/login/login.js?js_version=123456"></script>
+</html>

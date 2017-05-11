@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui", "upload"])
+		#JS_ENV_VAL()	
+	</head>
+	<body>
+		<form method="post" enctype="multipart/form-data" target="hideFrame">
+		<div class="easyui-panel" title="支出申办单提报" data-options="iconCls:'icon-edit'">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1">
+				<tr>
+    				<td class="head" noWrap style="text-align: right">
+    					事务标题
+    				</td>
+					<td noWrap>
+						<input class="easyui-validatebox" type='text' id='title' name="title" data-options ="required:true, missingMessage:'不能为空'"/>
+					</td>
+                </tr>
+				<tr>
+    				<td class="head" noWrap style="text-align: right">
+    					提交人
+    				</td>
+					<td noWrap>
+						<input id="userName" class="easyui-validatebox" type='text' value='$!{curUser.userName}' readonly />
+					</td>
+                 </tr>
+				 <tr>
+					<td class="head" noWrap style="text-align: right">
+    					选择模板
+    				</td>
+					<td noWrap>
+						<input id="modelId" name="key" data-options ="required:true"/>
+					</td>
+				</tr>
+				 <tr>
+    				<td class="head" noWrap style="text-align: right">
+    					附件上传
+    				</td>
+					<td colspan="3">
+						<div id="input">
+							<input class="easyui-validatebox" name="upload" id="file0" type="file" value="添加附件" onchange="addFile()" />
+							<font size="2.5" color="red">业务招待费或加班餐费等上传清单</font>
+						</div>
+						<div id="_file"></div>
+					</td>
+				 </tr>
+		    </table>
+		</div>
+		
+		<div region="south" border="false" style="height:12px;"></div>
+		
+		<div class="easyui-panel" title="支出申办单--总单信息" >
+			<table width="100%" border="0" cellpadding="0" cellspacing="1">
+				<tr>
+    				<td class="head" noWrap style="text-align: right">
+    					公司
+    				</td>
+					<td noWrap>
+						<input class="easyui-validatebox" type='text' value='Kintiger' readonly />
+					</td>
+					<td class="head" noWrap style="text-align: right">
+						部门
+                    </td>
+					<td noWrap>
+						<input class="easyui-validatebox" type='text' value='$!{curUser.orgName}' readonly />
+                    </td>
+					<td class="head" noWrap style="text-align: right">
+						受款人
+                    </td>
+					<td noWrap>
+						<input class="easyui-validatebox" type='text' value='$!{curUser.userName}' data-options ="required:true, missingMessage:'不能为空'"/>
+						<input type="hidden" name="singleTotal.user_id" value='$!{curUser.userId}' />
+						<input type="button" value="选择" onclick="alert(1111);"/>
+					</td>
+                </tr>
+				<tr>
+    				<td class="head" noWrap style="text-align: right">
+    					支付方式
+    				</td>
+					<td noWrap>
+                        <input type="radio" value="1" name="singleTotal.pay_type" >&nbsp;现金&nbsp;</input>
+                        <input type='radio' value="2" name="singleTotal.pay_type" checked >&nbsp;银行&nbsp;</input>
+                        <input type='radio' value="3" name="singleTotal.pay_type" >&nbsp;其他&nbsp;</input>
+					</td>
+					<td class="head" noWrap style="text-align: right">
+    					合计报销金额
+    				</td>
+					<td noWrap>
+						<input class="easyui-validatebox" type='text' id="" name="singleTotal.total_money" value="0" />
+					</td>
+    				<td class="head" noWrap style="text-align: right">
+    					待还借款金额
+    				</td>
+					<td noWrap>
+						<input class="easyui-validatebox" type='text' id="" name="singleTotal.pay_money" value="0" />
+                    </td>
+				 </tr>
+				 <tr>
+    				<td class="head" noWrap style="text-align: right">
+    					说明(75字以内)
+    				</td>
+					<td colspan="5">
+						<input class="easyui-validatebox" type='text' name="singleTotal.memo" size="123"/>
+					</td>
+				 </tr>
+		    </table>
+		</div>
+		
+		<div region="south" border="false" style="height:6px;"></div>
+		
+		<div class="easyui-panel" title="支出申办单--明细信息" >
+			<div region="south" border="false" style="text-align:left;height:30px;line-height:30px;BACKGROUND-COLOR:#f4f4f4">
+				<font style="color:#cccccc">|</font><a class="easyui-linkbutton" plain="true" icon="icon-add" href="javascript:addRow()">添加行
+				</a><font style="color:#cccccc">|</font><a class="easyui-linkbutton" plain="true" icon="icon-remove" href="javascript:removeRow()">删除行
+				</a><font style="color:#cccccc">|</font>
+			</div>
+			<table id="myTab" width="100%" cellpadding="0" border="1px" bordercolor="#cccccc" cellspacing="0px" style="border-collapse:collapse">
+				
+                <tr style="height:25px;BACKGROUND-COLOR:#f4f4f4">
+					<td width="2%" style="text-align: center">
+						<input id="item_all" type="checkbox" onclick="checkAll();"/>
+					</td>
+					<td width="3%" style="text-align: center">
+						项次
+                    </td>
+					<td width="20%" style="text-align: center">
+                        <font color="red">*</font> 摘 要
+                    </td>
+					<td width="7%" style="text-align: center">
+						<font color="red">*</font> 报销金额
+                    </td>
+					<td width="10%"style="text-align: center">
+						<font color="red">*</font> 发票类型
+                    </td>
+					<td width="8%" style="text-align: center">
+						<font color="red">*</font> 税率
+                    </td>
+					<td width="10%" style="text-align: center">
+						<font color="red">*</font> 费额(扣减预算)
+                    </td>
+					<td width="7%" style="text-align: center">
+						<font color="red">*</font> 税额
+                    </td>
+					<td width="10%" style="text-align: center">
+						<font color="red">*</font> 成本中心
+                    </td>
+					<td width="12%" style="text-align: center">
+						<font color="red">*</font> 预算科目
+                    </td>
+					<td width="8%" style="text-align: center">
+						<font color="red">*</font> 科目剩余金额
+                    </td>
+				</tr>
+				
+		    </table>
+		</div>
+		
+		<div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+			<a class="easyui-linkbutton" icon="icon-ok" href="javascript:submit()">Submit</a>
+			<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:reset()">Cancel</a>
+		</div>
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+        <div id="maintEvent"/>
+	</body>
+	<script type="text/javascript" src="$!{env.imgUrl}/js/platform/account/expenseSingle.js"></script>
+</html>

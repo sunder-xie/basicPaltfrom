@@ -1,0 +1,172 @@
+#macro(JS_ENV_VAL)
+	<script type="text/javascript">
+		var appUrl = '$!{env.appUrl}';
+		var imgUrl = '$!{env.imgUrl}';
+		var wfeUrl = '$!{env.wfeUrl}';
+		var hrUrl= '$!{env.hrUrl}';
+		var height = 400;
+		
+		function forbidBackSpace(e) {
+			var ev = e || window.event;
+			var obj = ev.target || ev.srcElement;
+			var t = obj.type || obj.getAttribute('type');
+			var vReadOnly = obj.readOnly;
+			var vDisabled = obj.disabled;
+			vReadOnly = (vReadOnly == undefined) ? false : vReadOnly;
+			vDisabled = (vDisabled == undefined) ? true : vDisabled;
+			var flag1 = ev.keyCode == 8
+					&& (t == "password" || t == "text" || t == "textarea")
+					&& (vReadOnly == true || vDisabled == true);
+			var flag2 = ev.keyCode == 8 && t != "password" && t != "text"
+					&& t != "textarea";
+    		if (flag2 || flag1) {
+    			return false;
+    		}
+		}
+		document.onkeypress = forbidBackSpace;
+		document.onkeydown = forbidBackSpace;
+		
+		
+	var exp_explorer = window.navigator.userAgent.toLowerCase() ;
+	var exp_type="";
+	var exp_version="";
+	if (exp_explorer.indexOf("msie") >= 0) {
+	    var ver=exp_explorer.match(/msie ([\d.]+)/)[1];
+	    exp_type='IE';
+	    exp_version=ver;
+	 }else if(exp_explorer.indexOf("chrome") >= 0){
+		    var ver=exp_explorer.match(/chrome\/([\d.]+)/)[1];
+		    exp_type='Chrome';
+		    exp_version=ver;
+	 } else if (exp_explorer.indexOf("firefox") >= 0) {
+	    var ver=exp_explorer.match(/firefox\/([\d.]+)/)[1];
+	    exp_type='Firefox';
+	    exp_version=ver;
+	 }else if(exp_explorer.indexOf("opera") >= 0){
+		 var ver=exp_explorer.match(/opera.([\d.]+)/)[1];
+		 exp_type='Opera';
+		 exp_version=ver;
+	 }else if(exp_explorer.indexOf("Safari") >= 0){
+		 var ver=exp_explorer.match(/version\/([\d.]+)/)[1];
+		 exp_type='Safari';
+		 exp_version=ver;
+     }
+	</script>
+#end
+
+#macro(JSM $libs)
+	#foreach ($key in $libs)
+		#if($key == 'jquery')
+			<script type="text/javascript" src="$!{env.imgUrl}/js/jquery/jquery-1.8.0.min.js"></script>
+			<script type="text/javascript" src="$!{env.imgUrl}/js/jquery/jquery.json-2.4.min.js"></script>
+			<script type="text/javascript" src="$!{env.imgUrl}/js/jquery/common.js"></script>
+			<script type="text/javascript" src="$!{env.imgUrl}/js/jquery/jquery.cookie.js"></script>
+		#elseif($key == 'easyui')
+			<script type="text/javascript" src="$!{env.imgUrl}/js/easyui/jquery.easyui.min.js"></script>
+			<script type="text/javascript" src="$!{env.imgUrl}/js/easyui/easyui-lang-zh_CN.js"></script>
+			<!--script type="text/javascript" src="$!{env.imgUrl}/js/easyui/changeTheme.js"></script-->
+			<script type="text/javascript" src="$!{env.imgUrl}/js/easyui/datetimebox.js"></script>
+			<!--script type="text/javascript" src="$!{env.imgUrl}/js/easyui/jquery.tips.js"></script-->
+		#elseif($key == 'easyui.ext')
+			<script type="text/javascript" src="$!{env.imgUrl}/js/easyui/jquery.tips.js"></script>
+		#elseif($key == 'jquery.tools')
+			<script type="text/javascript" src="$!{env.imgUrl}/js/jquery/jquery.blockUI.js"></script>
+			<script type="text/javascript" src="$!{env.imgUrl}/js/jquery/jquery.KinSlideshow-1.2.1.min.js"></script>
+		#elseif($key == 'jquery.ui')
+			<script type="text/javascript" src="$!{env.imgUrl}/js/jquery/jquery.ui.core.js"></script> 
+			<script type="text/javascript" src="$!{env.imgUrl}/js/jquery/jquery.ui.widget.js"></script> 
+			<script type="text/javascript" src="$!{env.imgUrl}/js/jquery/jquery.ui.mouse.js"></script>
+			<script type="text/javascript" src="$!{env.imgUrl}/js/jquery/jquery.ui.draggable.js"></script> 
+			<script type="text/javascript" src="$!{env.imgUrl}/js/jquery/jquery.ui.droppable.js"></script>
+			<script type="text/javascript" src="$!{env.imgUrl}/js/jquery/jquery.ui.effect.js"></script>
+			<script type="text/javascript" src="$!{env.imgUrl}/js/jquery/jquery.ui.effect-highlight.js"></script>
+		#elseif($key == 'jquery.chart')
+			<script type="text/javascript" src="$!{env.imgUrl}/js/jquery/highcharts.js"></script>
+			<script type="text/javascript" src="$!{env.imgUrl}/js/jquery/exporting.js"></script>
+		#elseif($key == 'ckeditor')
+			<script type="text/javascript" src="$!{env.imgUrl}/js/ckeditor/ckeditor.js"></script>
+		#elseif($key == 'editor')
+			<script type="text/javascript" src="$!{env.imgUrl}/js/utils/editorUtils.js"></script>
+		#elseif($key == 'upload')
+			<script type="text/javascript" src="$!{env.imgUrl}/js/platform/upload.js"></script>
+		#end
+	#end
+#end
+
+#macro(CSSM $libs)
+	#foreach ($key in $libs)
+		#if($key == 'easyui')
+			<link  id="easyuiTheme" href="$!{env.imgUrl}/css/easyui/themes/sunny/easyui.css" type="text/css" rel="stylesheet" />
+			<link href="$!{env.imgUrl}/css/easyui/themes/icon.css" type="text/css" rel="stylesheet" />
+		#elseif($key == 'style')
+			<link href="$!{env.imgUrl}/css/style.css" type="text/css" rel="stylesheet" />
+			<link href="$!{env.imgUrl}/css/mainBlue.css" type="text/css" rel="stylesheet" />
+		#elseif($key == 'homepage')
+			<link href="$!{env.imgUrl}/css/online/online.css" type="text/css" rel="stylesheet" />
+		#end
+	#end
+#end
+#macro(WORKFLOW)
+<!-- framework CSS -->
+<link href="$!{env.imgUrl}/css/workflow/themes/default/css/style.css" type="text/css" rel="stylesheet" title="blue"/>
+
+<!-- JQuery EasyUi CSS-->
+<link type="text/css" href="$!{env.imgUrl}/js/workflow/jquery-easyui/themes/default/easyui.css" rel="stylesheet" title="blue">
+<link href="$!{env.imgUrl}/js/workflow/jquery-easyui/themes/icon.css" type="text/css" rel="stylesheet"/>
+<!-- JQuery validate CSS-->
+<link href="$!{env.imgUrl}/js/workflow/validate/jquery.validate.extend.css" type="text/css" rel="stylesheet"/>
+<!-- JQuery AutoComplete -->
+<link href="$!{env.imgUrl}/css/workflow/jquery.autocomplete.css" rel="stylesheet" type="text/css"/>
+
+<!-- JQuery-->
+
+<script src="$!{env.imgUrl}/js/workflow/jquery.min.js" type="text/javascript"></script>
+
+
+<!-- JQuery EasyUi JS-->
+<script src="$!{env.imgUrl}/js/workflow/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
+
+
+
+<!-- JQuery validate JS-->
+<script src="$!{env.imgUrl}/js/workflow/validate/jquery.validate.js" type="text/javascript"></script>
+<script src="$!{env.imgUrl}/js/workflow/validate/jquery.metadata.js" type="text/javascript"></script>
+<script src="$!{env.imgUrl}/js/workflow/validate/jquery.validate.method.js" type="text/javascript"></script>
+<script src="$!{env.imgUrl}/js/workflow/validate/jquery.validate.extend.js" type="text/javascript"></script>
+
+<!-- JQuery form Plugin -->
+<script src="$!{env.imgUrl}/js/workflow/jquery.form.js" type="text/javascript"></script>
+
+<!-- JSON JS-->
+<!--<script src="$!{env.imgUrl}/js/workflow/json2.js" type="text/javascript"></script>-->
+
+<!-- JQuery AutoComplete -->
+<script type='text/javascript' src='$!{env.imgUrl}/js/workflow/jquery-autocomplete/lib/jquery.bgiframe.min.js'></script>
+<script type='text/javascript' src='$!{env.imgUrl}/js/workflow/jquery-autocomplete/lib/jquery.ajaxQueue.js'></script>
+<script type='text/javascript' src='$!{env.imgUrl}/js/workflow/jquery-autocomplete/jquery.autocomplete.min.js'></script>
+
+<!-- framework JS -->
+	    <script src="$!{env.imgUrl}/js/workflow/skin.js" type="text/javascript"></script>
+		<link href="$!{env.imgUrl}/css/workflow/designer.css" type="text/css" rel="stylesheet"/>
+  			
+        <!-- common, all times required, imports -->
+        <SCRIPT src='$!{env.imgUrl}/js/workflow/draw2d/wz_jsgraphics.js'></SCRIPT>          
+        <SCRIPT src='$!{env.imgUrl}/js/workflow/draw2d/mootools.js'></SCRIPT>          
+        <SCRIPT src='$!{env.imgUrl}/js/workflow/draw2d/moocanvas.js'></SCRIPT>                        
+        <SCRIPT src='$!{env.imgUrl}/js/workflow/draw2d/draw2d.js'></SCRIPT>
+
+        <!-- example specific imports -->
+        <SCRIPT src="$!{env.imgUrl}/js/workflow/designer/MyCanvas.js"></SCRIPT>
+        <SCRIPT src="$!{env.imgUrl}/js/workflow/designer/ResizeImage.js"></SCRIPT>
+		<SCRIPT src="$!{env.imgUrl}/js/workflow/designer/event/Start.js"></SCRIPT>
+		<SCRIPT src="$!{env.imgUrl}/js/workflow/designer/event/End.js"></SCRIPT>
+		<SCRIPT src="$!{env.imgUrl}/js/workflow/designer/connection/MyInputPort.js"></SCRIPT>
+		<SCRIPT src="$!{env.imgUrl}/js/workflow/designer/connection/MyOutputPort.js"></SCRIPT>
+		<SCRIPT src="$!{env.imgUrl}/js/workflow/designer/connection/DecoratedConnection.js"></SCRIPT>
+		<SCRIPT src="$!{env.imgUrl}/js/workflow/designer/task/Task.js"></SCRIPT>
+		<SCRIPT src="$!{env.imgUrl}/js/workflow/designer/task/UserTask.js"></SCRIPT>
+		<SCRIPT src="$!{env.imgUrl}/js/workflow/designer/task/ManualTask.js"></SCRIPT>
+		<SCRIPT src="$!{env.imgUrl}/js/workflow/designer/gateway/ExclusiveGateway.js"></SCRIPT>
+		<SCRIPT src="$!{env.imgUrl}/js/workflow/designer/gateway/ParallelGateway.js"></SCRIPT>
+		<SCRIPT src="$!{env.imgUrl}/js/workflow/designer/designer.js"></SCRIPT>
+	#end

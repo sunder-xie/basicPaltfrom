@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="post">
+	<typeAlias alias="empPost" type="com.kintiger.platform.post.pojo.EmpPost" />
+	
+	<insert id="createEmpPost" parameterClass="empPost">
+		<selectKey resultClass="java.lang.Long" keyProperty="empPostId">
+		      SELECT basis.basis_seq_emp_post.nextval AS empPostId FROM DUAL	
+		</selectKey>
+		<![CDATA[
+		insert into basis.basis_tb_emp_post
+		(emp_post_id,
+		emp_post_name,
+		emp_post_org_id,
+		emp_post_org_name,
+		create_date,
+		modify_date,
+		state)
+		values
+		(#empPostId#,
+		#empPostName#,
+		#orgId#,
+		#orgName#,
+		sysdate,
+		sysdate,
+		'Y')
+		
+		]]>
+	</insert>
+	
+	<select id="getPostNameCount" parameterClass="empPost" resultClass="java.lang.Integer">
+		<![CDATA[
+		select count(*) from basis.basis_tb_emp_post e where 
+  	  e.emp_post_name=#empPostName# and e.emp_post_org_id=#orgId# and e.state = 'Y'
+  	  ]]>
+	</select>	
+	
+	<select id="getEmpPostCount" parameterClass="empPost" resultClass="java.lang.Integer">
+		<![CDATA[
+		select count(*) from basis.basis_tb_emp_post b where b.state='Y'
+  	  ]]>
+  	  <dynamic>
+  	  		<isNotEmpty property="empPostName" prepend="and">
+			<![CDATA[ b.emp_post_name like #empPostName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+  	  		<isNotEmpty property="orgId" prepend="and">
+			<![CDATA[ b.emp_post_org_id =#orgId#]]>
+			</isNotEmpty>
+			<isNotEmpty property="orgIds" prepend="and">
+			<![CDATA[ b.emp_post_org_id in ]]>
+				<iterate property="orgIds" open="(" close=")" conjunction=",">#orgIds[]#
+				</iterate>
+			</isNotEmpty>
+  	  </dynamic>
+	</select>	
+	
+	<select id="getEmpPostList" parameterClass="empPost" resultClass="empPost">
+		<include refid="global.paginationStart" /> 
+		<![CDATA[
+		select b.emp_post_id as empPostId,
+			b.emp_post_name  as empPostName,
+			b.emp_post_org_id  as orgId,
+			b.emp_post_org_name as orgName,
+   		   nvl(b.emp_id,'') as empId,
+    	    b.create_date as createDate
+		from basis.basis_tb_emp_post b where b.state='Y'
+  	  ]]>
+  	  <dynamic>
+  	  		<isNotEmpty property="empPostName" prepend="and">
+			<![CDATA[ b.emp_post_name like #empPostName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+  	  		<isNotEmpty property="orgId" prepend="and">
+			<![CDATA[ b.emp_post_org_id =#orgId#]]>
+			</isNotEmpty>
+			<isNotEmpty property="orgIds" prepend="and">
+			<![CDATA[ b.emp_post_org_id in ]]>
+				<iterate property="orgIds" open="(" close=")" conjunction=",">#orgIds[]#
+				</iterate>
+			</isNotEmpty>
+			<isEmpty property="sort">
+			<![CDATA[ order by b.create_date desc]]>
+			</isEmpty>
+  	  </dynamic>
+  	  <include refid="global.orderBy" />
+		<include refid="global.paginationEnd" /> 
+	</select>	
+	
+	<update id="deleteEmpPostById"  parameterClass="empPost">
+			<![CDATA[
+			update basis.basis_tb_emp_post e set e.state=#state#,e.modify_date=sysdate 
+			where 1=1
+  	 	 ]]>	
+  	  <dynamic>
+  	  	<isNotEmpty property="empPostIds" prepend="and">
+			<![CDATA[ e.emp_post_id  in ]]>
+				<iterate property="empPostIds" open="(" close=")" conjunction=",">#empPostIds[]#
+				</iterate>
+			</isNotEmpty>
+  	  </dynamic>
+	</update>
+	
+	
+	<select id="getEmpPostCount4User" parameterClass="java.lang.String" resultClass="java.lang.Integer">
+		<![CDATA[
+		select count(*) from basis.basis_tb_emp_post b where b.state='Y' and b.emp_post_org_id=#orgId4Post#
+  	  ]]>
+	</select>	
+	
+	<select id="getEmpPostList4User" parameterClass="java.lang.String" resultClass="empPost">
+		<![CDATA[
+		select b.emp_post_id as empPostId,
+			b.emp_post_name  as empPostName,
+			 b.emp_post_org_id as orgId,
+			   b.emp_post_org_name as orgName
+		from basis.basis_tb_emp_post b where b.state='Y' and b.emp_post_org_id=#orgId4Post#
+  	  ]]>
+	</select>	
+	
+	
+</sqlMap>

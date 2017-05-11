@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui", "upload"])
+		#JS_ENV_VAL()	
+	</head>
+	<body>
+		<form method="post" enctype="multipart/form-data" target="hideFrame">
+		<input id="projectId"  name="projectId" type="hidden"/>
+		<input type="hidden" id="xmlTemp_FileName" name="xmlTemp_FileName" value="$!{xmlTemp_FileName}" />
+		<div class="easyui-panel" title="出差申请" data-options="iconCls:'icon-edit'">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1">
+				<tr>
+    				<td class="head" noWrap style="text-align: right">
+    					所属部门
+    				</td>
+					<td>
+						<input name="businessTripApply.orgName" type="text" value="$!{orgName}" readonly/>
+						<input name="businessTripApply.orgId" type="hidden" value="$!{orgId}" />
+					</td>
+                </tr>
+				<tr>
+    				<td class="head" noWrap style="text-align: right">
+    					所属项目
+    				</td>
+					<td>
+						<input type="text" id="costCenter" name="businessTripApply.costCenter" value="$!{businessTripApply.costCenter}" />
+						<input id="costCenterName" name="businessTripApply.costCenterName" type="hidden" value="$!{businessTripApply.costCenterName}" />
+					</td>
+                 </tr>
+				 
+				 <tr>
+    				<td class="head" noWrap style="text-align: right">
+    					出差地点
+    				</td>
+					<td>
+						<input type="text" id="place" name="businessTripApply.place" value="$!{businessTripApply.place}" />
+					</td>
+				 </tr>
+				 <tr>
+    				<td class="head" noWrap style="text-align: right">
+    					拟出行方式
+    				</td>
+					<td>
+						<input type="text" id="tripWay" name="businessTripApply.tripWay" value="$!{businessTripApply.tripWay}" />
+						<input type="hidden" id="tripWayName" name="businessTripApply.tripWayName" value="$!{businessTripApply.tripWayName}" />
+					</td>
+				 </tr>
+				 <tr id="showflag1">
+					<td class="head" noWrap style="text-align: right">
+						同行人员
+					</td>
+					<td >
+						<input type="text" name="businessTripApply.peopleNames" id="peopleNames" value="$!{businessTripApply.peopleNames}" />
+					</td>
+				</tr>
+				<tr id="showflag2">
+					<td class="head" noWrap style="text-align: right">
+						自驾里程
+					</td>
+					<td >
+						<input type="text" name="businessTripApply.distance" id="distance" value="$!{businessTripApply.distance}" />
+					</td>
+				</tr>
+				 <tr>
+    				<td class="head" noWrap style="text-align: right">
+    					开始时间
+    				</td>
+					<td>
+						<input type="text" id="beginDate" name="businessTripApply.beginDate" value="$!dateUtil.datetime($!{businessTripApply.beginDate},'yyyy-MM-dd')" />
+					</td>
+				 </tr>
+				 <tr>
+    				<td class="head" noWrap style="text-align: right">
+    					结束时间
+    				</td>
+					<td>
+						<input type="text" id="endDate" name="businessTripApply.endDate" value="$!dateUtil.datetime($!{businessTripApply.endDate},'yyyy-MM-dd')" />
+					</td>
+				 </tr>
+				 <tr>
+					<td class="head" noWrap style="text-align: right">
+    					出差事由
+    				</td>
+					<td>
+						<textarea type="text" id="reason" name="businessTripApply.reason" cols="30" rows="4">$!{businessTripApply.reason}</textarea>
+					</td>
+				 </tr>
+				
+		    </table>
+		</div>
+		
+		<div region="south" border="false" style="text-align:right;height:100px;line-height:50px;">
+			<a class="easyui-linkbutton" icon="icon-ok" href="javascript:submit()">Submit</a>
+			<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:reset()">Cancel</a>
+		</div>
+		
+		<div id="toolbar" class="datagrid-toolbar" >
+			<input class="easyui-searchbox" searcher="searcher" prompt="请填写查询条件" style="width:300px"></input>		
+		</div>
+		<div id="toolbar1" class="datagrid-toolbar" >
+			<input class="easyui-searchbox" searcher="searcher1" prompt="请填写查询条件" style="width:300px"></input>		
+		</div>
+		
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+        <div id="maintDiv"/>
+	</body>
+	<script type="text/javascript" src="$!{env.imgUrl}/js/platform/wfe/event/businessTripApply.js"></script>
+</html>

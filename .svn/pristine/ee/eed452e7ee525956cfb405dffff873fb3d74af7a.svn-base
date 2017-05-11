@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body>
+		<form method="post">
+				<div id="p_search" class="easyui-panel" title="查询条件"
+				style="padding: 2px; background: #fafafa;" data-options="collapsible:true,iconCls:'icon-search'">
+							<table width="100%" border="0" cellpadding="0" cellspacing="1">
+								<tr>
+									<td>
+									<input type='text' id='search' name="search" size="60%"/>
+									 <a id="con_search" href="javascript:searchs()" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
+									</td>
+                   </tr>
+				</table>
+				</div>
+			<table id="datagrid" data-options="rownumbers:true,pagination:true,pageSize:30,pageList:[30,50,100]"  ></table>
+		</form>
+		<input type='hidden' id='tableName' value='$!{reportParameter.tableName}' />
+		<input type='hidden' id='zdid' value='$!{reportParameter.zdid}' />
+		<input type='hidden' id='txt' value='$!{reportParameter.txt}' />
+		<input type='hidden' id='zdtxt' value='$!{reportParameter.zdtxt}' />
+		<input type='hidden' id='d' value="$!{reportParameter.d}" />
+        <input type='hidden' id='pid' value="$!{reportParameter.pid}" />
+	</body>
+
+<script type="text/javascript">
+var amount = $!{reportParameter.amount};
+</script>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/boform/searchQueryParameter.js"></script>
+</html>

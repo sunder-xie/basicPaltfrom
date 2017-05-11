@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<body class="easyui-layout">
+		<form method="post" target="hideFrame">
+			<div region="center" class="easyui-panel" title="岗位修改" data-options="iconCls:'icon-edit'">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1">
+			<tr>
+				<td class="head" noWrap>岗位编号:</td>
+				<td><input class="easyui-validatebox"  readonly  id="stationId" name="stationId"  value="${stationId}" ></td>
+			</tr>
+			<tr>
+				<td class="head" noWrap>岗位名称:</td>
+				<td><input class="easyui-validatebox"  id="stationName" name="stationName" value="${stationName}" ></td>
+			</tr>
+			<tr>
+				<td class="head" noWrap>岗位类型:</td>
+				<td>
+								<input id="oaStationId" name="oaStationId" class="easyui-combobox" value="${oaStationId}"  data-options="valueField:'itemId',textField:'itemName',required:true,url:appUrl + '/station!getCustTypes.jspa'" />
+                </td>
+			</tr>
+
+			<tr>
+				<td class="head" noWrap>公司:</td>
+									<td>
+										<input id="orgId" name="orgId" class="easyui-combobox" readonly  value=${orgId}  data-options="valueField:'orgId',textField:'orgName',required:true,url:appUrl + '/station!getCompanyJsonList.jspa'" /> 
+										<!--<select  id="orgId" name="orgId"   style="width:150px;" >-->
+									</td>
+				
+			</tr>
+			<tr>
+				<td class="head" noWrap></td>
+				
+			</tr>
+			
+		    </table>
+			</div>
+			<div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+				<a class="easyui-linkbutton" icon="icon-ok" href="javascript:submit()">保存</a>
+					<!--<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:close()">取消</a> -->
+			</div>
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+	</body>
+
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/station/updateStation.js"></script>
+</html>

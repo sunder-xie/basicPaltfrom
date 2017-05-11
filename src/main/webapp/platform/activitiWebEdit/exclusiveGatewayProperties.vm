@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		  #JS_ENV_VAL()	
+		  #WORKFLOW()
+	</head>
+	<body>
+<script type="text/javascript">
+		
+		var exclusiveGateway = workflow.getFigure(window.parent.eid);
+
+        jq(function(){
+        	populateExclusProperites();
+        });
+function saveLineProperties(){
+	
+	exclusiveGateway.gatewayId=jq('#id').val();
+	exclusiveGateway.gatewayName=jq('#name').val();
+	//exclusiveGateway.condition=jq('#condition').val();
+	jq.messager.show({
+		title:'提示',
+		msg:'保存流转属性成功!',
+		timeout:500,
+		showType:'slide'
+	});
+}
+function populateExclusProperites(){
+	jq('#id').val(exclusiveGateway.gatewayId);
+	jq('#name').val(exclusiveGateway.gatewayName);
+	
+	
+}
+</script>
+<div id="line-properties-layout" class="easyui-layout" fit="true">
+	<div id="line-properties-toolbar-panel" region="north" border="false" style="height:30px;background:#E1F0F2;">
+		<a href="#" id="sb2" class="easyui-linkbutton" plain="true" iconCls="icon-save" onclick="saveLineProperties()">保存分支属性</a>
+	</div>
+	<div id="line-properties-panel" region="center" border="true">
+		<div class="easyui-accordion" fit="true" border="false">
+			<div id="general" title="分支属性" selected="true" class="properties-menu">
+				<table id="general-properties">
+					<tr>
+						<td align="right">Id:</td>
+						<td><input type="text" id="id" name="id" size="30" value=""/></td>
+					</tr>
+					<tr>
+						<td align="right">名称:</td>
+						<td><input type="text" id="name" name="name" size="30" value=""/></td>
+					</tr>
+				<!--
+					<tr>
+						<td align="right">条件:</td>
+						<td><textarea id="condition" name="condition" cols="30" rows="5"></textarea></td>
+					</tr>
+					-->
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+		
+    </body>
+</html>
+
+
+
+   

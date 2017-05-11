@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="allUserAction" class="com.kintiger.platform.allUser.action.AllUserAction"
+		parent="baseAction" scope="request">
+		<property name="allUserService" ref="allUserService"></property>
+		<property name="stationService" ref="stationService"></property>
+		<property name="env" ref="env"></property>
+		<property name="emailaddress">
+			<value>${allUser.emailaddress}</value>
+		</property>
+		<property name="emailpassword">
+			<value>${allUser.emailpassword}</value>
+		</property>
+		<property name="smtpServer">
+			<value>${allUser.smtpServer}</value>
+		</property>
+		<property name="from">
+			<value>${allUser.from}</value>
+		</property>
+		<property name="displayName">
+			<value>${allUser.displayName}</value>
+		</property>
+		<property name="iOrgService" ref="orgService"></property>
+		<property name="LDAPService" ref="LDAPService"></property>
+		<property name="validate">
+			<value>${ldap.validate}</value>
+		</property>
+		<property name="postService" ref="postService"></property>
+		<property name="dictService" ref="dictService"></property>
+	</bean>
+	
+	<bean id="allUserService"
+		class="com.kintiger.platform.allUser.service.impl.AllUserServiceImpl">
+		<property name="allUserDao" ref="allUserDao" />
+
+	</bean>
+	<bean id="allUserDao" class="com.kintiger.platform.allUser.dao.impl.AllUserDaoImpl"
+		parent="baseDao"></bean>
+</beans>

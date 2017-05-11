@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="positionType">
+	<typeAlias alias="positionType" type="com.kintiger.platform.position.pojo.BpositionType" />
+
+	<select id="getpositionTypeCount" parameterClass="positionType" resultClass="java.lang.Integer">
+	<![CDATA[
+		 select count(t.position_type_id)
+			from smsuser.b_position_type t
+		 where t.status = 'U'
+	]]>
+		<dynamic>
+			<isNotEmpty property="companyId" prepend="and">
+			<![CDATA[  t.company_id = #companyId#]]>
+			</isNotEmpty>
+			<isNotEmpty property="positionTypeName" prepend="and">
+			<![CDATA[  t.position_type_name like #positionTypeName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="positionTypeId" prepend="and">
+			<![CDATA[  t.position_type_id = #positionTypeId#]]>
+			</isNotEmpty>
+			<isNotEmpty property="search" prepend="and">
+			<![CDATA[  t.position_type_name like #search,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getpositionTypeList" parameterClass="positionType" resultClass="positionType">
+		<include refid="global.paginationStart" />
+	<![CDATA[
+
+		  select t.position_type_id   as positionTypeId,
+			   t.position_type_name as positionTypeName,
+			   t.staff_type         as staffType,
+			   t.grade              as grade,
+			   t.modify_date        as modifyDate,
+			   t.company_id         as companyId,
+			   t.position_level     as positionLevel,
+			   t.status             as status,
+			   t.position_property  as positionProperty,
+			   g.org_name           as companyName
+		  from smsuser.b_position_type t
+		  left join  smsuser.b_org g on t.company_id = g.org_id
+		 where t.status = 'U'
+	]]>
+		<dynamic>
+			<isNotEmpty property="companyId" prepend="and">
+			<![CDATA[  t.company_id = #companyId#]]>
+			</isNotEmpty>
+			<isNotEmpty property="positionTypeId" prepend="and">
+			<![CDATA[  t.position_type_id = #positionTypeId#]]>
+			</isNotEmpty>
+			
+			<isNotEmpty property="position_type_name" prepend="and">
+			<![CDATA[  t.position_type_name = #position_type_name#]]>
+			</isNotEmpty>
+			<isNotEmpty property="positionTypeName" prepend="and">
+			<![CDATA[  t.position_type_name like #positionTypeName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="search" prepend="and">
+			<![CDATA[  t.position_type_name like #search,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+		</dynamic>
+		<include refid="global.orderBy" />
+		<include refid="global.paginationEnd" />
+	</select>
+	
+	<select id="exportpositionTypeList" parameterClass="positionType" resultClass="positionType">
+	<![CDATA[
+
+		  select t.position_type_id   as positionTypeId,
+			   t.position_type_name as positionTypeName,
+			   t.staff_type         as staffType,
+			   t.grade              as grade,
+			   t.modify_date        as modifyDate,
+			   t.company_id         as companyId,
+			   t.position_level     as positionLevel,
+			   t.status             as status,
+			   t.position_property  as positionProperty,
+			   g.org_name           as companyName
+		  from smsuser.b_position_type t
+		  left join  smsuser.b_org g on t.company_id = g.org_id
+		 where t.status = 'U'
+	]]>
+		<dynamic>
+			<isNotEmpty property="companyId" prepend="and">
+			<![CDATA[  t.company_id = #companyId#]]>
+			</isNotEmpty>
+			<isNotEmpty property="positionTypeId" prepend="and">
+			<![CDATA[  t.position_type_id = #positionTypeId#]]>
+			</isNotEmpty>
+			
+			<isNotEmpty property="position_type_name" prepend="and">
+			<![CDATA[  t.position_type_name = #position_type_name#]]>
+			</isNotEmpty>
+			<isNotEmpty property="positionTypeName" prepend="and">
+			<![CDATA[  t.position_type_name like #positionTypeName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="search" prepend="and">
+			<![CDATA[  t.position_type_name like #search,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+		</dynamic>
+		<include refid="global.orderBy" />
+	</select>
+	
+	<select id="getPositionTypes" parameterClass="positionType" resultClass="positionType">
+	<![CDATA[
+
+			 select t.position_type_id as positionTypeId,
+			   t.position_type_name as positionTypeName,
+			   t.staff_type         as staffType,
+			   t.grade              as grade,
+			   t.modify_date        as modifyDate,
+			   t.company_id         as companyId,
+			   t.position_level     as positionLevel,
+			   t.status             as status,
+			   t.position_property  as positionProperty,
+			   g.dict_type_id       as dictTypeId
+		  from smsuser.b_position_type t
+		  left join  cms.cms_tb_dict g on g.item_id = t.position_level
+		 where t.status = 'U' and t.position_type_id = #positionTypeId#
+	]]>
+	</select>
+	
+	<update id="updatePositionTypes" parameterClass="positionType">
+	<![CDATA[
+		update smsuser.b_position_type t set t.modify_date=sysdate				  
+	]]>
+		<isNotEmpty property="companyId" prepend=",">
+		<![CDATA[  t.company_id = #companyId#]]>
+		</isNotEmpty>
+		<isNotEmpty property="positionTypeName" prepend=",">
+		<![CDATA[  t.position_type_name = #positionTypeName#]]>
+		</isNotEmpty>
+		<isNotEmpty property="positionLevel" prepend=",">
+		<![CDATA[  t.position_level = #positionLevel#]]>
+		</isNotEmpty>
+		<isNotEmpty property="positionProperty" prepend=",">
+		<![CDATA[  t.position_property = #positionProperty#]]>
+		</isNotEmpty>
+		<isNotEmpty property="status" prepend=",">
+		<![CDATA[  t.status = #status#]]>
+		</isNotEmpty>
+	<![CDATA[					  
+		 where t.position_type_id = #positionTypeId#
+	]]>		
+	</update>
+	
+	<insert id="createPositionTypes" parameterClass="positionType" >
+		<selectKey resultClass="java.lang.Long" keyProperty="positionTypeId">
+		      SELECT Smsuser.SQ_POSITION_TYPE.NEXTVAL AS posId FROM DUAL	
+		</selectKey>
+	<![CDATA[
+		insert into smsuser.b_position_type
+		(   
+			  POSITION_TYPE_NAME,
+			  STAFF_TYPE,
+			  GRADE, 
+			  MODIFY_DATE,
+			  POSITION_TYPE_ID,
+			  COMPANY_ID,
+			  STATUS,
+			  POSITION_LEVEL,
+			  POSITION_PROPERTY
+		   ) values
+		(#positionTypeName#,#staffType#,#grade#,sysdate,#positionTypeId#,#companyId#,'U',#positionLevel#,#positionProperty#)
+	]]>
+	</insert>
+	
+	<select id="getPositionType4RoleCount" parameterClass="positionType" resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(distinct t.position_type_id)
+		  from osap.position_type_roles t, smsuser.b_position_type p
+		 where t.position_type_id = p.position_type_id
+		   and p.status = 'U'
+		   and t.role_id = #roleId#   
+	]]>
+			<dynamic>
+			<isNotEmpty property="positionTypeId" prepend="and">
+			<![CDATA[  p.position_type_id = #positionTypeId#]]>
+			</isNotEmpty>
+			<isNotEmpty property="positionTypeName" prepend="and">
+			<![CDATA[  p.position_type_name like #positionTypeName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getPositionType4RoleList" parameterClass="positionType" resultClass="positionType">
+		<include refid="global.paginationStart" />
+	<![CDATA[
+		select distinct p.position_type_id   as positionTypeId,
+						p.position_type_name as positionTypeName,
+						p.position_property  as positionProperty,
+						q.org_name           as companyName
+		  from osap.position_type_roles t,
+			   smsuser.b_position_type  p,
+			   smsuser.b_org            q
+		 where t.position_type_id = p.position_type_id
+		   and p.company_id = q.org_id(+)
+		   and p.status = 'U'
+		   and t.role_id = #roleId#
+	]]>
+		<dynamic>
+			<isNotEmpty property="positionTypeId" prepend="and">
+			<![CDATA[  p.position_type_id = #positionTypeId#]]>
+			</isNotEmpty>
+			<isNotEmpty property="positionTypeName" prepend="and">
+			<![CDATA[  p.position_type_name like #positionTypeName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+		</dynamic>
+		<include refid="global.orderBy" />
+		<include refid="global.paginationEnd" />
+	</select>
+	
+</sqlMap>

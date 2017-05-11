@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<body class="easyui-layout">
+		<form method="post" target="hideFrame">
+			<div region="center" class="easyui-panel" title="权限岗位创建" data-options="iconCls:'icon-edit'">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1">
+			<tr>
+				<td class="head" noWrap>岗位编号:</td>
+				<td><input class="easyui-validatebox"  id="stationId" name="stationId" data-options="required:true"></td>
+			</tr>
+			<tr>
+				<td class="head" noWrap>岗位名称:</td>
+				<td><input class="easyui-validatebox"  id="stationName" name="stationName" data-options="required:true"></td>
+			</tr>
+			<tr>
+				<td class="head" noWrap>公司:</td>
+				<td>
+				<!--<input class="easyui-validatebox"  id="stationId" name="stationId"></td>
+	-->			
+				<input id="orgId" name="orgId" class="easyui-combobox"   data-options="valueField:'orgId',textField:'orgName',url:appUrl + '/station!getCompanyJsonList.jspa'" />
+					</td>
+			</tr>
+			<tr>
+				<td class="head" noWrap>所在组织:</td>
+				<td><input class="easyui-numberbox" id="orgId" name="orgId" data-options ="required:true" style="width:150px;"/></td>
+			</tr>
+			<tr>
+			<td class="head" noWrap>编制数量:</td>
+				<td><input class="easyui-numberspinner" data-options="min:1,max:20,required:true" id="amount" name="amount" style="width:150px;"/></td>
+			</tr>
+			
+			<tr>
+				<td class="head" noWrap></td>
+			</tr>
+		    </table>
+			</div>
+			<div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+				<a class="easyui-linkbutton" icon="icon-ok" href="javascript:submit()">保存</a>
+					<!--<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:close()">Cancel</a>-->
+			</div>
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+		
+	</body>
+	
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/station/createStation.js"></script>
+</html>

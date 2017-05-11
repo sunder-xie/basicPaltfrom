@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body>
+		<form method="post"  target="hideFrame">
+			<input type="hidden" id="ids" name="ids"/>
+			<input type="hidden" id="roleId" name="roleId"  value="$!{roleId}"/>
+			<div class="easyui-panel" title="条件查询" >
+			<table width="90%" border="0" cellpadding="0" cellspacing="1">
+			<tr>
+				<td class="head" noWrap>岗位编号:</td>
+				<td><input class="easyui-validatebox" id="stationId" name="stationId"></td>
+				<td class="head" noWrap>岗位名称:</td>
+				<td><input class="easyui-validatebox" id="stationName" name="stationName"></td>
+				<td class="head" noWrap>点击查询:</td>
+				<td>			
+				<a href="javascript:search()" class="easyui-linkbutton" iconCls="icon-search">Search</a>
+				</td>
+			</tr>
+		    </table>
+			</div>
+			<table id="datagrid">  
+			</table> 
+			</form>		
+	 <iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+	 <!--维护菜单DIV-->
+	</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/positionType/searchPositionType4Role.js"></script>
+</html>

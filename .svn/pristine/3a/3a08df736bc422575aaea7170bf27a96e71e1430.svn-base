@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="monitor" extends="kintiger-default">
+		<action name="monitorAction" class="monitorAction">
+			<result>/platform/monitor/hessianHistory.vm</result>
+			<result name="envpre">/platform/monitor/envSet.vm</result>
+		</action>
+	</package>
+</struts>

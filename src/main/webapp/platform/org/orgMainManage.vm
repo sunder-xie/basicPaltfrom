@@ -1,0 +1,274 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body class="easyui-layout">
+    <div data-options="region:'west',title:'组织信息维护'" style="width:720px;" >
+		<div class="easyui-accordion" style="height:500px" id="actionAccordion">
+		<div  title="创建组织跟节点" data-options="iconCls:'icon-tip'" style="overflow:auto;padding:10px;" id="createRoot">
+			<form name='createRootForm'  method="post">
+			<input type="hidden" name='borg.orgParentId' value="0"/>
+			<table width="100%" border="0" cellpadding="0" cellspacing="1">
+			<tr style="height:50px">
+				<td class="head" noWrap>组织名称:</td>
+				<td><input class="easyui-validatebox" id="orgName_createRootForm" name="borg.orgName" data-options="required:true"></td>
+				<td class="head" noWrap>组织性质:</td>
+				<td>
+				<input class="easyui-validatebox" id="orgCity_createRootForm"  value="集团公司" data-options="required:true" readonly />
+				<input type="hidden"  name="borg.orgCity" value="A" data-options="required:true" readonly />
+				</td>
+			</tr>
+			<tr style="height:50px">
+				<td class="head" noWrap>组织层级:</td>
+				<td><input class="easyui-validatebox" id="orgLevel_createRootForm" name="borg.orgLevel" data-options="required:true" value="0"  readonly ></td>
+					<td class="head" noWrap>组织范围:</td>
+				<td>
+					<select class="easyui-combobox" id="orgRange_createRootForm" name="borg.orgRange" style='width:160px' data-options="required:true" style='width:160px'>
+						<option value="I">内部组织</option>
+						<option value="O">外部组织</option>
+					</select>
+				</td>
+			</tr>
+			<tr style="height:50px">
+				<td class="head" noWrap>组织简称:</td>
+				<td><input class="easyui-validatebox" id="shortName_createRootForm" name="borg.shortName" data-options="required:true"></td>
+				<td class="head" noWrap>组织简拼:</td>
+				<td><input class="easyui-validatebox" id="jianPing_createRootForm" name="borg.jianPing" data-options="required:true"></td>
+			</tr>
+			<tr style="height:50px">
+				<td class="head" noWrap>成本中心:</td>
+				<td><input class="easyui-validatebox" id="costCenter_createRootForm" name="borg.costCenter" data-options="required:true"></td>
+				<td class="head" noWrap>SAP组织:</td>
+				<td><input class="easyui-validatebox" id="sapOrgId_createRootForm" name="borg.sapOrgId" data-options="required:true"></td>	
+			</tr>
+			<tr style="height:100px">
+				<td class="head" noWrap colspan="4">
+				<div border="false" style="text-align:center;height:30px;line-height:30px;">
+				<a class="easyui-linkbutton" icon="icon-ok" href="javascript:submit('createRoot')">Submit</a>&nbsp;&nbsp;
+				<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:cancel('createRoot')">Cancel</a>
+				</div>
+				</td>
+			</tr>
+		    </table>
+			</form>
+		</div>
+		<div  title="新增组织节点" data-options="iconCls:'icon-add'" style="overflow:auto;padding:10px;">
+			<form name='createForm'  method="post">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1">
+			<tr style="height:50px">
+				<td class="head" noWrap>组织名称:</td>
+				<td><input class="easyui-validatebox" id="orgName_createForm" name="borg.orgName" data-options="required:true"></td>
+				<td class="head" noWrap></td>
+				<td></td>
+			</tr>
+			<tr style="height:50px">
+				<td class="head" noWrap>组织性质:</td>
+				<td>
+					<select class="easyui-combobox" id="orgCity_createForm" name="borg.orgCity" data-options="required:true" style='width:160px'>
+						<!--option value="A">集团公司</option-->
+						<option value="B">部门</option>
+						<option value="C">公司</option>
+						<option value="D">大区</option>
+						<option value="E">省份</option>
+						<option value="I">城市</option>
+						<option value="F">工厂</option>
+						<option value="G">工厂部门</option>
+						<option value="H">其他</option>
+					</select>
+				</td>
+				<td class="head" noWrap>组织层级:</td>
+				<td><input class="easyui-validatebox" id="orgLevel_createForm" name="borg.orgLevel" data-options="required:true" readonly ></td>
+			</tr>
+			<tr style="height:50px">
+				<td class="head" noWrap>组织范围:</td>
+				<td>
+					<select class="easyui-combobox" id="orgRange_createForm" name="borg.orgRange" data-options="required:true" style='width:160px'>
+						<option value="I">内部组织</option>
+						<option value="O">外部组织</option>
+					</select>
+				</td>
+				<td class="head" noWrap>上级组织:</td>
+				<td>
+					<input class="easyui-validatebox" id="orgParentName_createForm" name="borg.orgParentName" data-options="required:true" readonly >
+					<input type="hidden" id="orgParentId_createForm" name="borg.orgParentId">
+				</td>
+			</tr>
+			<tr style="height:50px">
+				<td class="head" noWrap>组织简称:</td>
+				<td><input class="easyui-validatebox" id="shortName_createForm" name="borg.shortName" data-options="required:true"></td>
+				<td class="head" noWrap>组织简拼:</td>
+				<td><input class="easyui-validatebox" id="jianPing_createForm" name="borg.jianPing" data-options="required:true"></td>
+			</tr>
+			<tr style="height:50px">
+				<td class="head" noWrap>成本中心:</td>
+				<td><input class="easyui-validatebox" id="costCenter_createForm" name="borg.costCenter" data-options="required:true"></td>
+				<td class="head" noWrap>SAP组织:</td>
+				<td><input class="easyui-validatebox" id="sapOrgId_createForm" name="borg.sapOrgId" data-options="required:true"></td>
+			</tr>
+
+			<tr style="height:100px">
+				<td class="head" noWrap colspan="4">
+				<div border="false" style="text-align:center;height:30px;line-height:30px;">
+				<a class="easyui-linkbutton" icon="icon-ok" href="javascript:submit('create')">Submit</a>&nbsp;&nbsp;
+				<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:cancel('create')">Cancel</a>
+				</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="head" noWrap><font color='green'>温馨提示：</font></td>
+				<td><font color='green'>请在右边组织树选中组织,右键点击创建下级组织.</font></td>
+            </tr>
+		    </table>
+			</form>
+		</div>
+		<div  title="修改组织节点" data-options="iconCls:'icon-edit'" style="overflow:auto;padding:10px;">
+			<form name='updateForm'  method="post">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1">
+			<tr style="height:50px">
+				<td class="head" noWrap>组织编号:</td>
+				<td><input class="easyui-validatebox" id="orgId_updateForm" name="borg.orgId" data-options="required:true" readonly ></td>
+				<td class="head" noWrap>组织名称:</td>
+				<td><input class="easyui-validatebox" id="orgName_updateForm" name="borg.orgName" data-options="required:true"></td>
+			</tr>
+			<tr style="height:50px">
+				<td class="head" noWrap>组织性质:</td>
+				<td>
+					<select class="easyui-combobox" id="orgCity_updateForm" name="borg.orgCity" data-options="required:true" style='width:160px'>
+						<!--option value="A">集团公司</option-->
+						<option value="B">部门</option>
+						<option value="C">公司</option>
+						<option value="D">大区</option>
+						<option value="E">省份</option>
+						<option value="I">城市</option>
+						<option value="F">工厂</option>
+						<option value="G">工厂部门</option>
+						<option value="H">其他</option>
+					</select>
+				</td>
+				<td class="head" noWrap>组织层级:</td>
+				<td><input class="easyui-validatebox" id="orgLevel_updateForm" name="borg.orgLevel" data-options="required:true" readonly ></td>
+			</tr>
+			<tr style="height:50px">
+				<td class="head" noWrap>组织范围:</td>
+                <td>
+					<select class="easyui-combobox" id="orgRange_updateForm" name="borg.orgRange" data-options="required:true" style='width:160px'>
+						<option value="I">内部组织</option>
+						<option value="O">外部组织</option>
+					</select>
+				</td>
+				<td class="head" noWrap>上级组织:</td>
+				<td>
+					<input class="easyui-validatebox" id="orgParentName_updateForm" name="borg.orgParentName" readonly>
+					<input type="hidden" id="orgParentId_updateForm" name="borg.orgParentId">
+				</td>
+			</tr>
+			<tr style="height:50px">
+				<td class="head" noWrap>组织简称:</td>
+				<td><input class="easyui-validatebox" id="shortName_updateForm" name="borg.shortName" data-options="required:true"></td>
+				<td class="head" noWrap>组织简拼:</td>
+				<td><input class="easyui-validatebox" id="jianPing_updateForm" name="borg.jianPing" data-options="required:true"></td>
+			</tr>
+			<tr style="height:50px">
+				<td class="head" noWrap>成本中心:</td>
+				<td><input class="easyui-validatebox" id="costCenter_updateForm" name="borg.costCenter" data-options="required:true"></td>
+				<td class="head" noWrap>SAP组织:</td>
+				<td><input class="easyui-validatebox" id="sapOrgId_updateForm" name="borg.sapOrgId" data-options="required:true"></td>	
+			</tr>
+			<tr style="height:100px">
+				<td class="head" noWrap colspan="4">
+				<div border="false" style="text-align:center;height:30px;line-height:30px;">
+				<a class="easyui-linkbutton" icon="icon-ok" href="javascript:submit('update')">Submit</a>&nbsp;&nbsp;
+				<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:cancel('update')">Clear</a>
+				</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="head" noWrap><font color='green'>温馨提示：</font></td>
+				<td><font color='green'>请在右边组织树选中组织,右键点击修改组织信息.</font></td>
+			</tr>
+		    </table>
+			</form>
+		</div>
+		<div  title="组织节点信息" data-options="iconCls:'icon-tip'" style="overflow:auto;padding:10px;">
+			<form name='lookForm'  method="post">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1">
+			<tr style="height:50px">
+				<td class="head" noWrap>组织编号:</td>
+				<td><input class="easyui-validatebox" id="orgId_lookForm" name="borg.orgId" data-options="required:true" readonly ></td>
+				<td class="head" noWrap>组织名称:</td>
+				<td><input class="easyui-validatebox" id="orgName_lookForm" name="borg.orgName" data-options="required:true" readonly ></td>
+			</tr>
+			<tr style="height:50px">
+				<td class="head" noWrap>组织性质:</td>
+				<td>
+					<select class="easyui-combobox" id="orgCity_lookForm" name="borg.orgCity" data-options="required:true" style='width:160px'>
+						<option value="A">集团公司</option>
+						<option value="B">部门</option>
+						<option value="C">公司</option>
+						<option value="D">大区</option>
+						<option value="E">省份</option>
+						<option value="I">城市</option>
+						<option value="F">工厂</option>
+						<option value="G">工厂部门</option>
+						<option value="H">其他</option>
+					</select>
+				</td>
+				<td class="head" noWrap>组织层级:</td>
+				<td><input class="easyui-validatebox" id="orgLevel_lookForm" name="borg.orgLevel" data-options="required:true" readonly ></td>
+			</tr>
+			<tr style="height:50px">
+				<td class="head" noWrap>组织范围:</td>
+                <td>
+					<select class="easyui-combobox" id="orgRange_lookForm" name="borg.orgRange" data-options="required:true" style='width:160px'>
+						<option value="I">内部组织</option>
+						<option value="O">外部组织</option>
+					</select>
+				</td>
+				<td class="head" noWrap>上级组织:</td>
+				<td>
+					<input class="easyui-validatebox" id="orgParentName_lookForm" name="borg.orgParentName" readonly>
+					<input type="hidden" id="orgParentId_lookForm" name="borg.orgParentId" readonly >
+				</td>
+			</tr>
+			<tr style="height:50px">
+				<td class="head" noWrap>组织简称:</td>
+				<td><input class="easyui-validatebox" id="shortName_lookForm" name="borg.shortName" data-options="required:true" readonly ></td>
+				<td class="head" noWrap>组织简拼:</td>
+				<td><input class="easyui-validatebox" id="jianPing_lookForm" name="borg.jianPing" data-options="required:true" readonly ></td>
+			</tr>
+			<tr style="height:50px">
+				<td class="head" noWrap>成本中心:</td>
+				<td><input class="easyui-validatebox" id="costCenter_lookForm" name="borg.costCenter" data-options="required:true"></td>
+				<td class="head" noWrap>SAP组织:</td>
+				<td><input class="easyui-validatebox" id="sapOrgId_lookForm" name="borg.sapOrgId" data-options="required:true"></td>	
+			</tr>
+		    </table>
+			</form>
+		</div>
+		</div>
+	</div>
+	<div data-options="region:'center',split:true,title:'组织层级树',tools:'#all'">
+	<form name='dropForm'  method="post">
+		<input type="hidden" id="targetId" name='borg.targetId'/>
+		<input type="hidden" id="sourceId" name='borg.sourceId'/>
+		<div id='all'>
+		<a href="javascript:void(0)" class="icon-expand" onclick="expandAll()"></a>
+		<a href="javascript:void(0)" class="icon-collapse" onclick="collapseAll()"></a>
+		</div>
+    <ul id="orgTree" class="easyui-tree">
+	</ul>	
+	<div id="treeMenu" class="easyui-menu" style="width:120px;"> 
+    <div name="update">修改组织信息</div>
+	<div name="create">创建下级组织</div> 
+	<div name="delete">删除本组织</div> 
+	</div> 
+    </form>
+	</div> 
+	<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/org/orgMainManage.js"></script>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<body>
+		<form method="post" enctype="multipart/form-data">
+		<input type="hidden" id="tableName" name="tableName" value="$!{tableName}" />
+			<div class="easyui-panel" title="数据上载" data-options="iconCls:'icon-edit'" style="padding: 8px; background: #fafafa;">
+				<table  width="100%" border="0" cellpadding="0" cellspacing="1">
+					<tr>
+						<td class="head" noWrap>Excel导入:</td>
+						<td>
+							<input type="file" class="easyui-validatebox" name="upload" id="upload" data-options="required:true" missingMessage="请选择excel文件!" />&nbsp;&nbsp;
+							<a class="easyui-linkbutton" icon="icon-excel" href="javascript:importData()">导入</a>
+						</td>
+					</tr>
+		    	</table>
+			</div>
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+	</body>
+	<script type="text/javascript" src="$!{env.imgUrl}/js/platform/data/dataImport.js"></script>
+</html>

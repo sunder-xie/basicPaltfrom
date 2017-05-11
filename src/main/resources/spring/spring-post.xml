@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="postAction" class="com.kintiger.platform.post.action.PostAction"
+		parent="baseAction" scope="request">
+		<property name="postService" ref="postService"/>
+		<property name="iOrgService" ref="orgService"/>
+	</bean>
+	
+	<bean id="postService" class="com.kintiger.platform.post.service.impl.PostServiceImpl" >
+		<property name="postDao" ref="postDao"/>
+	</bean>
+	
+	<bean id="postDao" class="com.kintiger.platform.post.dao.impl.PostDaoImpl" parent="baseDao">
+	</bean>
+</beans>

@@ -1,0 +1,748 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="evtstatistics">
+	<typeAlias alias="evtstatistics" type="com.kintiger.platform.evtstatistics.pojo.Evtstatistics" />
+	
+	<select id="searchOverTimeEvtDtlListCount" parameterClass="evtstatistics" resultClass="Integer"> 
+	<![CDATA[
+	select count(*) from (
+	    select count(*)
+               from workflow.workflow_tb_event_detail d
+               left join workflow.workflow_tb_event_detail d1 on d.next_eventdtl_id=d1.event_dtl_id
+               left join workflow.workflow_tb_event_total t on t.event_id=d.event_id
+               left join basis.basis_tb_salesemp_info i on i.emp_id=d.next_user_id
+               left join basis.basis_tb_salesemp_info i1 on i1.emp_id=t.initator
+               left join office.office_tb_evtstatistics_day da on to_date(da.day,'yyyyMMdd')<=d1.last_modify and to_date(da.day,'yyyyMMdd')>=d.last_modify
+               left join office.office_tb_evtstatistics_model m on m.model_id=t.model_id
+               where  d.next_eventdtl_id is not null and d.next_eventdtl_id <>'END' and m.model_id is not null 
+               and (d1.last_modify is null or to_char(d.last_modify,'yyyyMMdd')<>to_char(d1.last_modify,'yyyyMMdd'))
+               and t.status in ('1','2')
+    ]]>
+        <dynamic>
+            <isNotEmpty property="startDate" prepend="and">
+			    <![CDATA[ t.creatdate >= to_date(#startDate#,'yyyy-MM-dd') ]]>
+			</isNotEmpty>
+			<isNotEmpty property="endDate" prepend="and">
+			    <![CDATA[ t.creatdate <= to_date(#endDate#,'yyyy-MM-dd')+1 ]]>
+			</isNotEmpty>
+			<isNotEmpty property="orgId" prepend="and">
+			<![CDATA[ i.org_id  = #orgId# ]]>
+		    </isNotEmpty>
+			<isNotEmpty property="modelType" prepend="and">
+			<![CDATA[ m.model_type  = #modelType#]]>
+		    </isNotEmpty>
+            <isNotEmpty property="eventId" prepend="and">
+			    <![CDATA[ d1.event_id = #eventId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="eventState" prepend="and">
+			    <![CDATA[ t.status = #eventState# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="eventTitle" prepend="and">
+			    <![CDATA[ t.event_title like #eventTitle,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="initatorName" prepend="and">
+			    <![CDATA[ i1.emp_name like #initatorName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="overUserName" prepend="and">
+			    <![CDATA[ i.emp_name like #overUserName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="modelName" prepend="and">
+			    <![CDATA[ m.model_name like #modelName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+		</dynamic>
+    <![CDATA[
+               group by d.next_user_id,d1.cur_sta_id,d1.event_id
+    ]]>
+        <dynamic prepend="having">
+            <isNotEmpty property="overDate" prepend="and">
+			    <![CDATA[ (office.num_evtstatistics_days(min(d.last_modify),max(d1.last_modify))-nvl(count(da.day),0))>=#overDate# ]]>
+			</isNotEmpty>
+			<isEmpty property="overDate" prepend="and">
+			    <![CDATA[ (office.num_evtstatistics_days(min(d.last_modify),max(d1.last_modify))-nvl(count(da.day),0))>0 ]]>
+			</isEmpty>
+        </dynamic>
+    <![CDATA[)]]>
+	</select>
+	
+	<select id="searchOverTimeEvtDtlList" parameterClass="evtstatistics" resultClass="evtstatistics">
+	<include refid="global.paginationStart" /> 
+	<![CDATA[
+	    select d.next_user_id overUserId,
+               d1.cur_sta_id staId,
+               d1.event_id eventId,
+               max(t.event_title) eventTitle,
+               max(t.status) eventState,
+               max(m.model_name) modelName,
+               max(i1.emp_name) initatorName,
+               max(i.emp_name) overUserName,
+               office.num_evtstatistics_days(min(d.last_modify),max(d1.last_modify))-nvl(count(da.day),0) overDate
+               from workflow.workflow_tb_event_detail d
+               left join workflow.workflow_tb_event_detail d1 on d.next_eventdtl_id=d1.event_dtl_id
+               left join workflow.workflow_tb_event_total t on t.event_id=d.event_id
+               left join basis.basis_tb_salesemp_info i on i.emp_id=d.next_user_id
+               left join basis.basis_tb_salesemp_info i1 on i1.emp_id=t.initator
+               left join office.office_tb_evtstatistics_day da on to_date(da.day,'yyyyMMdd')<=d1.last_modify and to_date(da.day,'yyyyMMdd')>=d.last_modify
+               left join office.office_tb_evtstatistics_model m on m.model_id=t.model_id
+               where  d.next_eventdtl_id is not null and d.next_eventdtl_id <>'END' and m.model_id is not null 
+               and (d1.last_modify is null or to_char(d.last_modify,'yyyyMMdd')<>to_char(d1.last_modify,'yyyyMMdd'))
+               and t.status in ('1','2')
+    ]]>
+        <dynamic>
+            <isNotEmpty property="startDate" prepend="and">
+			    <![CDATA[ t.creatdate >= to_date(#startDate#,'yyyy-MM-dd') ]]>
+			</isNotEmpty>
+			<isNotEmpty property="endDate" prepend="and">
+			    <![CDATA[ t.creatdate <= to_date(#endDate#,'yyyy-MM-dd')+1 ]]>
+			</isNotEmpty>
+			<isNotEmpty property="orgId" prepend="and">
+			<![CDATA[ i.org_id  = #orgId#]]>
+		    </isNotEmpty>
+			<isNotEmpty property="modelType" prepend="and">
+			<![CDATA[ m.model_type  = #modelType#]]>
+		    </isNotEmpty>
+            <isNotEmpty property="eventId" prepend="and">
+			    <![CDATA[ d1.event_id = #eventId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="eventState" prepend="and">
+			    <![CDATA[ t.status = #eventState# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="eventTitle" prepend="and">
+			    <![CDATA[ t.event_title like #eventTitle,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="initatorName" prepend="and">
+			    <![CDATA[ i1.emp_name like #initatorName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="overUserName" prepend="and">
+			    <![CDATA[ i.emp_name like #overUserName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="modelName" prepend="and">
+			    <![CDATA[ m.model_name like #modelName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+		</dynamic>
+    <![CDATA[
+               group by d.next_user_id,d1.cur_sta_id,d1.event_id
+    ]]>
+        <dynamic prepend="having">
+            <isNotEmpty property="overDate" prepend="and">
+			    <![CDATA[ (office.num_evtstatistics_days(min(d.last_modify),max(d1.last_modify))-nvl(count(da.day),0))>=#overDate# ]]>
+			</isNotEmpty>
+			<isEmpty property="overDate" prepend="and">
+			    <![CDATA[ (office.num_evtstatistics_days(min(d.last_modify),max(d1.last_modify))-nvl(count(da.day),0))>0 ]]>
+			</isEmpty>
+        </dynamic>
+    <![CDATA[
+               order by d1.event_id desc,d.next_user_id
+     ]]>
+    <include refid="global.paginationEnd" /> 
+	</select>
+	
+	<select id="searchEventModelListCount" parameterClass="evtstatistics" resultClass="java.lang.Integer">
+	<![CDATA[
+	    select count(*)
+	           from office.office_tb_evtstatistics_model t
+	]]>
+	    <dynamic prepend="where">
+            <isNotEmpty property="modelId" prepend="and">
+			    <![CDATA[ t.model_id = #modelId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="modelName" prepend="and">
+			    <![CDATA[ t.model_name like #modelName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+            <isNotEmpty property="modelType" prepend="and">
+			    <![CDATA[ t.model_type = #modelType# ]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="searchEventModelList" parameterClass="evtstatistics" resultClass="evtstatistics">
+	<include refid="global.paginationStart" />
+	<![CDATA[
+	    select t.model_id modelId,
+	           t.model_name modelName,
+	           t.model_type modelType
+	           from office.office_tb_evtstatistics_model t
+	]]>
+	    <dynamic prepend="where">
+            <isNotEmpty property="modelId" prepend="and">
+			    <![CDATA[ t.model_id = #modelId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="modelName" prepend="and">
+			    <![CDATA[ t.model_name like #modelName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+            <isNotEmpty property="modelType" prepend="and">
+			    <![CDATA[ t.model_type = #modelType# ]]>
+			</isNotEmpty>
+		</dynamic>
+    <include refid="global.paginationEnd" />
+	</select>
+	
+	<insert id="createEventModel" parameterClass="evtstatistics">
+	<![CDATA[
+	    insert into office.office_tb_evtstatistics_model
+	    (model_id,
+	     model_name,
+	     model_type
+	     )
+	     values
+	    (#modelId#,
+	     #modelName#,
+	     #modelType#
+	     )
+	]]>
+	</insert>
+	
+	<update id="updateEventModel" parameterClass="evtstatistics">
+	<![CDATA[
+	    update office.office_tb_evtstatistics_model t
+	]]>
+	<dynamic prepend="set">
+	    <isNotEmpty property="modelType" prepend=",">
+            <![CDATA[ t.model_type = #modelType# ]]>
+		</isNotEmpty>
+	</dynamic>
+	<dynamic prepend="where">
+	    <isNotEmpty property="modelId" prepend="and">
+            <![CDATA[ t.model_id = #modelId# ]]>
+		</isNotEmpty>
+	</dynamic>
+	</update>
+	
+	<select id="searchEventModelForCsv" parameterClass="evtstatistics" resultClass="evtstatistics">
+	<![CDATA[
+	    select p.key_ modelId,
+	           p.name_ modelName
+               from osap.act_re_procdef p
+               where p.rowid in (select max(p.rowid) from osap.act_re_procdef p group by p.key_)
+	]]>
+	</select>
+	
+	<select id="searchOverTimeEvtListCount" parameterClass="evtstatistics" resultClass="java.lang.Integer">
+	<![CDATA[
+	select count(*)
+	    from
+	    (select
+	       t.orgId,
+	       sum(decode(t.modelType,'1',1,'')),
+	       sum(decode(t.modelType,'2',1,'')),
+	       sum(decode(t.modelType,'3',1,'')),
+	       sum(decode(t.modelType,'4',1,'')),
+	       sum(decode(t.modelType,'5',1,''))
+	       from 
+	       (select d.next_user_id overUserId,
+               d1.cur_sta_id staId,
+               d1.event_id eventId,
+               max(i.org_id) orgId,
+               max(m.model_type) modelType,
+               office.num_evtstatistics_days(min(d.last_modify),max(d1.last_modify))-nvl(count(da.day),0) overDate
+               from workflow.workflow_tb_event_detail d
+               left join workflow.workflow_tb_event_detail d1 on d.next_eventdtl_id=d1.event_dtl_id
+               left join workflow.workflow_tb_event_total t on t.event_id=d.event_id
+               left join basis.basis_tb_salesemp_info i on i.emp_id=d.next_user_id
+               left join basis.basis_tb_org o on o.org_id=i.org_id
+               left join basis.basis_tb_salesemp_info i1 on i1.emp_id=t.initator
+               left join office.office_tb_evtstatistics_day da on to_date(da.day,'yyyyMMdd')<=d1.last_modify and to_date(da.day,'yyyyMMdd')>=d.last_modify
+               left join office.office_tb_evtstatistics_model m on m.model_id=t.model_id
+               where  d.next_eventdtl_id is not null and d.next_eventdtl_id <>'END' and m.model_id is not null 
+               and (d1.last_modify is null or to_char(d.last_modify,'yyyyMMdd')<>to_char(d1.last_modify,'yyyyMMdd'))
+               and t.status in ('1','2')
+    ]]>
+        <dynamic>
+            <isNotEmpty property="startDate" prepend="and">
+			    <![CDATA[ t.creatdate >= to_date(#startDate#,'yyyy-MM-dd') ]]>
+			</isNotEmpty>
+			<isNotEmpty property="endDate" prepend="and">
+			    <![CDATA[ t.creatdate <= to_date(#endDate#,'yyyy-MM-dd')+1 ]]>
+			</isNotEmpty>
+			<isNotEmpty property="orgId" prepend="and">
+			<![CDATA[ i.org_id in (select b.org_id from basis.basis_tb_org b 
+				         start with b.org_id = #orgId#
+				         connect by prior b.org_id= b.org_parent_id)]]>
+		    </isNotEmpty>
+		</dynamic>
+    <![CDATA[
+               group by d.next_user_id,d1.cur_sta_id,d1.event_id
+    ]]>
+        <dynamic prepend="having">
+            <isNotEmpty property="overDate" prepend="and">
+			    <![CDATA[ (office.num_evtstatistics_days(min(d.last_modify),max(d1.last_modify))-nvl(count(da.day),0))>=#overDate# ]]>
+			</isNotEmpty>
+			<isEmpty property="overDate" prepend="and">
+			    <![CDATA[ (office.num_evtstatistics_days(min(d.last_modify),max(d1.last_modify))-nvl(count(da.day),0))>0 ]]>
+			</isEmpty>
+        </dynamic>
+    <![CDATA[
+        ) t
+        group by t.orgId
+    )
+    ]]>
+	</select>
+	
+	<select id="searchOverTimeEvtList" parameterClass="evtstatistics" resultClass="evtstatistics">
+	<include refid="global.paginationStart" /> 
+	<![CDATA[
+	select
+	       t.orgId,
+	       max(orgName) orgName,
+	       sum(decode(t.modelType,'1',1,'')) numA,
+	       sum(decode(t.modelType,'2',1,'')) numB,
+	       sum(decode(t.modelType,'3',1,'')) numC,
+	       sum(decode(t.modelType,'4',1,'')) numD,
+	       sum(decode(t.modelType,'5',1,'')) numE
+	       from 
+	       (select d.next_user_id overUserId,
+               d1.cur_sta_id staId,
+               d1.event_id eventId,
+               max(i.org_id) orgId,
+               max(o.org_name) orgName,
+               max(t.event_title) eventTitle,
+               max(t.status) eventState,
+               max(m.model_type) modelType,
+               max(i1.emp_name) initatorName,
+               max(i.emp_name) overUserName,
+               office.num_evtstatistics_days(min(d.last_modify),max(d1.last_modify))-nvl(count(da.day),0) overDate
+               from workflow.workflow_tb_event_detail d
+               left join workflow.workflow_tb_event_detail d1 on d.next_eventdtl_id=d1.event_dtl_id
+               left join workflow.workflow_tb_event_total t on t.event_id=d.event_id
+               left join basis.basis_tb_salesemp_info i on i.emp_id=d.next_user_id
+               left join basis.basis_tb_org o on o.org_id=i.org_id
+               left join basis.basis_tb_salesemp_info i1 on i1.emp_id=t.initator
+               left join office.office_tb_evtstatistics_day da on to_date(da.day,'yyyyMMdd')<=d1.last_modify and to_date(da.day,'yyyyMMdd')>=d.last_modify
+               left join office.office_tb_evtstatistics_model m on m.model_id=t.model_id
+               where  d.next_eventdtl_id is not null and d.next_eventdtl_id <>'END' and m.model_id is not null 
+               and (d1.last_modify is null or to_char(d.last_modify,'yyyyMMdd')<>to_char(d1.last_modify,'yyyyMMdd'))
+               and t.status in ('1','2')
+    ]]>
+        <dynamic>
+            <isNotEmpty property="startDate" prepend="and">
+			    <![CDATA[ t.creatdate >= to_date(#startDate#,'yyyy-MM-dd') ]]>
+			</isNotEmpty>
+			<isNotEmpty property="endDate" prepend="and">
+			    <![CDATA[ t.creatdate <= to_date(#endDate#,'yyyy-MM-dd')+1 ]]>
+			</isNotEmpty>
+			<isNotEmpty property="orgId" prepend="and">
+			<![CDATA[ i.org_id in (select b.org_id from basis.basis_tb_org b 
+				         start with b.org_id = #orgId#
+				         connect by prior b.org_id= b.org_parent_id)]]>
+		    </isNotEmpty>
+		</dynamic>
+    <![CDATA[
+               group by d.next_user_id,d1.cur_sta_id,d1.event_id
+    ]]>
+        <dynamic prepend="having">
+            <isNotEmpty property="overDate" prepend="and">
+			    <![CDATA[ (office.num_evtstatistics_days(min(d.last_modify),max(d1.last_modify))-nvl(count(da.day),0))>=#overDate# ]]>
+			</isNotEmpty>
+			<isEmpty property="overDate" prepend="and">
+			    <![CDATA[ (office.num_evtstatistics_days(min(d.last_modify),max(d1.last_modify))-nvl(count(da.day),0))>0 ]]>
+			</isEmpty>
+        </dynamic>
+    <![CDATA[
+        ) t
+        group by t.orgId
+        order by t.orgId
+    ]]>
+    <include refid="global.paginationEnd" /> 
+	</select>
+	
+	<select id="searchEventListCount" parameterClass="evtstatistics" resultClass="java.lang.Integer">
+	<![CDATA[
+	    select count(*)
+               from workflow.workflow_tb_event_total t
+               left join workflow.workflow_tb_event_detail d on d.event_dtl_id=t.tododetailid
+               left join basis.basis_tb_salesemp_info i on i.emp_id=d.cur_user_id
+               left join basis.basis_tb_salesemp_info i1 on i1.emp_id=t.initator
+               left join (select pp.key_,pp.version_,pp.name_ 
+                                 from osap.act_re_procdef pp
+                                 join (select p.key_,max(p.version_) version_
+                                       from osap.act_re_procdef p
+                                       group by p.key_
+                                       )p on p.key_=pp.key_ and p.version_=pp.version_
+                                  ) p on p.key_=t.model_id
+               where 1=1
+    ]]>
+        <dynamic>
+            <isNotEmpty property="startDate" prepend="and">
+			    <![CDATA[ t.creatdate >= to_date(#startDate#,'yyyy-MM-dd') ]]>
+			</isNotEmpty>
+			<isNotEmpty property="endDate" prepend="and">
+			    <![CDATA[ t.creatdate <= to_date(#endDate#,'yyyy-MM-dd')+1 ]]>
+			</isNotEmpty>
+            <isNotEmpty property="eventId" prepend="and">
+			    <![CDATA[ t.event_id = #eventId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="eventState" prepend="and">
+			    <![CDATA[ t.status = #eventState# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="eventTitle" prepend="and">
+			    <![CDATA[ t.event_title like #eventTitle,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="initatorName" prepend="and">
+			    <![CDATA[ i1.emp_name like #initatorName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="curUserName" prepend="and">
+			    <![CDATA[ i.emp_name like #curUserName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="modelId" prepend="and">
+			    <![CDATA[ t.model_id in (#modelId#) ]]>
+			</isNotEmpty>
+			<isNotEmpty property="modelName" prepend="and">
+			    <![CDATA[ p.name_ like #modelName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="modelIds" prepend="and">
+			    <![CDATA[ t.model_id in ]]>
+			    <iterate property="modelIds" open="(" close=")" conjunction=",">#modelIds[]#</iterate>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="searchEventList" parameterClass="evtstatistics" resultClass="evtstatistics">
+	<include refid="global.paginationStart" /> 
+	<![CDATA[
+	    select t.event_id eventId,
+               t.event_title eventTitle,
+               t.status eventState,
+               to_char(t.creatdate,'yyyy-MM-dd hh24:mi:ss') createDate,
+               p.key_ modelId,
+               p.name_ modelName,
+               i1.emp_name initatorName,
+               d.cur_user_id curUserId,
+               i.emp_name curUserName
+               from workflow.workflow_tb_event_total t
+               left join workflow.workflow_tb_event_detail d on d.event_dtl_id=t.tododetailid
+               left join basis.basis_tb_salesemp_info i on i.emp_id=d.cur_user_id
+               left join basis.basis_tb_salesemp_info i1 on i1.emp_id=t.initator
+               left join (select pp.key_,pp.version_,pp.name_ 
+                                 from osap.act_re_procdef pp
+                                 join (select p.key_,max(p.version_) version_
+                                       from osap.act_re_procdef p
+                                       group by p.key_
+                                       )p on p.key_=pp.key_ and p.version_=pp.version_
+                                  ) p on p.key_=t.model_id
+               where 1=1
+    ]]>
+        <dynamic>
+            <isNotEmpty property="startDate" prepend="and">
+			    <![CDATA[ t.creatdate >= to_date(#startDate#,'yyyy-MM-dd') ]]>
+			</isNotEmpty>
+			<isNotEmpty property="endDate" prepend="and">
+			    <![CDATA[ t.creatdate <= to_date(#endDate#,'yyyy-MM-dd')+1 ]]>
+			</isNotEmpty>
+            <isNotEmpty property="eventId" prepend="and">
+			    <![CDATA[ t.event_id = #eventId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="eventState" prepend="and">
+			    <![CDATA[ t.status = #eventState# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="eventTitle" prepend="and">
+			    <![CDATA[ t.event_title like #eventTitle,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="initatorName" prepend="and">
+			    <![CDATA[ i1.emp_name like #initatorName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="curUserName" prepend="and">
+			    <![CDATA[ i.emp_name like #curUserName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="modelId" prepend="and">
+			    <![CDATA[ t.model_id = #modelId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="modelName" prepend="and">
+			    <![CDATA[ p.name_ like #modelName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="modelIds" prepend="and">
+			    <![CDATA[ t.model_id in ]]>
+			    <iterate property="modelIds" open="(" close=")" conjunction=",">#modelIds[]#</iterate>
+			</isNotEmpty>
+		</dynamic>
+    <![CDATA[
+               order by t.event_id desc
+    ]]>
+    <include refid="global.paginationEnd" /> 
+	</select>
+	
+	<select id="searchEventModelHrRoles" parameterClass="evtstatistics" resultClass="evtstatistics">
+	<![CDATA[
+	    select  distinct d.cur_sta_id roleId,
+	                     r.role_name roleName,
+	                     pp.name_ modelName
+                                   from workflow.workflow_tb_event_detail d
+                                   left join workflow.workflow_tb_event_total t on t.event_id=d.event_id
+                                   left join basis.basis_tb_roles r on r.role_id=d.cur_sta_id 
+                                   left join osap.act_hi_procinst p on p.proc_inst_id_=t.event_id
+                                   left join (select pp.id_,pp.key_,pp.version_,pp.name_ 
+                                                     from osap.act_re_procdef pp
+                                                     join (select p.key_,max(p.version_) version_
+                                                                  from osap.act_re_procdef p
+                                                                  group by p.key_
+                                                                  )p on p.key_=pp.key_ and p.version_=pp.version_
+                                                     )pp on pp.id_=p.proc_def_id_
+                                   where pp.key_=#modelId# and t.status in ('1','2') and d.cur_sta_id<>'start'
+	]]>
+	</select>
+	
+	<select id="searchEventModelHrListCount" parameterClass="evtstatistics" resultClass="java.lang.Integer">
+	<![CDATA[
+	select count(*) from (
+	    select t.model_id modelId,
+	           t.model_name modelName,
+	           max(to_char(t.create_date,'yyyy-mm-dd hh24:mi:ss')) createDate
+	           from office.office_tb_evtstatistics_hr t
+	]]>
+	    <dynamic prepend="where">
+            <isNotEmpty property="modelId" prepend="and">
+			    <![CDATA[ t.model_id = #modelId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="modelName" prepend="and">
+			    <![CDATA[ t.model_name like #modelName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+		</dynamic>
+	<![CDATA[
+	    group by t.model_id,t.model_name )
+	]]>
+	</select>
+	
+	<select id="searchEventModelHrList" parameterClass="evtstatistics" resultClass="evtstatistics">
+	<include refid="global.paginationStart" />
+	<![CDATA[
+	    select t.model_id modelId,
+	           t.model_name modelName,
+	           max(to_char(t.create_date,'yyyy-mm-dd hh24:mi:ss')) createDate,
+	           max(i.emp_name) curUserName
+	           from office.office_tb_evtstatistics_hr t
+	           left join basis.basis_tb_salesemp_info i on i.emp_id=t.create_user
+	]]>
+	    <dynamic prepend="where">
+            <isNotEmpty property="modelId" prepend="and">
+			    <![CDATA[ t.model_id = #modelId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="modelName" prepend="and">
+			    <![CDATA[ t.model_name like #modelName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+		</dynamic>
+	<![CDATA[
+	    group by t.model_id,t.model_name
+	]]>
+    <include refid="global.paginationEnd" />
+	</select>
+	
+	<select id="searchEventModelHrDetailList" parameterClass="evtstatistics" resultClass="evtstatistics">
+	<![CDATA[
+	    select t.model_id modelId,
+	           t.model_name modelName,
+	           t.role_id roleId,
+	           t.role_name roleName,
+	           t.days overDate
+	           from office.office_tb_evtstatistics_hr t
+	]]>
+	    <dynamic prepend="where">
+            <isNotEmpty property="modelId" prepend="and">
+			    <![CDATA[ t.model_id = #modelId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="modelName" prepend="and">
+			    <![CDATA[ t.model_name like #modelName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<insert id="createEventModelHr" parameterClass="evtstatistics">
+	<![CDATA[
+	    insert into office.office_tb_evtstatistics_hr
+	    (model_id,
+	     model_name,
+	     role_id,
+	     role_name,
+	     create_date,
+	     create_user,
+	     days
+	     )
+	     values
+	    (#modelId#,
+	     #modelName#,
+	     #roleId#,
+	     #roleName#,
+	     sysdate,
+	     #curUserId#,
+	     #overDate#
+	     )
+	]]>
+	</insert>
+	
+	<update id="updateEventModelHr" parameterClass="evtstatistics">
+	<![CDATA[
+	    merge into office.office_tb_evtstatistics_hr t1
+	    using (select #modelId# as model_id,
+	                  #modelName# as model_name,
+	                  #roleId# as role_id,
+	                  #roleName# as role_name,
+	                  sysdate as create_date,
+	                  #curUserId# as create_user,
+	                  #overDate# as days
+	                  from dual
+	           ) t2
+	    on (t1.model_id=t2.model_id and t1.role_id=t2.role_id)
+	    when matched then
+	    update set t1.create_date=t2.create_date,t1.create_user=t2.create_user,t1.days=t2.days
+	    when not matched then
+	    insert
+	    values
+	       (t2.model_id,
+	        t2.model_name,
+	        t2.role_id,
+	        t2.role_name,
+	        t2.create_date,
+	        t2.create_user,
+	        t2.days
+	        )
+	]]>
+	</update>
+	
+	<select id="searchHrOverTimeEvtDtlListCount" parameterClass="evtstatistics" resultClass="java.lang.Integer">
+	<![CDATA[
+	select count(*) from (
+	    select d.event_id eventId,
+	           max(t.event_title) eventTitle,
+			   max(t.status) eventState,
+			   max(m.model_name) modelName,
+			   max(i.emp_name) initatorName
+			   from workflow.workflow_tb_event_detail d
+               left join workflow.workflow_tb_event_detail d1 on d.next_eventdtl_id=d1.event_dtl_id
+               left join workflow.workflow_tb_event_total t on t.event_id=d.event_id
+               left join basis.basis_tb_salesemp_info i on i.emp_id=t.initator
+               left join office.office_tb_evtstatistics_day da on to_date(da.day,'yyyyMMdd')<=d1.last_modify and to_date(da.day,'yyyyMMdd')>=d.last_modify
+               left join office.office_tb_evtstatistics_model m on m.model_id=t.model_id
+               where t.status='2' and d.next_eventdtl_id is not null and d.next_eventdtl_id <>'END' and m.model_id is not null
+    ]]>
+        <dynamic>
+            <isNotEmpty property="startDate" prepend="and">
+			    <![CDATA[ t.creatdate >= to_date(#startDate#,'yyyy-MM-dd') ]]>
+			</isNotEmpty>
+			<isNotEmpty property="endDate" prepend="and">
+			    <![CDATA[ t.creatdate <= to_date(#endDate#,'yyyy-MM-dd')+1 ]]>
+			</isNotEmpty>
+            <isNotEmpty property="eventId" prepend="and">
+			    <![CDATA[ d1.event_id = #eventId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="eventTitle" prepend="and">
+			    <![CDATA[ t.event_title like #eventTitle,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="initatorName" prepend="and">
+			    <![CDATA[ i.emp_name like #initatorName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+            <isNotEmpty property="modelId" prepend="and">
+			    <![CDATA[ m.model_id = #modelId# ]]>
+			</isNotEmpty>
+		</dynamic>
+    <![CDATA[
+               group by d.event_id
+    ]]>
+        <dynamic prepend="having">
+            <isEqual property="overFlag" compareValue="Y" prepend="and">
+			    <![CDATA[ sum(office.num_evtstatistics_days(d.last_modify,d1.last_modify))>#overDate# ]]>
+            </isEqual>
+            <isEqual property="overFlag" compareValue="N" prepend="and">
+			    <![CDATA[ sum(office.num_evtstatistics_days(d.last_modify,d1.last_modify))<=#overDate# ]]>
+            </isEqual>
+        </dynamic>
+     <![CDATA[
+               order by d.event_id desc
+        )
+     ]]>
+	</select>
+	
+	<select id="searchHrOverTimeEvtDtlList" parameterClass="evtstatistics" resultClass="evtstatistics" remapResults="true">
+	<include refid="global.paginationStart" /> 
+	<![CDATA[
+	    $sql$
+    ]]>
+        <dynamic>
+            <isNotEmpty property="startDate" prepend="and">
+			    <![CDATA[ t.creatdate >= to_date(#startDate#,'yyyy-MM-dd') ]]>
+			</isNotEmpty>
+			<isNotEmpty property="endDate" prepend="and">
+			    <![CDATA[ t.creatdate <= to_date(#endDate#,'yyyy-MM-dd')+1 ]]>
+			</isNotEmpty>
+            <isNotEmpty property="eventId" prepend="and">
+			    <![CDATA[ d1.event_id = #eventId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="eventTitle" prepend="and">
+			    <![CDATA[ t.event_title like #eventTitle,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="initatorName" prepend="and">
+			    <![CDATA[ i.emp_name like #initatorName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+            <isNotEmpty property="modelId" prepend="and">
+			    <![CDATA[ m.model_id = #modelId# ]]>
+			</isNotEmpty>
+		</dynamic>
+    <![CDATA[
+               group by d.event_id
+    ]]>
+        <dynamic prepend="having">
+            <isEqual property="overFlag" compareValue="Y" prepend="and">
+			    <![CDATA[ sum(office.num_evtstatistics_days(d.last_modify,d1.last_modify))>#overDate# ]]>
+            </isEqual>
+            <isEqual property="overFlag" compareValue="N" prepend="and">
+			    <![CDATA[ sum(office.num_evtstatistics_days(d.last_modify,d1.last_modify))<=#overDate# ]]>
+            </isEqual>
+        </dynamic>
+    <![CDATA[
+               order by d.event_id desc
+     ]]>
+    <include refid="global.paginationEnd" /> 
+	</select>
+	
+	<select id="searchSendEmailDateCount" resultClass="java.lang.Integer">
+	<![CDATA[
+	    select count(*)
+	           from office.office_tb_evtstatistics_mail t
+	           where t.send_date=to_char(sysdate,'yyyy-MM-dd')
+	]]>
+	</select>
+	
+	<insert id="createSendEmailDate">
+	<![CDATA[
+	    insert into office.office_tb_evtstatistics_mail
+	    (send_date,
+	     create_date
+	     )
+	     values
+	    (to_char(sysdate,'yyyy-MM-dd'),
+	     sysdate
+	     )
+	]]>
+	</insert>
+	
+	<select id="searchOverTimeEvtDtlForEmail" parameterClass="evtstatistics" resultClass="evtstatistics"> 
+	<![CDATA[
+	    select d.next_user_id overUserId,
+               d1.cur_sta_id staId,
+               d1.event_id eventId,
+               max(t.event_title) eventTitle,
+               max(m.model_name) modelName,
+               max(i1.emp_name) initatorName,
+               max(i.emp_name) overUserName,
+               max(i.rtx_code) email,
+               office.num_evtstatistics_days(min(d.last_modify),max(d1.last_modify))-nvl(count(da.day),0) overDate
+               from workflow.workflow_tb_event_detail d
+               left join workflow.workflow_tb_event_detail d1 on d.next_eventdtl_id=d1.event_dtl_id
+               left join workflow.workflow_tb_event_total t on t.event_id=d.event_id
+               left join basis.basis_tb_salesemp_info i on i.emp_id=d.next_user_id
+               left join basis.basis_tb_salesemp_info i1 on i1.emp_id=t.initator
+               left join office.office_tb_evtstatistics_day da on to_date(da.day,'yyyyMMdd')<=d1.last_modify and to_date(da.day,'yyyyMMdd')>=d.last_modify
+               left join office.office_tb_evtstatistics_model m on m.model_id=t.model_id
+               where  d.next_eventdtl_id is not null and d.next_eventdtl_id <>'END' and m.model_id is not null 
+               and d1.last_modify is null
+               and t.status in ('1')
+               group by d.next_user_id,d1.cur_sta_id,d1.event_id
+    ]]>
+        <dynamic prepend="having">
+            <isNotEmpty property="overDate" prepend="and">
+			    <![CDATA[ (office.num_evtstatistics_days(min(d.last_modify),max(d1.last_modify))-nvl(count(da.day),0))>=#overDate# ]]>
+			</isNotEmpty>
+        </dynamic>
+    <![CDATA[
+               order by d.next_user_id,d1.event_id desc
+     ]]>
+	</select>
+</sqlMap>

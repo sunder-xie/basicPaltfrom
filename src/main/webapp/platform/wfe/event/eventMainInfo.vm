@@ -1,0 +1,29 @@
+<!-- 新系统中显示 -->
+<tr>
+	<td class="head1" colspan="1">
+	内容:
+	</td>
+	<!--#if($proEventTotal.uiXmlFlag=="Y")
+		<td class="even" colspan="5">
+			<iframe name="iframe1" src="eventAction!searchEventContent.jspa?eventId=$!{proEventTotal.eventId}&subFolders=$!{proEventTotal.subFolders}"
+				width="100%" onload="iframeResize();" frameborder="no"></iframe>
+		</td>
+	#elseif($proEventTotal.uiXmlFlag=="N")
+    	<td class="even" colspan="5">
+		#if($proEventTotal.actionId.indexOf("?")==-1)
+			<iframe name="iframe1" src="$!{proEventTotal.actionId}?type=view&XMLId=$!{proEventTotal.eventId}&actionId=$!{proEventTotal.actionId}&xmlFolder=$!{proEventTotal.subFolders}&NFSQID=$!{timestamp}&token=$!{token}" 
+				width="100%" onload="iframeResize();" frameborder="no"></iframe>
+		#else
+	        <iframe name="iframe1" src="$!{proEventTotal.actionId}&iid=0&event_id=$!{proEventTotal.eventId}&xmlFolder=$!{proEventTotal.subFolders}&NFSQID=$!{timestamp}&token=$!{token}" 
+				width="100%" onload="iframeResize();" frameborder="no"></iframe>
+		#end
+    	</td>
+    #end-->
+	<td class="even" colspan="5">
+		#if($!{proEventTotal.actionId})
+		<iframe id="iframe1" src="$!{proEventTotal.actionId}?eventId=$!{proEventTotal.eventId}&subFolders=$!{proEventTotal.subFolders}"
+			width="100%" onload="iframeResize();" frameborder="no">
+        </iframe>
+		#end
+	</td>
+</tr>

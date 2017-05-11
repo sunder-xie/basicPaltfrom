@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<body>
+	<form method="post">
+		<div class="easyui-panel" data-options="collapsible:true,iconCls:'icon-tip'" title="回复列表 ">
+			<table width="100%" border="0" cellpadding="0" cellspacing="8">
+				<tr>
+					<td valign="top">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0">
+							<tr>
+								<td colspan="2">
+									#foreach($cc in $ccs)
+											<table width="100%" border="0" cellpadding="0" cellspacing="1" class=outer>
+										<tr>
+											<td class="head1" noWrap colspan="1">
+        										处理人:
+											</td>
+        									<td class="even" noWrap   style="width:165px">
+        										$!{cc.creator_name}
+											</td>
+											 <td class="head1" noWrap colspan="1">
+        										处理时间:
+        									  </td>
+        									  <td class="even" noWrap  style="width:165px">
+    											#if(${cc.replay_date})
+    												$dateUtil.datetime($!{cc.replay_date},"yyyy-MM-dd HH:mm:ss")
+												#end
+
+        									</td>
+										</tr>
+        									<tr>
+        											<td class="head1" colspan="1" noWrap>
+        												提交意见:
+        											</td>
+        											<td class="even" colspan="5" noWrap>
+														#if(${cc.replay_memo})
+															$!{cc.replay_memo}
+														#else
+															无回复
+														#end
+        											</td>
+        									</tr>
+        										
+											</table>
+									#end
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+            </div>
+		</form>
+	</body>
+</html>

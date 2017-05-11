@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="news" extends="kintiger-default">
+		<action name="newsAction" class="newsAction">
+			<result name="newsIndex">/platform/news/newsIndex.vm</result>
+			<result name="searchTotal">/platform/news/newsIndex.vm</result>
+			<result name="oneNews">/platform/news/oneNews.vm</result>
+			<result name="newsTotAdd">/platform/news/createNewsTotal.vm</result>
+			<result name="newsTree">/platform/news/newsTree.vm</result>
+			<result name="success">/platform/framework/common/resultMessage.vm</result>
+			<result name="searchNewsTotal">/platform/news/searchNewsTotal.vm</result>
+			<result name="newsDetail_add">/platform/news/news_det_add.vm</result>
+			<result name="searchNewsDetail">/platform/news/searchNewsDetail.vm</result>
+			<result name="getSearchNews">/platform/news/search.vm</result>
+			<result name="preview">/platform/news/oneNews.vm</result>
+			<result name="updateNewsDetailPre">/platform/news/news_det_update.vm</result>
+			<result name="updateNewsTotalPre">/platform/news/updateNewsTotal.vm</result>
+			<result name="toPayOff">/platform/news/topayoff.vm</result>
+		</action>
+	</package>
+</struts>

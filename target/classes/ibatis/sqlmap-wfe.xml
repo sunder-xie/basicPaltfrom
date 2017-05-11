@@ -1,0 +1,1415 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="wfe">
+	
+	<typeAlias alias="actProcdef" type="com.kintiger.platform.wfe.pojo.ActProcdef" />
+	<typeAlias alias="allUsers" type="com.kintiger.platform.allUser.pojo.AllUsers" />
+	<typeAlias alias="proEventLookUp" type="com.kintiger.platform.wfe.pojo.ProEventLookUp" />
+	<typeAlias alias="processEventTotal" type="com.kintiger.platform.webservice.pojo.ProcessEventTotal" />
+	
+	<typeAlias alias="proEventTotal" type="com.kintiger.platform.wfe.pojo.ProEventTotal" />
+	<typeAlias alias="proEventDetail" type="com.kintiger.platform.wfe.pojo.ProEventDetail" />
+	<typeAlias alias="budgetFileTmp" type="com.kintiger.platform.file.pojo.BudgetFileTmp" />
+	<typeAlias alias="linkMan" type="com.kintiger.platform.wfe.pojo.LinkMan" />
+	<typeAlias alias="tripWay" type="com.kintiger.platform.wfe.pojo.TripWay" />
+	<typeAlias alias="cc" type="com.kintiger.platform.wfe.pojo.Cc" />
+	<typeAlias alias="orderCheck" type="com.kintiger.platform.wfe.pojo.OrderCheck" />
+
+	
+	<select id="getUserModel" parameterClass="actProcdef"
+			resultClass="actProcdef">
+		<![CDATA[
+		 	select distinct a.key_ key,a.name_ name from osap.act_re_procdef a where a.suspension_state_ = 1
+		]]>
+	 	<dynamic>
+			<isNotEmpty property="models" prepend="and">
+			<![CDATA[ a.key_ in  ]]>
+				<iterate property="models" open="(" close=")" conjunction=",">#models[]#
+				</iterate>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<!--获取事务指定当前处理人对应的流程Detail(第一条,有可能多条)-->
+	<select id="getDeatilByCurUserAndEventID" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+	<![CDATA[
+		select t.event_dtl_id as eventDtlId from (
+			select a.event_dtl_id from workflow.workflow_tb_event_detail a
+			where a.event_id = #event_id# 
+		 	and a.cur_user_id = #cur_user_id#
+		 	order by a.event_dtl_id ) t
+		where rownum = 1
+	]]>
+	</select>
+
+	<select id="getWfeActionId" parameterClass="java.lang.String" resultClass="java.lang.String">
+		<![CDATA[
+		select t.action_id from workflow.workflow_tb_event_total t where t.event_id = #eventId#
+		]]>
+	</select>
+	
+	<select id="getEvent_XmlTempID" resultClass="java.lang.Long">
+		select osap.wfe_event_xmlid.nextval from dual
+	</select>
+	
+	<select id="getEmpListByOrgId" parameterClass="java.lang.Long" 
+			resultClass="allUsers">
+		<![CDATA[
+			select distinct a.emp_id       as userId,
+       						a.emp_name     as userName,
+       						a.org_id       as orgId,
+       						c.station_name as posName
+  			from basis.basis_tb_salesemp_info a
+  			left join basis.basis_tb_station_user b on a.emp_id = b.user_id
+  			left join basis.basis_tb_stations c on b.station_id = c.station_id
+ 			where a.emp_state in('S','Y') and a.org_id = #org_id#
+		]]>
+	</select>
+	<select id="getEventTotalById" parameterClass="java.lang.Long" resultClass="proEventTotal">
+	<![CDATA[
+		select distinct t.event_id    as eventId,
+         t.event_title as eventTitle,
+         q.name_  as modelName,
+         t.creatdate   as createDate,
+         t.model_id as modelId,
+         t.status,
+         t.keys,
+         t.ui_xml_flag as uiXmlFlag,
+         t.action_id   as actionId,
+         t.condition,
+         t.initator,
+         t.tododetailId as detailId,
+         t.sub_folders as subFolders
+      from workflow.workflow_tb_event_total t, osap.act_re_procdef q
+     where t.model_id = q.key_
+       and t.event_id = #eventId#
+       and q.suspension_state_= 1
+       and q.version_=(select max(o.version_) from osap.act_re_procdef o where o.key_=t.model_id and o.suspension_state_= 1)
+	]]>
+	</select>
+	
+	<select id="getEventTotalByIdAndCcId" parameterClass="java.util.HashMap" resultClass="proEventTotal">
+	<![CDATA[
+		select distinct t.event_id    as eventId,
+         t.event_title as eventTitle,
+         q.name_  as modelName,
+         t.creatdate   as createDate,
+         t.model_id as modelId,
+         t.status,
+         t.keys,
+         t.ui_xml_flag as uiXmlFlag,
+         t.action_id   as actionId,
+         t.condition,
+         t.sub_folders as subFolders,
+         c.replay_memo as replayMemo
+      from workflow.workflow_tb_event_total t
+      left join  workflow.workflow_tb_cc c on c.event_id=t.event_id
+      left join osap.act_hi_actinst e on e.proc_inst_id_=c.event_id
+      left join osap.act_re_procdef q on q.id_=e.proc_def_id_
+       where  t.event_id = #event_id#
+       and q.suspension_state_= 1
+       and c.cc_id = #cc_id#
+	]]>
+	</select>
+	
+	<!-- 查询某个事务的已处理detail节点-->
+	<select id="getEventDetailList" parameterClass="proEventDetail" resultClass="proEventDetail">
+	<![CDATA[
+		select d.event_dtl_id     as eventDtlId,
+		       d.cur_user_id      as curUserId,
+		       r.role_name        as roleName,
+		       i.emp_name         as userName,
+		       d.last_modify      as lastModify,
+		       d.operation,
+		       d.memo,
+		       b.fileid,
+		       b.filename,
+		       b.filename_new     as filenameNew,
+		       i.org_id           as curOrgId,
+		       d.time,
+		       b.sub_folders      as subFolders,
+		       d.cur_model_dtl_id as curModelDtlId,
+		       d.cur_sta_id       as curStaId,
+		       cc.repalyCount     as repalyCount
+		  from workflow.workflow_tb_event_detail d,
+		       basis.basis_tb_roles r,
+		       basis.basis_tb_salesemp_info i,
+		       workflow.workflow_tb_file b,
+		       (select count(1) as repalyCount, c.event_detail_id
+		          from workflow.workflow_tb_cc           c,
+		               workflow.workflow_tb_event_detail d
+		         where c.event_detail_id = d.event_dtl_id
+		           and d.event_id = #eventId#
+		         group by c.event_detail_id) cc
+		 where d.cur_sta_id = r.role_id(+)
+		   and d.cur_user_id = i.emp_id
+		   and d.event_dtl_id = b.event_dtl_id(+)
+		   and d.event_dtl_id = cc.event_detail_id(+)
+		   and d.operation in (0, 1, 5, 2, 9, 6)
+		   and d.cur_user_id is not null
+		   and d.event_id = #eventId#
+		 order by d.time ,d.event_dtl_id asc
+
+	]]>
+	
+	
+	</select>
+	
+	<select id="getAuthorizationCount" parameterClass="proEventLookUp" 
+			resultClass="java.lang.Integer">
+		<![CDATA[
+			select count(a.event_lookup_id) from workflow.workflow_tb_event_auth a
+ 			where a.event_id = #eventId# and a.user_id = #userId# and a.state='Y'
+		]]>
+	</select>
+	
+	<insert id="createAuthorization" parameterClass="proEventLookUp" >
+		<selectKey resultClass="java.lang.Long" keyProperty="eventLookUpId">
+		<![CDATA[
+			select workflow.workflow_seq_event_auth.nextval as eventLookUpId from dual
+		]]>
+		</selectKey>
+	<![CDATA[
+		insert into workflow.workflow_tb_event_auth
+		  (event_lookup_id,
+		   user_id,
+		   state,
+		   creator,
+		   create_date,
+		   modifyer,
+		   modify_date,
+		   event_id
+		  )
+		values
+		  (#eventLookUpId#,
+		   #userId#,
+		   'Y',
+		   #creator#,
+		   sysdate,
+		   #userId#,
+		   sysdate,
+		   #eventId#
+		 )
+	]]>
+	</insert>
+	
+	<select id="getEventReaderListCount" parameterClass="proEventLookUp" 
+			resultClass="java.lang.Integer">
+		<![CDATA[
+			select count(1)
+			  from workflow.workflow_tb_event_auth a
+  			left join basis.basis_tb_salesemp_info b on a.user_id = b.emp_id
+ 			left join basis.basis_tb_salesemp_info c on a.creator = c.emp_id
+  			left join basis.basis_tb_org g on b.org_id = g.org_id
+  			where a.event_id = #eventId# and a.state = 'Y' and a.creator=#creator#
+		]]>
+		<dynamic>
+			<isNotEmpty property="userName" prepend="and">
+			<![CDATA[ b.emp_name like #userName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getEventReaderList" parameterClass="proEventLookUp" resultClass="proEventLookUp">
+		<include refid="global.paginationStart" />
+	<![CDATA[
+		select 
+				a.event_lookup_id as eventLookUpId,
+				b.emp_name as userName,
+				c.emp_name as creator, 
+				a.create_date as createDate, 
+				g.org_name as orgName
+  			from workflow.workflow_tb_event_auth a
+  			left join basis.basis_tb_salesemp_info b on a.user_id = b.emp_id
+ 			left join basis.basis_tb_salesemp_info c on a.creator = c.emp_id
+  			left join basis.basis_tb_org g on b.org_id = g.org_id
+  			where a.event_id = #eventId# and a.state = 'Y' and a.creator=#creator#
+	]]>	     
+		<dynamic>
+			<isNotEmpty property="userName" prepend="and">
+			<![CDATA[ b.emp_name like #userName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+		</dynamic>
+	<![CDATA[		     
+		 order by a.event_lookup_id desc
+	]]>
+		<include refid="global.paginationEnd" />
+	</select>
+	
+	<update  id="deleteAuthorization" parameterClass="java.lang.Long" >
+	<![CDATA[
+		  update  workflow.workflow_tb_event_auth a set a.modify_date =sysdate,
+				 a.state ='N'
+			where a.event_lookup_id = #lookUpId# 
+	]]>
+	</update>
+	
+	<select id="getEventIdList" parameterClass="java.lang.String" resultClass="java.lang.String">
+		<![CDATA[
+			select event_id from workflow.workflow_tb_event_auth a where a.user_id=#userId# and a.state='Y'
+		]]>
+	</select>
+	
+	<select id="getAuthorizeEventById" parameterClass="java.lang.String" resultClass="processEventTotal">
+		<![CDATA[
+			select 	
+					a.event_id as eventId,
+					a.tododetailid as currentDetailid,
+					a.event_title as eventTitle,
+					a.initator as initator,
+					b.emp_name as empName,
+					a.model_id as modelId,
+					c.name_ as modelName,
+					a.creatdate as creatdate,
+					a.status as status
+			from workflow.workflow_tb_event_total a 
+			left join basis.basis_tb_salesemp_info b on a.initator=b.emp_id 
+			left join osap.act_re_procdef c on a.model_id=c.key_
+			where a.event_id=#eventId# and c.suspension_state_= 1
+		]]>
+	</select>
+	
+	<select id="getAuthorizeEventJsonListCount" parameterClass="processEventTotal" resultClass="java.lang.Integer">
+		<![CDATA[
+			select count(1)
+			from workflow.workflow_tb_event_auth t, workflow.workflow_tb_event_total a,  
+			basis.basis_tb_salesemp_info b, osap.act_re_procdef c 
+			where t.user_id=#userId# and t.state='Y' and a.event_id = t.event_id 
+			and a.initator=b.emp_id and a.model_id=c.key_ and c.suspension_state_= 1
+		]]>
+		<dynamic>
+			<isNotEmpty property="eventId" prepend="and">
+				<![CDATA[  a.event_id like '%' || #eventId# || '%' escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="eventTitle" prepend="and">
+				<![CDATA[  a.event_title like #eventTitle,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="empName" prepend="and">
+				<![CDATA[  b.emp_name like #empName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="modelName" prepend="and">
+				<![CDATA[  c.name_ like #modelName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getAuthorizeEventJsonList" parameterClass="processEventTotal" resultClass="processEventTotal">
+		<include refid="global.paginationStart" />
+		<![CDATA[
+			select 
+					a.event_id as eventId,
+					a.tododetailid as currentDetailid,
+					a.event_title as eventTitle,
+					a.initator as initator,
+					b.emp_name as empName,
+					a.model_id as modelId,
+					c.name_ as modelName,
+					a.creatdate as creatdate,
+					a.status as status
+			from workflow.workflow_tb_event_auth t, workflow.workflow_tb_event_total a,  
+			basis.basis_tb_salesemp_info b, osap.act_re_procdef c 
+			where t.user_id=#userId# and t.state='Y' and a.event_id = t.event_id 
+			and a.initator=b.emp_id and a.model_id=c.key_ and c.suspension_state_= 1
+			and c.version_=(select max(t.version_) from osap.act_re_procdef t where t.key_=a.model_id and t.suspension_state_= 1)
+		]]>
+		<dynamic>
+			<isNotEmpty property="eventId" prepend="and">
+				<![CDATA[  a.event_id like '%' || #eventId# || '%' escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="eventTitle" prepend="and">
+				<![CDATA[  a.event_title like #eventTitle,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="empName" prepend="and">
+				<![CDATA[  b.emp_name like #empName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="modelName" prepend="and">
+				<![CDATA[  c.name_ like #modelName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+		</dynamic>
+		<include refid="global.orderBy" />
+		<include refid="global.paginationEnd" />
+	</select>
+	
+	<insert id="createBudgetFileTmp" parameterClass="budgetFileTmp">
+		<selectKey resultClass="java.lang.Long" keyProperty="fileId">
+		<![CDATA[
+			select workflow.workflow_seq_file.nextval as fileId from dual
+		]]>
+		</selectKey>
+	<![CDATA[
+		insert into workflow.workflow_tb_file
+		  (FILEID,
+		   FILENAME,
+		   CREATEDATE,
+		   FILENAME_NEW,
+		   EVENT_DTL_ID,
+		   SUB_FOLDERS)
+		values
+		  (#fileId#,
+		   #fileName#,
+		   sysdate,
+		   #fileNameNew#,
+		   #eventDtlId#,
+		   #subFolders#)
+	]]>
+	</insert>
+	
+	<!-- 常用联系人个数 -->
+	<select id="getLinkManCount" parameterClass="linkMan" resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(t.link_id)
+		  from workflow.workflow_tb_wfe_tb_linkman t, basis.basis_tb_salesemp_info p
+		 where t.linkman_id = p.emp_id
+		   and p.emp_state = 'Y'
+		   and t.emp_id = #empId#
+	]]>
+		<dynamic>
+			<isNotEmpty property="linkManId" prepend="and">
+			<![CDATA[ t.linkman_id = #linkManId#]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<!--查询常用联系人-->
+	<select id="getLinkManList" parameterClass="linkMan" resultClass="linkMan">
+	<![CDATA[
+		select distinct l.linkman_id   as linkManId,
+			   l.linkman_name as linkManName,
+			   l.orgid        as orgId,
+			   o.org_name     as orgName,
+			   l.use_count    as useCount
+		  from workflow.workflow_tb_wfe_tb_linkman l
+		  left join basis.basis_tb_org o
+			on l.orgid = o.org_id
+		  left join basis.basis_tb_salesemp_info p
+			on l.linkman_id = p.emp_id
+		 where p.emp_state = 'Y'
+		   and l.emp_id = #empId#
+	]]>
+		<dynamic>
+			<isNotEmpty property="linkManId" prepend="and">
+			<![CDATA[ l.linkman_id = #linkManId#]]>
+			</isNotEmpty>
+		</dynamic>
+	<![CDATA[
+		order by l.use_count desc
+	]]>
+	</select>
+	
+	<!--创建常用联系人-->
+	<insert id="createLinkMan" parameterClass="linkMan">
+		<selectKey resultClass="java.lang.Long" keyProperty="linkId">
+		<![CDATA[
+			select workflow.workflow_seq_wfe_tb_linkman.nextval from dual
+		]]>
+		</selectKey>
+	<![CDATA[
+		insert into workflow.workflow_tb_wfe_tb_linkman
+		  (LINK_ID,
+		   EMP_ID,
+		   LINKMAN_ID,
+		   LINKMAN_NAME,
+		   USE_COUNT,
+		   CREATE_DATE,
+		   MODIFY_DATE,
+		   ORGNAME,
+		   ORGID)
+		values
+		  (#linkId#,
+		   #empId#,
+		   #linkManId#,
+		   #linkManName#,
+		   #useCount#,
+		   sysdate,
+		   sysdate,
+		   #orgName#,
+		   #orgId#)
+	]]>
+	</insert>
+	
+	<!--更新常用联系人-->
+	<update id="updateLinkMan" parameterClass="linkMan">
+	<![CDATA[
+		update workflow.workflow_tb_wfe_tb_linkman t
+		   set t.modify_date = sysdate, t.use_count = nvl(t.use_count, 0) + #useCount#
+		 where t.emp_id = #empId#
+		   and t.linkman_id = #linkManId#
+	]]>
+	</update>
+	
+	
+	<select id="getStationListByEventId" parameterClass="java.lang.Long" resultClass="proEventDetail">
+		<![CDATA[
+			select a.cur_user_id  as curUserId,
+			       a.event_dtl_id as eventDtlId,
+			       a.cur_sta_id   as curStaId,
+			       p.emp_name     as curUserName,
+			       b.role_name    as roleName
+				  from workflow.workflow_tb_event_detail a
+				  left join basis.basis_tb_salesemp_info p on a.cur_user_id = p.emp_id
+				  left join basis.basis_tb_roles b on a.cur_sta_id = b.role_id
+				 where  a.event_id = #event_id#
+				 and b.state='U'
+				 and a.event_dtl_id <
+				       (select min(d.event_dtl_id)
+				          from workflow.workflow_tb_event_detail d
+				         where d.event_id = #event_id#
+				           and d.cur_sta_id = (select d2.cur_sta_id
+				                                 from workflow.workflow_tb_event_detail d2
+				                                where d2.event_id = #event_id#
+				                                  and d2.operation ='9'))
+				 order by a.event_dtl_id
+		]]>
+	</select>
+	
+	<select id="getBackListByEventId" parameterClass="java.lang.Long" resultClass="proEventDetail">
+		<![CDATA[
+			select  a.cur_user_id  as curUserId,
+       				a.event_dtl_id as eventDtlId,
+       				a.cur_sta_id   as curStaId,
+      				p.emp_name     as curUserName,
+      				p.org_id	   as nextOrgId,
+       				b.role_name    as roleName
+  			from workflow.workflow_tb_event_detail a
+  			left join basis.basis_tb_salesemp_info p on a.cur_user_id = p.emp_id
+  			left join basis.basis_tb_roles b on a.cur_sta_id = b.role_id
+ 			where a.event_dtl_id in (select min(t.event_dtl_id)
+                            			from workflow.workflow_tb_event_detail t
+                          			  where t.event_id = #event_id#
+                             				and t.operation = 1
+                           			  group by t.cur_user_id) 
+                             				and a.event_dtl_flag='Y'
+ 			order by a.event_dtl_id desc
+		]]>
+	</select>
+	
+	<update id="updateBuglogFile" parameterClass="java.util.HashMap">
+		<![CDATA[
+			update office.office_tb_buglog_file t set t.state=#state# ,t.modify_date=sysdate, t.last_date=sysdate where t.event_id=#eventId# 
+		]]>
+	</update>
+	<update id="updateEventFlag" parameterClass="java.util.HashMap">
+		<![CDATA[
+			update  workflow.workflow_tb_event_detail t set t.event_dtl_flag='H'  where t.event_id=#eventId# and t.cur_user_id=#userId#
+		]]>
+	</update>
+	<select id="getTripWayCount" parameterClass="tripWay" resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(1)
+  		from basis.basis_tb_dict t, basis.basis_tb_dict_type a
+		where a.dict_type_id = t.dict_type_id
+   			  and a.dict_type_value = 'tripType'
+   			  and t.item_state = 'U'
+
+	]]>
+		<dynamic>
+			<isNotEmpty property="text" prepend="and">
+			<![CDATA[ 
+				( t.item_value like #text,handler=wildcard# escape '\'
+				or t.item_name like #text,handler=wildcard# escape '\')
+			]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getTripWayList" parameterClass="tripWay" resultClass="tripWay">
+	<![CDATA[
+		select t.item_name as name, t.item_value as value
+  		from basis.basis_tb_dict t, basis.basis_tb_dict_type a
+		where a.dict_type_id = t.dict_type_id
+   			  and a.dict_type_value = 'tripType'
+   			  and t.item_state = 'U'
+
+	]]>
+		<dynamic>
+			<isNotEmpty property="text" prepend="and">
+			<![CDATA[ 
+				( t.item_value like #text,handler=wildcard# escape '\'
+				or t.item_name like #text,handler=wildcard# escape '\')
+			]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getTripApplyListCount" parameterClass="proEventTotal" 
+			resultClass="java.lang.Integer">
+		<![CDATA[
+			select count(*)
+			  from workflow.workflow_tb_event_total l
+			  left join basis.basis_tb_salesemp_info o
+			    on o.emp_id = l.initator
+			 where l.model_id = 'fix_travel'
+			   and l.status = '2'
+		]]>
+		<dynamic>
+			<isNotEmpty property="eventId" prepend="and">
+			<![CDATA[ l.event_id = #eventId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="initator" prepend="and">
+			<![CDATA[ l.initator = #initator# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="userName" prepend="and">
+			<![CDATA[ o.emp_name like #userName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="eventTitle" prepend="and">
+			<![CDATA[ l.event_title like #eventTitle,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getTripApplyList" parameterClass="proEventTotal" 
+			resultClass="proEventTotal">
+		<![CDATA[
+			select l.event_id    eventId,
+			       o.emp_name    userName,
+			       l.sub_folders subFolders,
+			       l.status,
+			       l.event_title eventTitle
+		  from workflow.workflow_tb_event_total l
+		  left join basis.basis_tb_salesemp_info o
+		    on o.emp_id = l.initator
+		  left join (select ot.travel_eventid
+		               from office.office_tb_form_total      ot,
+		                    workflow.workflow_tb_event_total ll
+		              where ll.event_id = ot.transaction_id
+		                and ll.status in ('1', '2')) oo
+		    on oo.travel_eventid = l.event_id
+		 where l.model_id = 'fix_travle'
+		   and l.status = '2'
+		   and oo.travel_eventid is null
+		]]>
+		<dynamic>
+			<isNotEmpty property="eventId" prepend="and">
+			<![CDATA[ l.event_id = #eventId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="initator" prepend="and">
+			<![CDATA[ l.initator = #initator# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="userName" prepend="and">
+			<![CDATA[ o.emp_name like #userName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="eventTitle" prepend="and">
+			<![CDATA[ l.event_title like #eventTitle,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+		</dynamic>
+		<![CDATA[
+			order by l.event_id desc
+		]]>
+	</select>
+	
+	<insert id="createCc" parameterClass="cc" >
+		<selectKey resultClass="java.lang.Long" keyProperty="cc_id">
+		<![CDATA[
+			select workflow.workflow_seq_cc.nextval as cc_id from dual
+		]]>
+		</selectKey>
+	<![CDATA[
+		insert into workflow.workflow_tb_cc
+		  (cc_id,
+		   event_id,
+		   event_detail_id,
+		   create_date,
+		   creator,
+		   replay_memo,
+		   cc_user_id,
+		   replay_date,
+		   type
+		  )
+		values
+		  (#cc_id#,
+		   #event_id#,
+		   #event_detail_id#,
+		   sysdate,
+		   #creator#,
+		   #replay_memo#,
+		   #cc_user_id#,
+		   #replay_date#,
+		   #type#
+		 )
+	]]>
+	</insert>
+	<update id="updateCc" parameterClass="cc">
+		<![CDATA[
+			update workflow.workflow_tb_cc t set t.replay_date=sysdate ,t.replay_memo=#replay_memo# where t.cc_id=#cc_id# 
+		]]>
+	</update>
+	<select id="getCcListCount" parameterClass="cc" resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(1)
+  		from workflow.workflow_tb_cc t, workflow.workflow_tb_event_total l,basis.basis_tb_salesemp_info o
+		where t.event_id = l.event_id and t.cc_user_id = #cc_user_id#
+		      and to_char(o.emp_id) = t.creator
+	]]>
+		<dynamic>
+			<isNotEmpty property="creator_name" prepend="and">
+			<![CDATA[ 
+				(o.emp_name like #creator_name,handler=wildcard# escape '\')
+			]]>
+			</isNotEmpty>
+			<isNotEmpty property="event_id" prepend="and">
+			<![CDATA[ 
+				t.event_id = #event_id#
+			]]>
+			</isNotEmpty>
+			<isNotEmpty property="event_title" prepend="and">
+			<![CDATA[ 
+				(l.event_title like #event_title,handler=wildcard# escape '\')
+			]]>
+			</isNotEmpty>
+			<isEqual property="flag" compareValue="1" prepend="and">
+				t.replay_memo is null
+ 			</isEqual>
+			<isEqual property="flag" compareValue="2" prepend="and">
+			<![CDATA[ 
+				t.replay_memo is not null
+			]]>
+			</isEqual>
+		</dynamic>
+	</select>
+	
+	<select id="getCcList" parameterClass="cc" resultClass="cc">
+		<include refid="global.paginationStart" />
+		<![CDATA[
+		select t.*,o.emp_name creator_name,l.event_title
+  		from workflow.workflow_tb_cc t, workflow.workflow_tb_event_total l,basis.basis_tb_salesemp_info o
+		where t.event_id = l.event_id and t.cc_user_id = #cc_user_id#
+		      and to_char(o.emp_id) = t.creator
+		]]>
+		<dynamic>
+			<isNotEmpty property="creator_name" prepend="and">
+			<![CDATA[ 
+				(o.emp_name like #creator_name,handler=wildcard# escape '\')
+			]]>
+			</isNotEmpty>
+			<isNotEmpty property="event_id" prepend="and">
+			<![CDATA[ 
+				t.event_id = #event_id#
+			]]>
+			</isNotEmpty>
+			<isNotEmpty property="event_title" prepend="and">
+			<![CDATA[ 
+				(l.event_title like #event_title,handler=wildcard# escape '\')
+			]]>
+			</isNotEmpty>
+			
+			<isEqual property="flag" compareValue="1" prepend="and">
+				t.replay_memo is null
+ 			</isEqual>
+			<isEqual property="flag" compareValue="2" prepend="and">
+			<![CDATA[ 
+				t.replay_memo is not null
+			]]>
+			</isEqual>
+		</dynamic>
+			<![CDATA[
+			order by t.cc_id desc
+		]]>
+		<include refid="global.paginationEnd" />
+	</select>
+	
+	<select id="getCcListByEventId" parameterClass="cc" resultClass="cc">
+		<![CDATA[
+		select t.*,o.emp_name creator_name
+  		from workflow.workflow_tb_cc t,basis.basis_tb_salesemp_info o
+		where t.event_id = #event_id# and t.event_detail_id = #event_detail_id#
+		      and to_char(o.emp_id) = t.cc_user_id
+		]]>
+	</select>
+	
+	<select id="getCancelEventCount" parameterClass="processEventTotal" resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(*) from workflow.workflow_tb_event_total t
+		where t.initator = #initator#
+		and t.status = #status#
+	]]>
+	<dynamic>
+		<isNotEmpty property="eventId" prepend="and">
+			<![CDATA[ 
+				t.event_id = #eventId#
+			]]>
+		</isNotEmpty>
+		<isEmpty property="isRead" prepend="and">
+			<![CDATA[ 
+				t.is_read is null
+			]]>
+		</isEmpty>
+		<isNotEmpty property="isRead" prepend="and">
+			<![CDATA[ 
+				t.is_read = '1'
+			]]>
+		</isNotEmpty>
+		<isNotEmpty property="eventTitle" prepend="and">
+			<![CDATA[ 
+				t.event_title = #eventTitle#
+			]]>
+		</isNotEmpty>
+	</dynamic>
+	</select>
+	
+	<select id="getCancelEventList" parameterClass="processEventTotal" resultClass="processEventTotal">
+	<include refid="global.paginationStart" />
+	<![CDATA[
+		select t.event_id eventId,
+			t.event_title eventTitle,
+			t.status,
+			t.initator,
+			t.creatdate creatdate,
+			o.emp_name curUserName,
+			t.model_id modelId,
+			t.is_read  isRead,
+			(select x.name_ from osap.act_re_procdef x where x.key_ = t.model_id and rownum = 1) modelName
+		from workflow.workflow_tb_event_total t
+			left join workflow.workflow_tb_event_detail v on t.tododetailid = v.event_dtl_id
+			left join basis.basis_tb_salesemp_info o on v.cur_user_id = o.emp_id
+		where t.initator = #initator#
+		and t.status = #status#
+	]]>
+	<dynamic>
+		<isNotEmpty property="eventId" prepend="and">
+			<![CDATA[ 
+				t.event_id = #eventId#
+			]]>
+		</isNotEmpty>
+		<isEmpty property="isRead" prepend="and">
+			<![CDATA[ 
+				t.is_read is null
+			]]>
+		</isEmpty>
+		<isNotEmpty property="isRead" prepend="and">
+			<![CDATA[ 
+				t.is_read = '1'
+			]]>
+		</isNotEmpty>
+		<isNotEmpty property="eventTitle" prepend="and">
+			<![CDATA[ 
+				t.event_title = #eventTitle#
+			]]>
+		</isNotEmpty>
+	</dynamic>
+	<![CDATA[
+			order by t.is_read desc, t.creatdate desc
+		]]>
+	<include refid="global.paginationEnd" />
+	</select>
+	
+	<select id="getStationId" parameterClass="java.lang.String" resultClass="java.lang.String">
+		<![CDATA[
+		select t.station_id
+  		from basis.basis_tb_station_user t
+ 		where t.is_main_station = 'Y' and t.user_id = #userId#
+		]]>
+	</select>
+		<select id="getCountRoleByUser" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(1)
+  		from basis.basis_tb_salesemp_info a,
+       		basis.basis_tb_station_user  b,
+       		basis.basis_tb_station_role  c
+ 		where a.emp_id = b.user_id
+   			and b.station_id = c.station_id
+   			and a.emp_id = #userId#
+   			and c.role_id = #roleId#
+	]]>
+	</select>
+	
+	
+	<update  id="updateWorkflowtotal" parameterClass="processEventTotal" >
+	<![CDATA[
+		  update  workflow.workflow_tb_event_total a set a.LAST_MODIFY =sysdate,
+				 a.is_read =#isRead#
+			where a.event_id = #eventId# 
+	]]>
+	</update>
+	
+	
+	
+	
+	<!-- 查询某个事务的未处理detail节点-->
+	<select id="getUntreatedUserByEventId" parameterClass="java.lang.String" resultClass="allUsers">
+	<![CDATA[
+			select v.text_ as userId
+                      from osap.act_ru_variable v
+                     where v.proc_inst_id_ = #eventId#
+                       and v.name_ in ('userList','nextuser')
+	]]>
+	</select>
+	
+	<select id="getModelCount" parameterClass="processEventTotal" resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(1) 
+		from (select distinct p.name_, p.key_ from osap.act_re_procdef p where p.suspension_state_ = 1) o
+		where 1=1
+	]]>
+	<dynamic>
+		<isNotEmpty property="search" prepend="and">
+			<![CDATA[ 
+				(o.key_ like #search,handler=wildcard# escape '\' 
+				or o.name_ like #search,handler=wildcard# escape '\')
+			]]>
+		</isNotEmpty>
+	</dynamic>
+	</select>
+	
+	<select id="getModelList" parameterClass="processEventTotal" resultClass="processEventTotal">
+	<include refid="global.paginationStart" />
+	<![CDATA[
+		select distinct p.name_		modelName, p.key_		modelId
+		from osap.act_re_procdef p where p.suspension_state_ = 1
+	]]>
+	<dynamic>
+		<isNotEmpty property="search" prepend="and">
+			<![CDATA[ 
+				(p.key_ like #search,handler=wildcard# escape '\' 
+				or p.name_ like #search,handler=wildcard# escape '\')
+			]]>
+		</isNotEmpty>
+	</dynamic>
+	<![CDATA[ order by p.key_ ]]>
+	<include refid="global.paginationEnd" />
+	</select>
+	
+	<select id="getStationIdByUserIdForOrderCheck" parameterClass="java.lang.String" resultClass="orderCheck">
+	    <![CDATA[
+	        select 
+	        s.station_id as stationId,
+	        s.org_id as orgId
+	        from basis.basis_tb_station_user s
+	        where s.user_id=#userId#
+	    ]]>
+	</select>
+	
+	<select id="searchOrderCheckListCount" parameterClass="orderCheck" resultClass="java.lang.Integer">
+	    <![CDATA[
+	        select
+	          count(*)
+	          from crm.crm_tb_kunnr k
+	          left join (select max(l.create_date) as create_date,
+	                            l.check_year,
+	                            l.check_month,
+	                            l.kunnr 
+	                            from basis.basis_tb_orderreport_log l
+	                            where 1=1
+	    ]]>
+	       <dynamic>
+           <isNotEmpty property="checkMonth" prepend="and">
+             <![CDATA[ l.check_month = #checkMonth# ]]>
+           </isNotEmpty>
+           <isNotEmpty property="checkYear" prepend="and">
+             <![CDATA[ l.check_year = #checkYear# ]]>
+           </isNotEmpty>
+           </dynamic>
+	    <![CDATA[
+	                            group by l.check_year,l.check_month,l.kunnr
+	                            ) l on l.kunnr=k.kunnr
+	          left join crm.crm_tb_order_check t on l.kunnr=t.kunnr and l.check_year=t.check_year and l.check_month=t.check_month
+	          where 1=1
+	    ]]>
+	       <dynamic>
+           <isNotEmpty property="kunnr" prepend="and">
+             <![CDATA[ k.kunnr = #kunnr# ]]>
+           </isNotEmpty>
+           <isNotEmpty property="state" prepend="and">
+             <![CDATA[ t.state = #state# ]]>
+           </isNotEmpty>
+           <isNotEmpty property="checkUser" prepend="and">
+             <![CDATA[ t.check_user = #checkUser# ]]>
+           </isNotEmpty>
+           <isEqual property="lastCheckDate" compareValue="Y" prepend="and">
+             <![CDATA[ l.create_date is not null ]]>
+           </isEqual>
+           <isEqual property="lastCheckDate" compareValue="N" prepend="and">
+             <![CDATA[ l.create_date is null ]]>
+           </isEqual>
+           <isNotEmpty property="orgId" prepend="and">
+		    <![CDATA[ k.org_id in (select b.org_id from basis.basis_tb_org b 
+				         start with b.org_id = #orgId#
+				         connect by prior b.org_id= b.org_parent_id)]]>
+		    </isNotEmpty>
+           </dynamic>
+	</select>
+	<!-- 查询某个事务的detail节点附件-->
+	<select id="getEventFileListsByEventId" parameterClass="java.lang.String" resultClass="proEventDetail">
+	<![CDATA[
+		select d.event_dtl_id     as eventDtlId,
+           b.fileid,
+           b.filename,
+           b.filename_new     as filenameNew,
+           b.sub_folders      as subFolders,
+           d.cur_model_dtl_id as curModelDtlId
+      from workflow.workflow_tb_event_detail d,
+           workflow.workflow_tb_file b
+     where d.event_dtl_id=b.event_dtl_id
+       and d.event_id = #eventId#
+     order by d.event_dtl_id asc
+	]]>
+	</select>
+	
+	<select id="getCcCount" parameterClass="cc" 
+			resultClass="java.lang.Integer">
+		<![CDATA[
+			select count(1) from workflow.workflow_tb_cc 
+where event_id=#event_id# and event_detail_id=#event_detail_id# and cc_user_id=#cc_user_id#
+		]]>
+	</select>
+	
+		<!-- userId查询可转移事务的id-->
+	<select id="getRoleEventsByUserId" parameterClass="java.lang.String" resultClass="processEventTotal">
+	<![CDATA[
+	select 
+		tt.event_id eventId,
+        tt.tododetailid currentDetailid,
+		tt.event_title eventTitle,
+		tt.status status,
+		s1.emp_name empName,
+		o.org_id   orgId,
+		o.org_name orgName,
+		p.name_ modelName,
+		s2.emp_name curUserName,
+		1 as eventType,
+		to_char(tt.creatdate, 'yyyy-MM-dd hh:mi:ss') creatdate
+	  from osap.act_ru_execution e
+	  left join workflow.workflow_tb_event_total tt on tt.event_id=e.proc_inst_id_
+      left join workflow.workflow_tb_event_detail d on tt.tododetailid = d.event_dtl_id
+      left join basis.basis_tb_salesemp_info s1 on s1.emp_id=tt.initator
+      left join basis.basis_tb_org o on o.org_id=s1.org_id
+      left join basis.basis_tb_salesemp_info s2 on s2.emp_id=d.cur_user_id
+      left join osap.ACT_HI_PROCINST RES on tt.event_id = RES.PROC_INST_ID_  
+      left join  osap.act_re_procdef p on RES.Proc_Def_Id_ = p.id_ 
+	  left join osap.act_ru_variable v on e.proc_inst_id_ = v.proc_inst_id_
+	 where v.name_ = 'roleFlag'
+	   and v.long_ = 1
+	   and e.act_id_ in
+       (select r.role_id
+          from basis.basis_tb_station_user u, basis.basis_tb_station_role r
+         where u.station_id = r.station_id
+           and u.user_id = #userId#
+           and u.user_id <>
+               (select d.cur_user_id
+                  from workflow.workflow_tb_event_total  t,
+                       workflow.workflow_tb_event_detail d
+                 where t.tododetailid = d.event_dtl_id
+                   and t.event_id = e.proc_inst_id_))
+
+	]]>
+	
+	</select>
+	<!-- 根据事务的id查询事务清单-->
+	<select id="getEventListById" parameterClass="java.lang.String" resultClass="processEventTotal">
+	<![CDATA[
+		select t.event_id eventId,
+			   t.tododetailid currentDetailid,
+		       t.event_title eventTitle,
+		       t.status status,
+		       s1.emp_name empName,
+		       o.org_id   orgId,
+		       o.org_name orgName,
+		       p.name_ modelName,
+		       s2.emp_name curUserName,
+		       to_char(t.creatdate, 'yyyy-MM-dd hh:mi:ss') creatdate
+			from workflow.workflow_tb_event_total  t
+                left join     workflow.workflow_tb_event_detail d on t.tododetailid = d.event_dtl_id
+                left join basis.basis_tb_salesemp_info s1 on s1.emp_id=t.initator
+                left join basis.basis_tb_org o on o.org_id=s1.org_id
+                left join basis.basis_tb_salesemp_info s2 on s2.emp_id=d.cur_user_id
+                left join osap.ACT_HI_PROCINST RES on t.event_id = RES.PROC_INST_ID_  
+                left join  osap.act_re_procdef p on RES.Proc_Def_Id_ = p.id_ 
+                 where t.event_id =#eventId#
+	]]>
+	</select>
+
+	<select id="searchAllUsersByRtxCode" parameterClass="allUsers"
+		resultClass="allUsers">
+	<![CDATA[
+			select  t.emp_id          as userId,
+			   t.emp_code           as loginId,
+			 t.emp_name           as userName,
+			 t.emp_state          as userState,
+			 t.org_id             as orgId,   
+			 b.org_name           as orgName,
+			 t.emp_phone          as phone,
+			 t.emp_mobile_phone    as mobile,
+			 t.emp_email          as email,
+			 t.emp_address        as address,
+			 t.emp_sex            as sex,
+			 t.bus_mobilephone as BusMobilephone,
+			 t.emp_psd  as passWd,
+			 t.rtx_code as rtx_LoginId
+		  from basis.basis_tb_salesemp_info t left join basis.basis_tb_org b on t.org_id=b.org_id
+		   where
+				t.emp_state <> 'D' and t.emp_state<>'R' and t.emp_state<>'N' and t.emp_code is not null
+	]]>
+		<dynamic>
+			<isNotEmpty property="email" prepend="and">
+			<![CDATA[ t.emp_email =#email#]]>
+			</isNotEmpty>
+			<isNotEmpty property="loginId" prepend="and">
+			<![CDATA[ t.emp_code like #loginId,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="userName" prepend="and">
+			<![CDATA[ t.emp_name like #userName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="orgId" prepend="and">
+			<![CDATA[ t.org_id = #orgId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="orgIds" prepend="and">
+			<![CDATA[ t.org_id in ]]>
+				<iterate property="orgIds" open="(" close=")" conjunction=",">#orgIds[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty property="rtx_LoginId" prepend="and">
+			<![CDATA[ t.rtx_code = #rtx_LoginId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="userId" prepend="and">
+			<![CDATA[ t.emp_id = #userId# ]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>		
+	<select id="getCcListBycc" parameterClass="cc" resultClass="cc">
+		<![CDATA[
+		select t.*,s.emp_name creator_name,o.rtx_code rtx_LoginId,e.event_title event_title
+  		from workflow.workflow_tb_cc t,basis.basis_tb_salesemp_info o,workflow.workflow_tb_event_total e,basis.basis_tb_salesemp_info s
+		where t.event_id = #event_id# and t.creator=#creator# and t.cc_user_id=#cc_user_id#
+		      and to_char(o.emp_id) = t.cc_user_id and e.event_id=t.event_id and to_char(s.emp_id) = t.creator
+		      and t.type=#type#
+		]]>
+	</select>	
+	<!--查询个人未完成的会签 -->
+	<select id="getCountersignEventsByUserId" parameterClass="java.util.HashMap" resultClass="processEventTotal">
+		<![CDATA[
+		select 
+			t.cc_id,
+			t.event_id eventId,
+			tt.tododetailid currentDetailid,
+			tt.event_title eventTitle,
+			tt.status status,
+			s1.emp_name empName,
+			o.org_id   orgId,
+			o.org_name orgName,
+			p.name_ modelName,
+			s2.emp_name curUserName,
+			2 as eventType,
+			to_char(tt.creatdate, 'yyyy-MM-dd hh:mi:ss') creatdate
+		from workflow.workflow_tb_cc t 
+        left join workflow.workflow_tb_event_total tt on tt.event_id=t.event_id
+         left join workflow.workflow_tb_event_detail d on tt.tododetailid = d.event_dtl_id
+                left join basis.basis_tb_salesemp_info s1 on s1.emp_id=tt.initator
+                left join basis.basis_tb_org o on o.org_id=s1.org_id
+                left join basis.basis_tb_salesemp_info s2 on s2.emp_id=d.cur_user_id
+                left join osap.ACT_HI_PROCINST RES on t.event_id = RES.PROC_INST_ID_  
+                left join  osap.act_re_procdef p on RES.Proc_Def_Id_ = p.id_ 
+			where  t.type=2 and t.cc_user_id=#userId# and  t.replay_date is null
+		]]>
+		<dynamic>
+			<isNotEmpty property="eventId" prepend="and">
+			<![CDATA[ t.event_id = #eventId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="initator" prepend="and">
+			<![CDATA[ 
+				(s1.emp_name like #initator,handler=wildcard# escape '\')
+			]]>
+			</isNotEmpty>
+			<isNotEmpty property="eventTitle" prepend="and">
+			<![CDATA[ 
+				(tt.event_title like #eventTitle,handler=wildcard# escape '\')
+			]]>
+			</isNotEmpty>
+			<isNotEmpty property="status" prepend="and">
+			<![CDATA[ tt.status = #status# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="orgName" prepend="and">
+			<![CDATA[ 
+				(o.org_name like #orgName,handler=wildcard# escape '\')
+			]]>
+			</isNotEmpty>
+			<isNotEmpty property="modelName" prepend="and">
+			<![CDATA[ 
+				(p.name_  like #modelName,handler=wildcard# escape '\')
+			]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>	
+	<!--查询个人已完成的会签 -->
+	<select id="getCompleteCountersignEvents" parameterClass="java.util.HashMap" resultClass="processEventTotal">
+		<![CDATA[
+		select 
+			t.cc_id,
+			t.event_id eventId,
+			tt.tododetailid currentDetailid,
+			tt.event_title eventTitle,
+			tt.status status,
+			s1.emp_name empName,
+			o.org_id   orgId,
+			o.org_name orgName,
+			p.name_ modelName,
+			s2.emp_name curUserName,
+			to_char(tt.creatdate, 'yyyy-MM-dd hh:mi:ss') creatdate
+		from workflow.workflow_tb_cc t 
+        left join workflow.workflow_tb_event_total tt on tt.event_id=t.event_id
+         left join workflow.workflow_tb_event_detail d on tt.tododetailid = d.event_dtl_id
+                left join basis.basis_tb_salesemp_info s1 on s1.emp_id=tt.initator
+                left join basis.basis_tb_org o on o.org_id=s1.org_id
+                left join basis.basis_tb_salesemp_info s2 on s2.emp_id=d.cur_user_id
+                left join osap.ACT_HI_PROCINST RES on t.event_id = RES.PROC_INST_ID_  
+                left join  osap.act_re_procdef p on RES.Proc_Def_Id_ = p.id_ 
+			where  t.type=2 and t.cc_user_id=#userId# and  t.replay_date is not null
+		]]>
+        <dynamic>
+			<isNotEmpty property="eventId" prepend="and">
+			<![CDATA[ t.event_id = #eventId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="initator" prepend="and">
+			<![CDATA[ 
+				(s1.emp_name like #initator,handler=wildcard# escape '\')
+			]]>
+			</isNotEmpty>
+			<isNotEmpty property="eventTitle" prepend="and">
+			<![CDATA[ 
+				(tt.event_title like #eventTitle,handler=wildcard# escape '\')
+			]]>
+			</isNotEmpty>
+			<isNotEmpty property="status" prepend="and">
+			<![CDATA[ tt.status = #status# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="orgName" prepend="and">
+			<![CDATA[ 
+				(o.org_name like #orgName,handler=wildcard# escape '\')
+			]]>
+			</isNotEmpty>
+			<isNotEmpty property="modelName" prepend="and">
+			<![CDATA[ 
+				(p.name_  like #modelName,handler=wildcard# escape '\')
+			]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>	
+	<!--判断事务中是否有未完成的会签 -->
+	<select id="completeSign" parameterClass="java.lang.String" resultClass="java.lang.String">
+		<![CDATA[
+		select count(1)from workflow.workflow_tb_cc t 
+			where  t.type=2 and t.event_id=#eventId# and  t.replay_date is null
+		]]>
+	</select>	
+		<!--检查登录用户是否是当前处理人 -->
+	<select id="checkProcessUserId" parameterClass="java.util.HashMap" resultClass="java.lang.String">
+		<![CDATA[
+		select count(1) from workflow.workflow_tb_event_total t 
+			left join workflow.workflow_tb_event_detail d  on t.tododetailid= d.event_dtl_id
+			where t.event_id=#eventId#  and d.cur_user_id=#userId#
+		]]>
+	</select>	
+	<select id="searchWorkflowEventdetailCur_sta" parameterClass="proEventDetail" resultClass="proEventDetail">
+ 		<![CDATA[select t.event_dtl_id as eventDtlId,
+       t.event_id     as eventId,
+       t.cur_user_id  as curUserId,
+       t.cur_sta_id   as curStaId
+  from workflow.workflow_tb_event_detail t
+ where t.operation = 9 ]]>
+ <isNotEmpty property="eventId" prepend="and">
+				<![CDATA[t.event_id = #eventId# 
+			 ]]>
+</isNotEmpty>
+<isNotEmpty property="curUserId" prepend="and">
+				<![CDATA[t.cur_user_id = #curUserId# 
+			 ]]>
+</isNotEmpty>
+  </select>	
+  	<select id="checkFix_signsampleDate" parameterClass="proEventDetail"  resultClass="java.lang.Integer">
+ 		<![CDATA[select count(*)
+  from office.office_tb_signsamples_detail t
+  left join office.office_tb_signsamples_total s on t.sample_id =
+                                                    s.sample_id where  t.state='U']]>
+ <isNotEmpty property="eventId" prepend="and">
+				<![CDATA[s.event_id = #eventId# 
+			 ]]>
+</isNotEmpty>
+<isPropertyAvailable property="operation">
+            <isNotNull property="operation">
+              <isEqual prepend=" and " property="operation" compareValue="1">
+				<![CDATA[(t.maktx is null or t.version is null or t.markingenddate is null or t.markingsupplier is null )]]>
+				</isEqual>
+				 <isEqual prepend=" and " property="operation" compareValue="2">
+				<![CDATA[( t.needenddate is null  )   ]]>
+				</isEqual>
+				 <isEqual prepend=" and " property="operation" compareValue="3">
+				<![CDATA[(t.signsupplier  is null or t.signdate  is null )  ]]>
+				</isEqual>
+				 <isEqual prepend=" and " property="operation" compareValue="4">
+				<![CDATA[(t.signcondition is null or t.signcondition='0' )  ]]>
+				</isEqual>
+            </isNotNull>
+          </isPropertyAvailable>
+  </select>	
+	<!--根据事务号查询关户的经销商id -->
+	<select id="getKunnrId" parameterClass="java.lang.String" resultClass="java.lang.String">
+		<![CDATA[
+		select t.text_ from osap.act_ru_variable t where t.proc_inst_id_ =#eventId#  and  t.name_='kunnrId'
+		]]>
+	</select>	
+	<update id="updateKunnrStatus" parameterClass="java.lang.String">
+	<![CDATA[
+		update crm.crm_tb_kunnr s 
+			set 
+			s.last_modify_date=sysdate,
+			s.status='3'
+			where s.kunnr=#kunnrId#
+			]]>
+	</update>
+	<!--关户时在销售目标量调整主表中插入记录  -->
+	<insert id="createGoalSalesChange" parameterClass="java.lang.String">
+		<![CDATA[
+		 merge into crm.crm_tb_goalsales_change t1  
+		using (select t.initator user_id,t.event_id from workflow.workflow_tb_event_total t where t.event_id=#eventId#) t2  
+		on (t1.event_id = t2.event_id )  
+		when not matched then  
+	     insert values ( crm.crm_seq_goalsales_change.nextval,'经销商关户',t2.user_id, sysdate,t2.event_id,'D') 
+		]]>
+	</insert>
+	<!--关户时在销售目标量调整明细表中插入记录  -->
+	<insert id="createGoalSalesChangeDetail" parameterClass="java.util.HashMap">
+		<![CDATA[
+		  insert into crm.crm_tb_goalsales_change_dtl 
+	    (detail_id, change_id, org_id, kunnr, matter, year, month, quantity)
+	    select crm.crm_seq_goalsales_change_dtl.nextval,
+	           (select c.change_id
+	              from crm.crm_tb_goalsales_change c
+	             where c.event_id = #eventId#),
+	           t.org_id,
+	           t.cust_id,
+	           t.matter,
+	           t.the_year,
+	           t.the_month,
+	           0 - t.box
+	      from crm.crm_tb_target t
+	     where t.cust_id = #kunnrId#
+	       and t.mark = 'Y'
+	       and t.kunnr_goal_type = 'B'
+	       and t.ct_state = '0'
+	         and t.the_year || t.the_month >=
+           (select to_char(t.creatdate, 'yyyyMM')
+              from workflow.workflow_tb_event_total t
+             where t.event_id = #eventId#)
+		]]>
+	</insert>
+	<!--关户时在经销商目标量调整主表中插入记录  -->
+	<insert id="createDealerAdjustMent" parameterClass="java.lang.String">
+		<![CDATA[
+	   merge into crm.crm_tb_target_adjust t1
+	   using (select t.initator user_id, t.event_id
+	            from workflow.workflow_tb_event_total t
+	           where t.event_id = #eventId#) t2
+	   on (t1.event_id = t2.event_id)
+	   when not matched then
+	     insert
+	       (t1.adjust_id,
+	       	t1.apply_year,
+	       	t1.apply_month,
+	        t1.event_id,
+	        t1.event_status,
+	        t1.event_title,
+	        t1.event_type,
+	        t1.create_date,
+	        t1.user_id)
+	     values
+	       (crm.crm_tb_target_adjust_seq.nextval,
+	       to_char(sysdate, 'yyyy'),
+	       to_char(sysdate, 'MM'),
+	        t2.event_id,
+	        'D',
+	        '经销商关户',
+	        'B',
+	        sysdate,
+	        t2.user_id)
+		]]>
+	</insert>
+	<!--关户时在经销商目标量调整明细表中插入记录  -->
+	<insert id="createDealerAdjustDetail" parameterClass="java.util.HashMap">
+		<![CDATA[
+		  insert into crm.crm_tb_target_detail
+	    (adjust_detal_id, adjust_id, org_id, kunnr, matter, adjust_year, adjust_month, adjust_target)
+	    select crm.crm_tb_target_detail_seq.nextval,
+	           (select c.adjust_id
+	              from crm.crm_tb_target_adjust c
+	             where c.event_id = #eventId#),
+	           t.org_id,
+	           t.cust_id,
+	           t.matter,
+	           t.the_year,
+	           t.the_month,
+	           0 - t.box
+	      from crm.crm_tb_target t
+	     where t.cust_id = #kunnrId#
+	       and t.mark = 'Y'
+	       and t.kunnr_goal_type = 'C'
+	       and t.ct_state = '0'
+	        and t.the_year || t.the_month >=
+           (select to_char(t.creatdate, 'yyyyMM')
+              from workflow.workflow_tb_event_total t
+             where t.event_id = #eventId#)
+		]]>
+	</insert>
+	<!--关户时，删除经销商，销售目标量  -->
+	<update id="deleteKunnrTarget" parameterClass="java.util.HashMap">
+	<![CDATA[
+		update crm.crm_tb_target t
+		   set t.ct_state = '1'
+		 where t.cust_id = #kunnrId#
+		   and t.mark = 'Y'
+		   and t.ct_state = '0'
+		     and t.the_year || t.the_month >=
+           (select to_char(t.creatdate, 'yyyyMM')
+              from workflow.workflow_tb_event_total t
+             where t.event_id = #eventId#)
+			]]>
+	</update>
+	<!--关户时在分销目标量调整主表中插入记录  -->
+	<insert id="createGoalFxChange" parameterClass="java.lang.String">
+		<![CDATA[
+		 merge into crm.crm_tb_goalfx_change t1  
+		using (select t.initator user_id,t.event_id from workflow.workflow_tb_event_total t where t.event_id=#eventId#) t2  
+		on (t1.event_id = t2.event_id )  
+		when not matched then  
+	     insert values ( crm.crm_seq_goalsales_change.nextval,'经销商关户',t2.user_id, sysdate,t2.event_id,'D') 
+		]]>
+	</insert>
+	<!--关户时在分销目标量调整明细表中插入记录  -->
+	<insert id="createGoalFxChangeDetail" parameterClass="java.util.HashMap">
+		<![CDATA[
+		  insert into crm.crm_tb_goalfx_change_dtl 
+      (detail_id, change_id, org_id, kunnr, matter, year, month, quantity)
+      select crm.crm_seq_goalsales_change_dtl.nextval,
+             (select c.change_id
+                from crm.crm_tb_goalfx_change c
+               where c.event_id = #eventId#),
+             t.org_id,
+             t.kunnr,
+             t.matter_num,
+             t.goal_year,
+             t.goal_month,
+             0 - t.box_num
+        from crm.crm_tb_goal_production t
+       where t.kunnr = #kunnrId#
+         and t.goal_mark = 'Y'
+         and t.status = 'U'
+           and t.goal_year || t.goal_month >=
+           (select to_char(t.creatdate, 'yyyyMM')
+              from workflow.workflow_tb_event_total t
+             where t.event_id = #eventId#)
+		]]>
+	</insert>
+	
+	<!--关户时，删除分销目标量  -->
+	<update id="deleteFxTarget" parameterClass="java.util.HashMap">
+	<![CDATA[
+		update crm.crm_tb_goal_production t
+		   set t.status = 'D'
+		 where t.kunnr = #kunnrId#
+		   and t.goal_mark = 'Y'
+		   and t.status = 'U'
+		     and t.goal_year || t.goal_month >=
+           (select to_char(t.creatdate, 'yyyyMM')
+              from workflow.workflow_tb_event_total t
+             where t.event_id = #eventId#)
+			]]>
+	</update>
+</sqlMap>

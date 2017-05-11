@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+		<!-- Google Analytics --> 
+    	<script type="text/javascript">
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-17060347-7']);
+          _gaq.push(['_setDomainName', 'kintiger.com']);
+        
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+        </script>
+       
+	</head>
+	<body >
+		<form name="xx" method="post" target="myshow">
+			<div id="p_search" class="easyui-panel" title="参数列表"
+				style="padding: 2px; background: #fafafa;" data-options="collapsible:true,iconCls:'icon-search'">
+				<table width="100%" border="0" cellpadding="0" cellspacing="1">
+										#set($counts = 0)
+										#foreach($rp in $!{reportParameterList})
+										<tr>
+											<td class="head" noWrap>$!{rp.memo}:</td>
+											<td>
+												<input type="hidden" name='c_$counts' value='$!{rp.che}' />
+                        						<input type="hidden" name='l_$counts' value='$!{rp.memo}' />
+                        						<input type="hidden" name='a_$counts' value='$!{rp.amount}' />
+												<input type="hidden" name='nickname_$counts' value='$!{rp.nickname}' />
+											#if($!{rp.amount} == 0)
+                        						<input type="text" name='cont_$counts' onchange="ac(this.value,$counts)" onblur='gocheck(this.value,$counts)' />
+                        						<input type="hidden" name='coni_$counts' readonly="readonly" />
+                        						<input type="hidden" name='cw_$counts' value='$!{rp.checkway}' />
+											#elseif($!{rp.amount} == 7)
+                        						<input type="text" name='cont_$counts' value='$!{custName}' readonly="readonly" />
+                        						<input type="hidden" name='coni_$counts' readonly="readonly" value='$!{custId}' />
+												#if($!{rp.che} == 0)
+												<input type="button" name='clear_$counts' value="清空" onclick="cc($counts)" />
+												#end
+											#elseif($!{rp.amount} == 4)
+                        						<input type="text" name='cont_$counts' readonly="readonly" />
+                        						<input type="hidden" name='coni_$counts' />
+                        						<input type="button" name='bot_$counts' onclick="newtree2($counts)" value="选择" />
+												#if($!{rp.che} == 0)
+												<input type="button" name='clear_$counts' value="清空" onclick="cc($counts)" />
+												#end
+											#elseif($!{rp.amount} == 8)
+                        						<input type="text" name='cont_$counts' readonly="readonly" />
+                        						<input type="hidden" name='coni_$counts' />
+                        						<input type="button" name='bot_$counts' onclick="newtree3($counts)" value="选择" />
+												#if($!{rp.che} == 0)
+												<input type="button" name='clear_$counts' value="清空" onclick="cc($counts)" />
+												#end	
+											#elseif($!{rp.amount} == 5)
+												<select id='cont_$counts' size=1  name='cont_$counts' onchange="cii($counts,this.value)">
+													#foreach($y in $!{yearList})
+													#if($y == $!{year})
+													<option value="$y" selected=true>$y</option>
+													#else
+													<option value="$y">$y</option>
+													#end
+													#end
+												</select>
+												<input type="hidden" name='coni_$counts' readonly="readonly" value='$!{year}' />
+												#if($!{rp.che} == 0)
+												<input type="button" name='clear_$counts' value="清空" onclick="cc($counts)" />
+												#end
+											#elseif($!{rp.amount} == 6)
+												<select id='cont_$counts' size=1 name='cont_$counts' onpropertychange="cii($counts,this.value)">
+                                                   #foreach($m in $!{monthList})
+												       #if($m == $!{month})
+													       <option value="$m" selected=true>$m</option>
+													   #else
+													       <option value="$m">$m</option>
+													   #end
+												   #end
+                                                    <!-- 
+                                                    <option value="1" selected=true>1</option> 
+                                                    <option value="2">2</option> 
+                                                    <option value="3">3</option> 
+                                                    <option value="4">4</option> 
+                                                    <option value="5">5</option> 
+                                                    <option value="6">6</option> 
+                                                    <option value="7">7</option> 
+                                                    <option value="8">8</option> 
+                                                    <option value="9">9</option> 
+                                                    <option value="10">10</option> 
+                                                    <option value="11">11</option> 
+                                                    <option value="12">12</option> -->
+												</select>
+												<input type="hidden" name='coni_$counts' readonly="readonly" />
+												#if($!{rp.che} == 0)
+												<input type="button" name='clear_$counts' value="清空" onclick="cc($counts)" />
+												#end
+											#elseif($!{rp.amount} == 3)
+												<input  type="text" size="20" onClick="WdatePicker()" class="Wdate" id="cont_$counts" name="cont_$counts" onchange="ac(this.value,$counts)" />
+												<input type="hidden" name='coni_$counts' readonly="readonly" />
+											#else
+                        						<input type="text" name='cont_$counts' readonly="readonly" />
+                        						<input type="hidden" name='coni_$counts' readonly="readonly" />
+                        						<input type="button" name='bot_$counts' onclick="newtree1('$!{rp.pid}', $counts)" value="选择" />
+												#if($!{rp.che} == 0)
+												<input type="button" name='clear_$counts' value="清空" onclick="cc($counts)" />
+												#end
+											#end
+											</td>
+										#if(1==$counts || 3==$counts || 5==$counts || 7==$counts)
+										</tr>
+										#end
+										#set($counts = $counts + 1)
+										#end 
+						      #if($!{bid}=='13219')
+						      <tr>
+						     	<td class="head" noWrap></td>
+								<td>
+									日期格式  如："201401"
+							 	</td>
+							  </tr>
+							  #end
+						     	<tr>
+						     	<td class="head" noWrap></td>
+								<td>
+									<input type="button" onclick="check($!{total});" value="查看报表" />
+							 	</td>
+							 	</br>
+							  </tr>
+						</table>
+			<input type="hidden" id="bid" name="bid" value="$!{bid}" />
+			<input type="hidden" name="reportType" value="$!{reportType}" />
+			<input type="hidden" name="boType" value="$!{boType}" />
+			<input type='hidden' name="reportParameterList" id="reportParameterList" />
+			<input type="hidden" id="countNum" name="countNum"/>
+			<input type="hidden" id="countNum0" name="countNum0"/>
+			</div>
+		</form>
+		
+		<div id="maintWindow"/> 
+	</body>
+ <script type="text/javascript" src="$!{env.imgUrl}/js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+var total = $!{total};
+</script>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/boform/showBoRpt.js?verson=20150804"></script>
+</html>

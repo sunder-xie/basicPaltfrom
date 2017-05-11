@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+    <fieldset>
+    	<input type="hidden" id="eventId" name="eventId"  value='$!{eventId}' readonly   >
+    	<input type="hidden" id="subFolders" name="subFolders"  value='$!{subFolders}' >
+    	<div><a class="easyui-linkbutton" icon="icon-print" href="#" onclick="print()">打印</a></div>
+    	<div align="center"><h2>$!{proEventTotal.eventTitle}</h2></div>
+		<table width="100%" border="0" cellpadding="0" cellspacing="1">
+			<tr>
+				<td class="head" noWrap width="10%">
+					事务类别：
+				</td>
+				<td noWrap class="even" style="text-align:left;font-size:14px">
+					$!{planTypeName}
+				</td>
+			</tr>
+			#foreach($oaXmlBean in $oaXmlBeanList)
+			<tr>
+				<td class="head" noWrap width="10%">
+					$!{oaXmlBean.parameter2}：
+				</td>
+			##	<td noWrap class="even" style="text-align:left;font-size:14px" colspan=4>
+			##		$!{oaXmlBean.parameter3}
+			##	</td>
+				<td class="even">
+					<div>
+						#if("N"==$!{oaXmlBean.parameter3})
+						       否
+						#end
+						#if("Y"==$!{oaXmlBean.parameter3})
+							是
+						#end
+						#if("N"!=$!{oaXmlBean.parameter3}&&"Y"!=$!{oaXmlBean.parameter3})
+								$!{oaXmlBean.parameter3}
+						#end
+					</div>
+				</td>
+				<td width="5%">
+				</td>
+			</tr> 
+			#end
+		</table>
+	</fieldset>
+	<script type="text/javascript" src="$!{env.imgUrl}/js/platform/wfe/event/searchEventContent.js"></script>
+</html>

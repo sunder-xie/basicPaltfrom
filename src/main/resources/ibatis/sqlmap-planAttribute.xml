@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="planAttribute">
+	<typeAlias alias="planAttribute" type="com.kintiger.platform.wfe.pojo.PlanAttribute" />
+	<typeAlias alias="actProcdef" type="com.kintiger.platform.wfe.pojo.ActProcdef" />
+	<typeAlias alias="planAttributeDetail" type="com.kintiger.platform.wfe.pojo.PlanAttributeDetail" />
+	<typeAlias alias="cmsDict" type="com.kintiger.platform.dict.pojo.CmsTbDict" />
+	
+	<!-- 查询模板事务类型属性Count -->
+	<select id="getPlanAttributeCount" parameterClass="planAttribute" resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(distinct t.plan_att_id)
+		  from workflow.workflow_tb_plan_attribute t, osap.act_re_procdef p
+		 where t.model_id = p.key_ and p.suspension_state_= 1
+	]]>
+		<dynamic>
+			<isNotEmpty property="modelName" prepend="and">
+			<![CDATA[ p.name_ like #modelName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="planTypeName" prepend="and">
+			<![CDATA[ t.plan_type_name like #planTypeName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="planAttFlag" prepend="and">
+			<![CDATA[ t.plan_att_flag = #planAttFlag# ]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<!-- 查询模板事务类型属性List -->
+	<select id="getPlanAttributeList" parameterClass="planAttribute" resultClass="planAttribute">
+		<include refid="global.paginationStart" />
+	<![CDATA[
+		select distinct t.plan_att_id      as planAttId,
+         t.plan_att_memo    as planAttMemo,
+         t.plan_att_flag    as planAttFlag,
+         t.modify_date      as modifyDate,
+         t.plan_type_name   as planTypeName,
+         p.name_            as modelName
+      	from workflow.workflow_tb_plan_attribute t, osap.act_re_procdef p
+      	where t.model_id = p.key_ and p.suspension_state_= 1
+	]]>
+		<dynamic>
+			<isNotEmpty property="modelName" prepend="and">
+			<![CDATA[ p.name_ like #modelName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="planTypeName" prepend="and">
+			<![CDATA[ t.plan_type_name like #planTypeName,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="planAttFlag" prepend="and">
+			<![CDATA[ t.plan_att_flag = #planAttFlag# ]]>
+			</isNotEmpty>
+		</dynamic>
+		<include refid="global.orderBy" />
+		<include refid="global.paginationEnd" />
+	</select>	
+	
+	<!-- 通过主键查询一条事务类别属性 -->
+	<select id="getPlanAttributeByModelId" parameterClass="java.lang.String" resultClass="planAttribute">
+	<![CDATA[
+		select t.plan_att_id      	as planAttId,
+         	t.plan_type_name   		as planTypeName,
+         	t.create_date			as createDate
+ 		from workflow.workflow_tb_plan_attribute t
+     	where t.plan_att_flag = 'Y'
+       	and t.model_id = #modelId#
+       	order by t.create_date
+	]]>
+	</select>
+	
+	<select id="getModelByEntity" parameterClass="actProcdef" resultClass="actProcdef">
+		<![CDATA[
+		select distinct a.key_ key,a.name_ name from osap.act_re_procdef a where a.suspension_state_ = 1
+		]]>
+		<dynamic>
+			<isNotEmpty property="name" prepend="and">
+			<![CDATA[ a.name_ like #name,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<!-- 保存模板属性总表 -->
+	<insert id="insertPlanAttTotal" parameterClass="planAttribute">
+	<![CDATA[
+		insert into workflow.workflow_tb_plan_attribute
+		  (plan_att_id,
+		   model_id,
+		   plan_att_user,
+		   plan_att_memo,
+		   plan_att_flag,
+		   create_date,
+		   modify_date,
+		   plan_type_name
+		  )
+		values
+		  (workflow.workflow_seq_plan_attribute.nextval,
+		   #modelId#,
+		   #planAttUser#,
+		   #planAttMemo#,
+		   #planAttFlag#,
+		   sysdate,
+		   sysdate,
+		   #planTypeName#
+		 )
+	]]>
+	</insert>
+	
+	<select id="getPlanAttributeByPlanAttId" parameterClass="java.lang.Long" resultClass="planAttribute" >
+		<![CDATA[
+		select distinct t.plan_att_id as planAttId,
+			t.model_id         as modelId,
+       		t.plan_type_name   as planTypeName,
+       		t.plan_att_flag    as planAttFlag,
+       		t.plan_att_memo    as planAttMemo,
+       		p.name_            as modelName
+  		from workflow.workflow_tb_plan_attribute t, osap.act_re_procdef p
+ 		where t.model_id = p.key_
+   		and t.plan_att_id = #planAttId#  
+   		and p.suspension_state_= 1
+	]]>
+	</select>
+
+	<update id="updatePlanAttTotal" parameterClass="planAttribute">
+		<![CDATA[
+			update workflow.workflow_tb_plan_attribute
+			set model_id=#modelId#,
+				plan_att_memo=#planAttMemo#,
+				plan_att_flag=#planAttFlag#,
+				modify_date=sysdate,
+				plan_att_user=#planAttUser#,
+				plan_type_name=#planTypeName#
+			where plan_att_id=#planAttId#
+		]]>
+	</update>
+	
+	<!-- 批量删除(禁用)模板属性  -->
+	<update id="deletPlanAtt" parameterClass="java.lang.String">
+		<![CDATA[
+			update workflow.workflow_tb_plan_attribute a set a.plan_att_flag = 'N'
+			where a.plan_att_id in ($ids$)
+		]]>
+	</update>
+	
+	<!-- 查询模板属性明细Count -->
+	<select id="getModelAttributeDetailCount" parameterClass="planAttributeDetail" resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(t.plan_att_detailid) from workflow.workflow_tb_attribute_detail t
+		where t.plan_att_id = #planAttId#
+	]]>
+		<dynamic>
+			<isNotEmpty property="planAttContent" prepend="and">
+			<![CDATA[ t.plan_att_content like #planAttContent,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<!-- 查询模板属性明细List -->
+	<select id="getModelAttributeDetailList" parameterClass="planAttributeDetail" resultClass="planAttributeDetail">
+	<![CDATA[
+		select t.plan_att_detailid		planAttDetailId,
+			t.plan_att_id				planAttId,
+			t.plan_att_content			PlanAttContent,
+			t.plan_att_key				planAttKey,
+			t.plan_att_datatype			planAttDataType,
+			t.plan_att_isnull			planAttIsNull
+		from workflow.workflow_tb_attribute_detail t
+		where t.plan_att_id = #planAttId#
+		order by t.plan_att_detailid asc
+	]]>
+		<dynamic>
+			<isNotEmpty property="planAttContent" prepend="and">
+			<![CDATA[ t.plan_att_content like #planAttContent,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getPlanAttContentByPlanAttId" parameterClass="java.lang.Long" resultClass="planAttributeDetail">
+	<![CDATA[
+		select t.plan_att_detailid	as planAttDetailId,
+       		t.plan_att_id				planAttId,
+			t.plan_att_content			PlanAttContent,
+			t.plan_att_key				planAttKey,
+			t.plan_att_datatype			planAttDataType,
+			t.plan_att_isnull			planAttIsNull
+  		from workflow.workflow_tb_attribute_detail t
+ 		where t.plan_att_id = #planAttId#
+ 		order by t.plan_att_detailid asc
+	]]>
+	</select>
+	
+	<!-- 查询字典数据类型 -->
+	<select id="searchDataType" parameterClass="cmsDict" resultClass="cmsDict">
+	<![CDATA[
+		select t.item_id itemId, t.item_name itemName, t.item_value itemValue
+		from basis.basis_tb_dict t, basis.basis_tb_dict_type r
+		where t.dict_type_id = r.dict_type_id
+		and t.item_state = 'U'
+		and r.dict_type_value = #dictTypeValue#
+	]]>	
+	</select>
+	
+	<!-- 保存模板属性明细表 -->
+	<insert id="createPlanAttDetail" parameterClass="planAttributeDetail">
+	<![CDATA[
+		insert into workflow.workflow_tb_attribute_detail
+		  (plan_att_detailid,
+		   plan_att_id,
+		   plan_att_content,
+		   plan_att_key,
+		   plan_att_datatype,
+		   plan_att_isnull
+		  )
+		values
+		  (workflow.workflow_seq_attribute_detail.nextval,
+		   #planAttId#,
+		   #planAttContent#,
+		   #planAttKey#,
+		   #planAttDataType#,
+		   #planAttIsNull#
+		 )
+	]]>
+	</insert>
+	
+	<select id="getAttDetailByDetail" parameterClass="java.lang.Long" resultClass="planAttributeDetail">
+		<![CDATA[
+			select 
+				t.plan_att_detailid as planAttDetailId,
+				t.plan_att_content  as planAttContent,
+				t.plan_att_key      as planAttKey,
+				t.plan_att_datatype	as planAttDataType,
+				t.plan_att_isnull	as planAttIsNull
+			from workflow.workflow_tb_attribute_detail t 
+			where t.plan_att_detailid = #detailId#
+		]]>
+	</select>
+	
+	<update id="updatePlanAttDetail" parameterClass="planAttributeDetail">
+		<![CDATA[
+			update workflow.workflow_tb_attribute_detail
+			set plan_att_content = #planAttContent#, 
+			plan_att_key = #planAttKey#,
+			plan_att_datatype = #planAttDataType#,
+			plan_att_isnull = #planAttIsNull#
+			where plan_att_detailid = #planAttDetailId#
+		]]>
+	</update>
+	
+	<!-- 批量删除属性明细  -->
+	<update id="deleteAttDetail" parameterClass="java.lang.String">
+		<![CDATA[
+			delete workflow.workflow_tb_attribute_detail a
+			where a.plan_att_detailid in ($ids$)
+		]]>
+	</update>
+	
+</sqlMap>

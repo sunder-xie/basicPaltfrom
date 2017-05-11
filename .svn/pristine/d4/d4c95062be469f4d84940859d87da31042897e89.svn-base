@@ -1,0 +1,254 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		<style media="print">  
+			.noPrint { display : none; }  
+        </style> 
+		#JS_ENV_VAL()
+	</head>
+    	<input type="hidden" id="eventId" name="eventId"  value='$!{eventId}' readonly   >
+    	<input type="hidden" id="subFolders" name="subFolders"  value='$!{subFolders}' >
+    	<div class="noPrint">
+##		    <object height="0" width="0" id="wb" classid="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2" name="wb"></object> 
+		<object  id="LODOP" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0> 
+			<embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0></embed>
+		</object>
+		    <input type="button" onClick="Print()" value="打印" name="button_print"> 
+		    <input type="button" onClick="Preview()" value="打印预览 " name="button_show"> 
+##		    <input type="button" onClick="Design()" value="打印页面设置" name="button_setup"> 
+	    	<img id = "log" align="right" border='0' width="5%" height = "5%" src='$!{env.imgUrl}/images/xpp/log.png' />
+	    </div>
+	    <div id = "event">
+	    <div align="center"><h2>$!{proEventTotal.eventTitle}</h2></div>
+##	   	<div class="easyui-panel" title="业务数据" data-options="collapsible:true,iconCls:'icon-list'" style="padding: 2px; width:700px; background: #fafafa;">
+    	<table width="100%" cellpadding="0" cellspacing="0" style="border:#f39801 solid 1px;border-width:1 1 0 1;border-collapse:collapse;" >
+            <tr height="25px">
+                <td style="padding-left:5px;font-size:13px;font-weight:bold;color:#0e2d5f;border:#f39801 solid 1px;border-width:0 0 1 0">
+    				业务数据
+    			</td>
+    		</tr>
+    		<tr>
+    			<td>	   	
+					<table width="100%" border="0" cellpadding="4" cellspacing="0" style="border:#f39801 solid 1px;border-width:1 0 1 0;border-collapse:collapse;TABLE-LAYOUT: fixed;">
+						<tr>
+							<td class="head" noWrap width="11%" style="border:#f39801 solid 1px;border-width:0 0 1 0">
+								事务类别：
+							</td>
+							<td width="84%" class="even" style="text-align:left;border:#f39801 solid 1px;border-width:0 1 1 1">
+								$!{planTypeName}
+							</td>
+							<td width="5%">
+							</td>
+						</tr>
+						#foreach($oaXmlBean in $oaXmlBeanList)
+						<tr>
+							<td class="head"  width="11%" style="border:#f39801 solid 1px;border-width:0 0 1 0">
+								$!{oaXmlBean.parameter2}：
+							</td>
+							<td class="even" width="84%" style="word-break:break-all; word-wrap:break-word;text-align:left;border:#f39801 solid 1px;border-width:0 1 0 1">
+								<div>
+									#if("N"==$!{oaXmlBean.parameter3})
+									       否
+									#end
+									#if("Y"==$!{oaXmlBean.parameter3})
+										是
+									#end
+									#if("N"!=$!{oaXmlBean.parameter3}&&"Y"!=$!{oaXmlBean.parameter3})
+											$!{oaXmlBean.parameter3}
+									#end
+								</div>
+							</td>
+							<td width="5%">
+							</td>
+						</tr> 
+						#end
+					</table>
+    			</td>
+            </tr>
+        </table>		
+##		</div>
+
+    	<div region="south" border="false" style="height:6px;"></div>
+
+			    #if($!{proEventTotal.status}=="0")
+                	#set($status = "未处理")
+                #elseif($!{proEventTotal.status}=="1")
+                	#set($status = "处理中")
+                #elseif($!{proEventTotal.status}=="2")
+                	#set($status = "已完成")
+                #elseif($!{proEventTotal.status}=="3")
+                	#set($status = "已拒绝")
+                #elseif($!{proEventTotal.status}=="4")
+                	#set($status = "已取消")
+                #end
+##		    <div class="easyui-panel" data-options="collapsible:true,iconCls:'icon-tip'" style="padding: 2px;width:700px; background: #fafafa;" title="流程数据：评审列表  事务ID：$!{proEventTotal.eventId} 事务状态：$status">
+			<table width="100%" cellpadding="0" cellspacing="0" style="border:#f39801 solid 1px;border-width:1 1 0 1;border-collapse:collapse;word-break:break-all; word-wrap:break-word;" >
+            <tr height="25px">
+                <td style="padding-left:5px;font-size:13px;font-weight:bold;color:#0e2d5f;border:#f39801 solid 1px;border-width:0 0 1 0" >
+                	流程数据：评审列表  事务ID：$!{proEventTotal.eventId} 事务状态：$status
+    			</td>
+    		</tr>
+    		<tr>
+    			<td>
+			<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse;word-break:break-all; word-wrap:break-word;">
+				<tr>
+					<td align="top">
+						<table width="100%" border="1px" bordercolor="#f39801" cellspacing="0px" style="border-collapse:collapse">
+							<tr>
+								<td colspan="2">
+									<table width="100%" border="1px" bordercolor="#f39801" cellspacing="0px" style="border-collapse:collapse">
+										#set($detail=$eventDetailList.get(0))
+										<tr>
+											<td class="head" align="right" noWrap colspan="1">
+												发起人:
+											</td>
+											<td   noWrap  style="text-align:left;font-size:14px">
+													$!{detail.userName}
+											</td>
+										<!--	<td class="head" align="right"  noWrap colspan="1">
+												角色:
+											</td>
+											<td  noWrap style="text-align:left;font-size:14px">
+												$!{detail.roleName}
+											</td> -->
+											<td class="head" align="right"  noWrap colspan="1">
+												发起时间:
+											</td>
+											<td noWrap  style="text-align:left;font-size:14px">
+												$!dateUtil.datetime($!{detail.time},"yyyy-MM-dd HH:mm:ss")
+											</td>
+										</tr>
+										<tr>
+											<td class="head" align="right"  noWrap colspan="1">
+												审批意见:
+											</td>
+											<td class="even" style="word-wrap:break-word;word-break:break-all;width:600px;"    noWrap colspan="5">
+											 $!{detail.memo}
+											</td>
+										</tr>
+							<!--			<tr>
+											<td class="head"  align="right"  noWrap colspan="1">
+												附件:
+											</td>
+											<td   noWrap colspan="5">
+												$!{detail.link}
+											</td>
+										</tr>   -->
+									</table>
+									#foreach($detail in $eventDetailList)
+										#if($velocityCount != 0)
+											<table width="100%" border="1px" bordercolor="#f39801" cellspacing="0px" style="border-collapse:collapse;word-break:break-all; word-wrap:break-word;">
+										<tr>
+											<td class="head" noWrap colspan="1" align="right">
+        										处理人:
+											</td>
+        									<td colspan="1"  noWrap style="text-align:left;font-size:14px">
+        										$!{detail.userName}
+											</td>
+								<!--			<td class="head" noWrap colspan="1" align="right">
+												角色:
+        									</td>
+        									<td   noWrap style="text-align:left;font-size:14px">
+        										$!{detail.roleName}
+        									</td>-->
+											<td class="head" noWrap colspan="1" align="right">
+        										处理时间:
+        									</td>
+        								    <td noWrap  style="text-align:left;font-size:14px">
+												#if(${detail.lastModify})
+													$dateUtil.datetime($!{detail.lastModify},"yyyy-MM-dd HH:mm:ss")
+												#else
+												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+												#end
+        									</td>
+										</tr>
+										<tr>
+	        								<td class="head" colspan="1" noWrap align="right">
+	        												操作状态:
+	        								</td>
+											<td noWrap colspan="3" style="text-align:left;font-size:14px">
+    										#if($!{detail.operation}=="0")
+    											拒绝
+    										#elseif($!{detail.operation}=="1")
+    													同意
+    												#elseif($!{detail.operation}=="9")
+    													未处理
+													#elseif($!{detail.operation}=="2")
+														已回退
+    												#end
+											</td>
+        								</tr>
+        										<tr>
+        											<td class="head" colspan="1" noWrap align="right">
+        												提交意见:
+        											</td>
+        											<td class="even" style="word-wrap:break-word;word-break:break-all;width:600px;"    noWrap colspan="5">
+        												$!{detail.memo}
+        											</td>
+        										</tr>
+        									<!--		<tr>
+        										<td class="head" colspan="1" noWrap>
+        												附件:
+        											</td>
+        											<td  colspan="5" noWrap>
+        												$!{detail.link}
+        											</td>
+        											
+        										</tr>  -->
+        										#foreach($cc in $detail.ccs)
+												<tr>
+        											<td class="head" noWrap colspan="1" align="right">
+        												抄送人:
+        											</td>
+        											<td  colspan="1"  noWrap style="text-align:left;font-size:14px">
+		        										$!{cc.creator_name}
+        											</td>
+        											
+        											 <td class="head" noWrap colspan="1" align="right">
+		        										处理时间:
+		        									  </td>
+		        									  <td noWrap  style="text-align:left;font-size:14px">
+		    											#if(${cc.replay_date})
+		    												$dateUtil.datetime($!{cc.replay_date},"yyyy-MM-dd HH:mm:ss")
+														#end
+		        									</td>
+        										</tr>
+        										<tr>
+        											<td class="head" colspan="1" noWrap align="right">
+        												反馈意见:
+        											</td>
+        											<td  class="even" style="word-wrap:break-word;word-break:break-all;width:600px;"    noWrap colspan="5">
+														#if(${cc.replay_memo})
+															$!{cc.replay_memo}
+														#else
+															未处理
+														#end
+        											</td>
+        										</tr>
+												#end
+											</table>
+										#end
+									#end
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+    			</td>
+            </tr>
+        </table>			
+##            </div>
+            </div>
+	<script type="text/javascript" src="$!{env.imgUrl}/js/platform/wfe/event/eventPrintPre.js"></script>
+	<script type="text/javascript" src="$!{env.imgUrl}/js/print/LodopFuncs.js"></script>
+	<script type="text/javascript">
+		var strHtml1="<br><font color='#FF00FF'>打印控件未安装!点击这里<a href='" + imgUrl + "/js/print/install_lodop.exe'>执行安装</a>,安装后请刷新页面或重新进入。</font>";
+    	var strHtml2="<br><font color='#FF00FF'>打印控件需要升级!点击这里<a href='" + imgUrl + "/js/print/install_lodop.exe'>执行升级</a>,升级后请重新进入。</font>";
+    	var strHtml3="<br><br><font color='#FF00FF'>(注：如曾安装过Lodop旧版附件npActiveXPLugin,请在【工具】->【附加组件】->【扩展】中先卸载它)</font>";
+    </script>
+</html>

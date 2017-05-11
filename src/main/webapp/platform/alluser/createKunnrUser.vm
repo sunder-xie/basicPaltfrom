@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<body class="easyui-layout">
+		<form method="post" target="hideFrame">
+			<div region="center" class="easyui-panel" title="人员创建" data-options="iconCls:'icon-edit'">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1">
+        			<tr>
+                        <td class="head" noWrap>用户ID(<font color='red'>登录账号</font>):</td>
+        				<td><input class="easyui-validatebox"  id="loginId" name="allUsers.loginId" 
+							data-options="required:true" missingMessage="请输入正确的用户ID">
+							<!--<input type="button" onclick="testId(document.getElementById('loginId').value)" value="测试是否可用"/>-->
+                            <a class="easyui-linkbutton" icon="icon-search" href="javascript:testId(document.getElementById('loginId').value)">测试是否可用</a>
+						</td>
+        			</tr>
+					<tr>
+						<td class="head" noWrap></td>
+						<td colspan='3'>
+							<font color='green'>用户ID的格式为：名的第一个拼音字母+姓的全拼，比如王小明<br/>的用户ID为：xmwang，如用户ID重复，请在后面按序加阿拉伯数字（1，2,...)
+							</font>	
+						</td>	
+					</tr>	
+        			<tr>
+        				<td class="head" noWrap>用户姓名<font color='red'>*</font>:</td>
+        				<td><input class="easyui-validatebox"  id="userName" name="allUsers.userName" 
+							data-options="required:true" missingMessage="请输入正确的用户名"></td>
+						<td class="head" noWrap>身份证号码:</td>
+        				<td><input class="easyui-validatebox"  id="idCard" name="allUsers.idCard"></td>
+        			</tr>
+        			<tr>
+        				<td class="head" noWrap>密码<font color='red'>*</font>:</td>
+        				<td>
+        				<input class="easyui-validatebox"  type="password" id="passWd" value='111111' name="allUsers.passWd" data-options="required:true" validType="length[6,99]" missingMessage="请输入6位及以上的密码" invalidMessage="请输入6位及以上的密码">
+                            <font color='green'>初始密码为111111,可修改</font>
+						</td>
+						<td class="head" noWrap>开始工作时间:</td>
+        				<td>
+        				<input class="easyui-datebox"  id="startDate" name="allUsers.startDate" readonly ></td>
+        				</td>
+						
+        			</tr>
+        			<tr>
+        				<td class="head" noWrap>确认密码<font color='red'>*</font>:</td>
+        				<td>
+        				<input class="easyui-validatebox" type="password" id="repassWd" value='111111' name="statirepassWdonId" validType="equalTo['#passWd']" invalidMessage="两次输入密码不匹配"></td>
+						<td class="head" noWrap>性别:</td>
+						<td>
+                        <select id="sex"  name="allUsers.sex" style="width:100px;" required="true" >
+									<option value="M"   readonly>男</option>
+									<option value="F"   readonly>女</option>
+						</select>			
+						</td>	
+        				<!--<td><input class="easyui-validatebox"  id="sex" name="sex" ></td>-->
+        			</tr>
+        			<tr>
+        				<td class="head" noWrap>通信地址:</td>
+						<td >
+							<input class="easyui-validatebox"  id="address" name="allUsers.address">
+						</td>
+						<td class="head" noWrap>办公传真:</td>
+        				<td><input class="easyui-validatebox"  id="workFax" name="allUsers.workFax"></td>
+        			</tr>
+        			<tr>
+						
+        				<td class="head" noWrap>邮箱地址<font color='red'>*</font>:</td>
+        				<td>
+        				<input class="easyui-validatebox"  id="email" name="allUsers.email" data-options="required:true"
+							missingMessage="请输入邮箱" validType="email" invalidMessage="请输入正确的邮箱格式,如：xxx@kintiger.com"></td>
+						<td class="head" noWrap>办公电话:</td>
+        				<td><input class="easyui-validatebox"  id="phone" name="allUsers.phone"></td>
+        			</tr>
+        			<tr>
+        				<td class="head" noWrap>公务手机<font color='red'>*</font>:</td>
+        				<td>
+        				<input class="easyui-validatebox"  id="busMobilephone" name="allUsers.busMobilephone" data-options="required:true"
+							missingMessage="请输入手机号" validType="length[11,11]" invalidMessage="请输入正确的11位手机号"></td>
+							<td class="head" noWrap>私人手机<font color='red'>*</font>:</td>
+        				<td>
+        				<input class="easyui-validatebox"  id="mobile" name="allUsers.mobile" data-options="required:true"
+							missingMessage="请输入手机号" validType="length[11,11]" invalidMessage="请输入正确的11位手机号" value="$!{allUsers.mobile}"></td>
+						
+						
+        			</tr>
+					<tr>
+				<td class="head" noWrap>所属经销商:</td>
+        		<td>
+					<input type="hidden"  id="orgId" value="$!{orgId}" name="orgId"     />
+					<input type="hidden"    value="$!{kunnrId}"  id="custKunnr1"  />
+					<input id="custKunnr" name="kunnrId"  value=${kunnrId} style="width:153px" data-options="editable:false" validType="length[0,200]"></td>
+					<div id="toolbarKonzs" class="datagrid-toolbar">
+					<input class="easyui-searchbox" searcher="searcherKonzs"  prompt="请输入经销商名称查询" style="width:300px"></input>		
+				</div>
+				</td>
+				<td class="head" noWrap>备注:</td>
+        				<td><input class="easyui-validatebox"  id="remark" name="allUsers.remark"></td>
+                    </tr>	
+					<tr>
+						#if  ("A" ==$!{isoffKunnr} )
+        				<td class="head" noWrap>编制数:</td>
+						<td class="even" noWrap><input type="text" class="easyui-numberbox"  name="allUsers.staffNubmer" id="staffNubmer"       /></td>
+						#else 
+						<td class="head" noWrap></td>
+						#end
+					</tr>
+					<tr>
+        				<td class="head" noWrap></td>
+        			</tr>
+					<tr>
+        				<td class="head" noWrap></td>
+        			</tr>
+					<tr>
+        				<td class="head" noWrap></td>
+        			</tr>
+					<tr>
+        				<td class="head" noWrap></td>
+        			</tr>
+					<tr>
+						<td class="head" noWrap><font color='green'>温馨提示：</font></td>
+						<td>
+							<font color='green'>带<font color='red'>*</font>为必填项，其他信息可以后续补充修改</font>
+						</td>
+					</tr>
+		    </table>
+		
+			</div>
+			<div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+				<a class="easyui-linkbutton" icon="icon-ok" href="javascript:submit()">创建</a>
+				<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:close()">取消</a>
+			</div>
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+		 <div id="maintWindow"/> 
+	</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/alluser/createKunnrUser.js"></script>
+</html>

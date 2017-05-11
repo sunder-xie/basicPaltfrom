@@ -1,0 +1,876 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="alluser">
+	<typeAlias alias="allUsers"
+		type="com.kintiger.platform.allUser.pojo.AllUsers" />
+	<typeAlias alias="kunnr" type="com.kintiger.platform.allUser.pojo.Kunnr" />
+	<select id="searchAllUsers" parameterClass="allUsers"
+		resultClass="allUsers">
+		<include refid="global.paginationStart" /> 
+	<![CDATA[
+			select  t.emp_id          as userId,
+			   t.emp_code           as loginId,
+			 t.emp_name           as userName,
+			 t.emp_state          as userState,
+			 t.org_id             as orgId,   
+			 b.org_name           as orgName,
+			 t.emp_phone          as phone,
+			 t.emp_mobile_phone    as mobile,
+			 t.emp_email          as email,
+			 t.emp_address        as address,
+			 t.emp_sex            as sex,
+			 t.bus_mobilephone as BusMobilephone,
+			 t.emp_psd  as passWd,
+			 t.rtx_code as rtx_LoginId
+		  from basis.basis_tb_salesemp_info t left join basis.basis_tb_org b on t.org_id=b.org_id
+		   where
+				t.emp_state <> 'D' and t.emp_state<>'W' and t.emp_state<>'R' and  t.emp_code is not null
+	]]>
+		<dynamic>
+			<isNotEmpty property="email" prepend="and">
+			<![CDATA[ t.emp_email =#email#]]>
+			</isNotEmpty>
+			<isNotEmpty property="loginId" prepend="and">
+			<![CDATA[ t.emp_code like #loginId,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="userName" prepend="and">
+			<![CDATA[ t.emp_name like #userName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="orgId" prepend="and">
+			<![CDATA[ t.org_id = #orgId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="orgIds" prepend="and">
+			<![CDATA[ t.org_id in ]]>
+				<iterate property="orgIds" open="(" close=")" conjunction=",">#orgIds[]#
+				</iterate>
+			</isNotEmpty>
+		</dynamic>
+		<include refid="global.orderBy" />
+		<include refid="global.paginationEnd" />
+	</select>
+	<select id="searchAllUsers_all" parameterClass="allUsers"
+		resultClass="allUsers">
+	<![CDATA[
+			select  t.emp_id          as userId,
+			   t.emp_code           as loginId,
+			 t.emp_name           as userName,
+			 t.emp_state          as userState,
+			 t.org_id             as orgId,   
+			 b.org_name           as orgName,
+			 t.emp_phone          as phone,
+			 t.emp_mobile_phone    as mobile,
+			 t.emp_email          as email,
+			 t.emp_address        as address,
+			 t.emp_sex            as sex,
+			 t.bus_mobilephone as BusMobilephone,
+			 t.emp_psd  as passWd,
+			 t.rtx_code as rtx_LoginId
+		  from basis.basis_tb_salesemp_info t left join basis.basis_tb_org b on t.org_id=b.org_id
+		   where
+				t.emp_state <> 'D' and t.emp_state<>'R' and t.emp_state<>'N' and t.emp_code is not null
+	]]>
+		<dynamic>
+			<isNotEmpty property="email" prepend="and">
+			<![CDATA[ t.emp_email =#email#]]>
+			</isNotEmpty>
+			<isNotEmpty property="loginId" prepend="and">
+			<![CDATA[ t.emp_code like #loginId,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="userName" prepend="and">
+			<![CDATA[ t.emp_name like #userName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="orgId" prepend="and">
+			<![CDATA[ t.org_id = #orgId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="orgIds" prepend="and">
+			<![CDATA[ t.org_id in ]]>
+				<iterate property="orgIds" open="(" close=")" conjunction=",">#orgIds[]#
+				</iterate>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<select id="searchAllUsersCount" parameterClass="allUsers"
+		resultClass="java.lang.Integer">
+	<![CDATA[
+			select  count(t.emp_id) 
+		  from basis.basis_tb_salesemp_info t left join basis.basis_tb_org b on t.org_id=b.org_id
+		   where 
+				t.emp_state <> 'D' and t.emp_state<>'N' and t.emp_state<>'R' and  t.emp_code is not null
+	]]>
+		<dynamic>
+			<isNotEmpty property="loginId" prepend="and">
+			<![CDATA[ t.emp_code like #loginId,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="userName" prepend="and">
+			<![CDATA[ t.emp_name like #userName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="orgId" prepend="and">
+			<![CDATA[ t.org_id = #orgId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="orgIds" prepend="and">
+			<![CDATA[ t.org_id in ]]>
+				<iterate property="orgIds" open="(" close=")" conjunction=",">#orgIds[]#
+				</iterate>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="getEmpListByOrgId" parameterClass="java.lang.Long"
+		resultClass="allUsers">
+	<![CDATA[
+		select distinct a.emp_id       as userId,
+						   a.emp_name     as userName,
+						   a.org_id       as orgId,
+							 a.emp_sex      as sex,
+						   c.station_name as posName
+		  from basis.basis_tb_salesemp_info a
+		  left join basis.basis_tb_station_user b on a.emp_id = b.user_id
+		  left join basis.basis_tb_stations c on b.station_id = c.station_id
+		 where a.emp_state in('S','Y') and a.org_id = #org_id#
+	]]>
+	</select>
+
+	<update id="deleteUserByEmpId" parameterClass="allUsers">
+	<![CDATA[
+		update basis.basis_tb_salesemp_info b set b.emp_state='D',b.last_modify = sysdate 
+		where b.emp_id=#userId#
+	]]>
+	</update>
+
+
+	<select id="getAllUserByPassport" parameterClass="java.lang.String"
+		resultClass="allUsers">
+	<![CDATA[
+		select t.cust_type  as custType,
+			   t.passwd     as passWd,
+			   t.login_id   as loginId,
+			   t.mobile,
+			   t.phone,
+			   t.email,
+			   t.user_state as userState,
+			   t.user_id    as userId,
+			   t.user_name  as userName,
+			   t.hq_sign    as hqSign,
+			   t.org_id     as orgId,
+			   t.isoffice_sign as isOffice,
+			   t.expiredpsw as expiredpsw,
+			   t.kunnr_sign as kunnrSign
+		  from basis.basis_vw_user_psw t
+		 where (t.login_id = #passport# or
+			   (t.mobile = #passport# and t.cust_type = 'X') or
+			   (t.phone = #passport# and t.cust_type = 'X'))
+		   and t.user_state in ('S', 'Y') 
+	]]>
+	</select>
+
+
+	<select id="getAllUserByMobile" parameterClass="allUsers"
+		resultClass="allUsers">
+	<![CDATA[
+		select
+		distinct
+		 t.cust_type  as custType,
+			   t.passwd     as passWd,
+			   t.login_id   as loginId,
+			   t.mobile,
+			   t.bus_mobilephone ,
+			   t.phone,
+			   t.email,
+			   t.user_state as userState,
+			   t.user_id    as userId,
+			   t.user_name  as userName,
+			   t.hq_sign    as hqSign,
+			   t.org_id     as orgId,
+			   t.isoffice_sign as isOffice,
+			   t.expiredpsw as expiredpsw,
+			   t.kunnr_sign as kunnrSign
+		  from basis.basis_vw_user_psw t
+		 where 1=1
+		   and t.user_state in ('S', 'Y')
+	]]>
+		<dynamic>
+			<isNotEmpty property="mobile" prepend="and">
+			<![CDATA[ t.mobile =#mobile# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="busMobilephone" prepend="and">
+			<![CDATA[ t.bus_mobilephone =#busMobilephone# ]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<update id="updateAllUser" parameterClass="allUsers">
+	<![CDATA[
+		update basis.basis_tb_salesemp_info t
+		   set t.last_modify = sysdate, t.emp_psd = #passWd#
+	]]>
+	<![CDATA[
+		  where t.emp_email = #email#
+	]]>
+	</update>
+	<select id="getAllUserByLoginId" parameterClass="java.lang.String"
+		resultClass="java.lang.Integer">
+		select count(*) from basis.basis_vw_user_psw t where
+		(t.login_id = #loginId# or
+		(t.mobile = #loginId# and t.cust_type = 'X')
+		or
+		(t.phone = #loginId# and t.cust_type = 'X'))
+		and t.user_state in
+		('S','Y','W')
+	</select>
+
+	<select id="getEmpCount" parameterClass="allUsers" resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(s.emp_code) from basis.basis_tb_salesemp_info  s    where s.emp_state in('S','Y')
+	]]>
+		<dynamic>
+			<isNotEmpty property="loginId" prepend="and">
+			<![CDATA[ s.emp_code =#loginId# ]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="getAllUsersByUserId" parameterClass="java.lang.String"
+		resultClass="allUsers">
+		select
+		b.emp_code as loginId,
+		b.emp_name as userName,
+		b.emp_sex as sex,
+		b.emp_psd as passWd,
+		b.emp_start_date as
+		startDate,
+		b.org_id as orgId,
+		o.org_name as orgName,
+		b.emp_id_card as
+		idCard,
+		b.emp_workfax as workFax,
+		b.emp_email as email,
+		b.emp_phone as phone,
+		b.emp_mobile_phone as busMobilephone,
+		b.st_mobile as mobileSimple,
+		b.emp_remark as remark,
+		b.emp_address as address，
+		b.emp_post_id as
+		empPostId,
+		b.hq_sign as
+		hqSign,
+		b.rtx_code as rtx_LoginId,
+		e.emp_post_id
+		as empPostId,
+		e.emp_post_name as empPostName
+		from
+		basis.basis_tb_salesemp_info b left
+		join basis.basis_tb_org o
+		on
+		b.org_id = o.org_id
+		left join
+		basis.basis_tb_emp_post e on
+		e.emp_post_id
+		= b.emp_post_id
+		where
+		b.emp_id= #ids#
+
+	</select>
+
+	<select id="getEmpList" parameterClass="allUsers" resultClass="allUsers">
+		<include refid="global.paginationStart" />
+	<![CDATA[
+		select s.emp_code as loginId, s.emp_name as userName, s.emp_email as email
+		  from basis.basis_tb_salesemp_info s
+		 where s.emp_state in('S','Y')
+	]]>
+		<dynamic>
+			<isNotEmpty property="loginId" prepend="and">
+			<![CDATA[ s.emp_code =#loginId# ]]>
+			</isNotEmpty>
+		</dynamic>
+		<include refid="global.orderBy" />
+		<include refid="global.paginationEnd" />
+	</select>
+
+	<select id="getEmpList4Code" parameterClass="allUsers"
+		resultClass="allUsers">
+	<![CDATA[
+		select s.emp_code as loginId, s.emp_name as userName, s.emp_email as email
+		  from basis.basis_tb_salesemp_info s
+		 where s.emp_state in ('S','Y')
+	]]>
+		<dynamic>
+			<isNotEmpty property="loginId" prepend="and">
+			<![CDATA[ s.emp_code =#loginId# ]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<insert id="createUser" parameterClass="allUsers">
+		<selectKey resultClass="java.lang.Long" keyProperty="id">
+			SELECT
+			basis.basis_seq_emp.NEXTVAL AS id FROM DUAL
+		</selectKey>
+	<![CDATA[
+		 insert into basis.basis_tb_salesemp_info
+		  (emp_id,
+		   org_id,
+		   emp_name,
+		   emp_id_card,
+		   emp_code,
+		   emp_sex,
+		   emp_phone,
+		   emp_mobile_phone,
+		   emp_start_date,
+		   emp_state,
+		   emp_remark,
+		   last_modify,
+		   emp_address,
+		   modify_date,
+		   emp_psd,
+		   emp_email,
+		   emp_workfax,
+		   paswd_sign_Date,
+		   emp_post_id,
+		   hq_sign,
+		   rtx_code
+
+		   )
+		values
+		  (#id#,
+		   #orgId#,
+		   #userName#,
+		   #idCard#,
+		   #loginId#,
+		   #sex#,
+		   #phone#,
+		   #busMobilephone#,
+		   #startDate#,
+		   #userState#,
+		   #remark#,
+		   sysdate,
+		   #address#,
+		   sysdate,
+		   #passWd#,
+		   #email#,
+		   #workFax#,
+		   sysdate,
+		   #empPostId#,
+		   #hqSign#,
+		   #rtx_LoginId#
+		   )
+
+	]]>
+	</insert>
+
+
+	<!-- <insert id="selectRole4Station" parameterClass="allUsers"> <selectKey 
+		resultClass="java.lang.Long" keyProperty="stationRoleId"> <![CDATA[ SELECT 
+		basis.basis_seq_station_role.nextval AS stationRoleId FROM DUAL ]]> </selectKey> 
+		<![CDATA[ insert into basis.basis_tb_station_role values (#stationRoleId#, 
+		#stationId#, #roleId#, '', sysdate,TO_DATE(to_char(sysdate,'YYYY-MM-DD'),'YYYY-MM-DD'),to_date('9999-01-01','yyyy-MM-dd'),'U') 
+		]]> </insert> -->
+
+
+	<select id="getEmpNameByUserId" parameterClass="java.lang.String"
+		resultClass="java.lang.String">
+		select b.emp_name from basis.basis_tb_salesemp_info b
+		where b.emp_id=#userId#
+	</select>
+
+	<update id="forbidden" parameterClass="allUsers">
+		update
+		basis.basis_tb_salesemp_info b set
+		b.emp_state=#userState#,b.last_modify=sysdate
+		where b.emp_id=#userId#
+	</update>
+
+	<update id="updateAllUserOrg" parameterClass="allUsers">
+		update
+		basis.basis_tb_salesemp_info b set
+		b.org_id=#orgId#,b.last_modify=sysdate
+		where b.emp_id=#userId#
+	</update>
+
+	<select id="getAllUser" parameterClass="java.lang.String"
+		resultClass="allUsers">
+	<![CDATA[
+		select distinct t.emp_id           as userId,
+			   t.emp_code         as loginId,
+			   t.emp_name         as userName,
+			   t.emp_showname     as userShowName,      
+			   t.emp_id_card      as idCard,
+			   t.emp_phone        as phone,
+			   t.emp_workfax      as workFax,
+			   t.emp_mobile_phone as mobile,
+			   t.emp_homephone    as homePhone,
+			   t.emp_start_date   as startDate,
+			   t.emp_address      as address,
+			   t.emp_email        as email,
+			   t.emp_sex          as sex,
+			   c.station_name         as posName,
+			   t.havemail         as haveMail,
+			   t.emp_remark       as remark,
+			   t.org_id           as orgId,
+			   t.emp_shortmsgbook  as empShortmsgbook,
+			   t.sms_usertype_id   as smsUserTypeId,
+			   t.charge_id         as chargeId ,
+			   t.bus_mobilephone    as busMobilephone,
+			   t.supplier_number   as supplierNumber,
+			   t.emp_shortmsgbook as empShortmsgbook,
+			   t.sms_usertype_id  as smsUserTypeId,
+			   t.charge_id        as chargeId,
+			   t.bus_mobilephone  as busMobilephone,
+			   t.rtx_code 		  as rtx_LoginId
+		from basis.basis_tb_salesemp_info t
+			  left join basis.basis_tb_station_user b on t.emp_id = b.user_id and b.is_main_station='Y'
+			  left join basis.basis_tb_stations c on b.station_id = c.station_id
+		 where t.emp_state in('S','Y') and t.emp_id = #empId#
+	]]>
+	</select>
+
+	<update id="updateUserInfo" parameterClass="allUsers">
+		update
+		basis.basis_tb_salesemp_info b set
+		b.org_id=#orgId#,
+		b.emp_email=#email#,
+		b.emp_mobile_phone=#busMobilephone#,
+		b.st_mobile=#mobileSimple#,
+		b.emp_address=#address#,
+		b.emp_start_date =
+		#startDate#,
+		b.emp_sex=#sex#,
+		b.emp_id_card=#idCard#,
+		b.emp_phone
+		=#phone#,
+		b.emp_remark =#remark#,
+		b.emp_workfax = #workFax#,
+		b.last_modify= sysdate,
+		b.emp_post_id=#empPostId#,
+		b.hq_sign=#hqSign#
+		where b.emp_id=#userId#
+	</update>
+
+	<update id="updatePwd" parameterClass="allUsers">
+	<![CDATA[
+		  update basis.basis_tb_salesemp_info t set  t.last_modify =sysdate  
+	]]>
+		<dynamic>
+			<isNotEmpty property="passWd" prepend=",">
+			<![CDATA[ t.emp_psd =#passWd# ]]>
+			</isNotEmpty>
+		</dynamic>
+	<![CDATA[
+		where  t.emp_id =#userId#
+	]]>
+	</update>
+
+	<insert id="loginLog" parameterClass="allUsers">
+	<![CDATA[
+		insert into
+		basis.BASIS_TB_LOGINLOG(LOGIN_ID, LOGIN_IP, LOGIN_DATE) values
+		(#loginId#,#ip#,to_char(sysdate,'yyyy-MM-dd hh24:ss'))
+	]]>
+	</insert>
+
+	<select id="getLoginOrgs" parameterClass="allUsers" resultClass="java.lang.String">
+	<![CDATA[
+		select t.org_id from basis.basis_tb_station_user t where t.user_id =#userId#
+	]]>
+	</select>
+
+
+
+
+
+	<select id="searchAllKunnrUsers" parameterClass="allUsers"
+		resultClass="allUsers">
+		<include refid="global.paginationStart" /> 
+	<![CDATA[
+		select  t.emp_id          as userId,
+         t.emp_code           as loginId,
+       t.emp_name           as userName,
+       t.emp_state          as userState,
+       t.org_id             as orgId,   
+       c.name1           as orgName,
+       t.emp_phone          as phone,
+       t.emp_mobile_phone    as mobile,
+       t.emp_email          as email,
+       t.emp_address        as address,
+       t.emp_sex            as sex,
+       t.bus_mobilephone as BusMobilephone,
+       t.emp_psd  as passWd,
+       t.lifnr as isOffice,
+       t.staff_nubmer as staffNubmer
+      from basis.basis_tb_kunnremp_info t 
+      left join crm.crm_tb_kunnr c on t.lifnr=c.kunnr
+		   where
+				t.emp_state <> 'D' and t.emp_state<>'W' and t.emp_state<>'R' and  t.emp_code is not null
+	]]>
+		<dynamic>
+			<isNotEmpty property="email" prepend="and">
+			<![CDATA[ t.emp_email =#email#]]>
+			</isNotEmpty>
+			<isNotEmpty property="loginId" prepend="and">
+			<![CDATA[ t.emp_code like #loginId,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="userName" prepend="and">
+			<![CDATA[ t.emp_name like #userName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="isOffice" prepend="and">
+			<![CDATA[ t.lifnr =#isOffice#]]>
+			</isNotEmpty>
+			<isNotEmpty property="orgId" prepend="and">
+			<![CDATA[ t.org_id in(select o.org_id
+                   from basis.basis_tb_org o
+                    where o.state = 'Y'
+                    start with o.org_id = #orgId#
+                    connect by nocycle prior o.org_id = o.org_parent_id
+			)]]>
+			</isNotEmpty>
+			<isNotEmpty property="busMobilephone" prepend="and">
+			<![CDATA[ t.bus_mobilephone =#busMobilephone#]]>
+			</isNotEmpty>
+			<isNotEmpty property="orgName" prepend="and">
+			<![CDATA[ c.name1 like #orgName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+		</dynamic>
+		<include refid="global.orderBy" />
+		<include refid="global.paginationEnd" />
+	</select>
+	<select id="searchKunnur_all" parameterClass="allUsers"
+		resultClass="allUsers">
+	<![CDATA[
+			select t.kunnr           as loginId,
+			       t.org_id             as orgId
+			from crm.crm_tb_kunnr t left join basis.basis_tb_org b on t.org_id=b.org_id  
+		    where t.status <> '2' and t.status <> '3' and t.kunnr is not null
+	]]>
+		<dynamic>
+			<isNotEmpty property="loginId" prepend="and">
+			<![CDATA[ t.emp_code like #loginId,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="orgId" prepend="and">
+			<![CDATA[ t.org_id = #orgId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="orgIds" prepend="and">
+			<![CDATA[ t.org_id in ]]>
+				<iterate property="orgIds" open="(" close=")" conjunction=",">#orgIds[]#
+				</iterate>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<select id="searchAllKunnrUsersCount" parameterClass="allUsers"
+		resultClass="java.lang.Integer">
+	<![CDATA[
+			select  count(t.emp_id) 
+		  from basis.basis_tb_kunnremp_info t
+		   left join crm.crm_tb_kunnr c on t.lifnr=c.kunnr
+		   where 
+				t.emp_state <> 'D' and t.emp_state<>'W' and t.emp_state<>'R' and  t.emp_code is not null
+	]]>
+		<dynamic>
+			<isNotEmpty property="loginId" prepend="and">
+			<![CDATA[ t.emp_code like #loginId,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="userName" prepend="and">
+			<![CDATA[ t.emp_name like #userName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="isOffice" prepend="and">
+			<![CDATA[ t.lifnr =#isOffice#]]>
+			</isNotEmpty>
+			<isNotEmpty property="orgId" prepend="and">
+			<![CDATA[ t.org_id in(select o.org_id
+                   from basis.basis_tb_org o
+                    where o.state = 'Y'
+                    start with o.org_id = #orgId#
+                    connect by nocycle prior o.org_id = o.org_parent_id
+			)]]>
+			</isNotEmpty>
+			<isNotEmpty property="busMobilephone" prepend="and">
+			<![CDATA[ t.bus_mobilephone =#busMobilephone#]]>
+			</isNotEmpty>
+			<isNotEmpty property="orgName" prepend="and">
+			<![CDATA[ c.name1 like #orgName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<insert id="createKunnrUser" parameterClass="allUsers">
+		<selectKey resultClass="java.lang.Long" keyProperty="id">
+			SELECT
+			basis.basis_seq_emp.NEXTVAL AS id FROM DUAL
+		</selectKey>
+	<![CDATA[
+		 insert into basis.basis_tb_kunnremp_info
+		  (emp_id,
+		   org_id,
+		   emp_name,
+		   emp_id_card,
+		   emp_code,
+		   emp_sex,
+		   emp_phone,
+		   bus_mobilephone,
+		   emp_start_date,
+		   emp_state,
+		   emp_remark,
+		   last_modify,
+		   emp_address,
+		   modify_date,
+		   emp_psd,
+		   emp_email,
+		   emp_workfax,
+		   paswd_sign_Date,
+		   emp_mobile_phone,
+		   hq_sign,
+		   lifnr,
+		   STAFF_NUBMER
+		   )
+		values
+		  (#id#,
+		   #orgId#,
+		   #userName#,
+		   #idCard#,
+		   #loginId#,
+		   #sex#,
+		   #phone#,
+		   #busMobilephone#,
+		   #startDate#,
+		   #userState#,
+		   #remark#,
+		   sysdate,
+		   #address#,
+		   sysdate,
+		   #passWd#,
+		   #email#,
+		   #workFax#,
+		   sysdate,
+		   #mobile#,
+		   #hqSign#,
+		   #isOffice#,
+		   #staffNubmer#
+		   )
+
+	]]>
+	</insert>
+	<select id="getAllKunnrUsersByUserId" parameterClass="java.lang.String"
+		resultClass="allUsers">
+		select
+		b.emp_code as loginId,
+		b.emp_name as userName,
+		b.emp_sex as sex,
+		b.emp_psd as passWd,
+		b.emp_start_date as
+		startDate,
+		b.org_id as orgId,
+		b.emp_id_card as
+		idCard,
+		b.emp_workfax as workFax,
+		b.emp_email as email,
+		b.emp_phone as
+		phone,
+		b.bus_mobilephone as
+		busMobilephone,
+		b.emp_mobile_phone as
+		mobile,
+		b.emp_remark as remark,
+		b.emp_address as address，
+		b.emp_post_id as empPostId,
+		b.hq_sign as
+		hqSign,
+		b.LIFNR as isOffice,
+		b.staff_nubmer as staffNubmer
+		from
+		basis.basis_tb_kunnremp_info b
+		where
+		b.emp_id= #ids#
+
+	</select>
+	<update id="updateKunnrUserInfo" parameterClass="allUsers">
+		update
+		basis.basis_tb_kunnremp_info b set
+		b.emp_email=#email#,
+		b.emp_mobile_phone=#mobile#,
+		b.bus_mobilephone=#busMobilephone#,
+		b.emp_address =
+		#address#,
+		b.emp_start_date = #startDate#,
+		b.emp_sex=#sex#,
+		b.emp_id_card=#idCard#,
+		b.emp_phone =#phone#,
+		b.emp_remark =#remark#,
+		b.emp_workfax = #workFax#,
+		b.LIFNR = #isOffice#,
+		b.STAFF_NUBMER = #staffNubmer#,
+		b.last_modify= sysdate
+		where
+		b.emp_id=#userId#
+	</update>
+
+	<update id="updateKunnrPwd" parameterClass="allUsers">
+	<![CDATA[
+		  update basis.basis_tb_kunnremp_info t set  t.last_modify =sysdate ,t.expiredpsw='A' ,t.emp_psd =#passWd#  where  t.emp_id =#userId#
+	]]>
+	</update>
+
+
+	<update id="forKunnrbidden" parameterClass="allUsers">
+		update
+		basis.basis_tb_kunnremp_info b set
+		b.emp_state=#userState#,b.last_modify=sysdate
+		where b.emp_id=#userId#
+	</update>
+
+	<insert id="selectRole4User" parameterClass="allUsers">
+		<selectKey resultClass="java.lang.Long" keyProperty="id">
+		<![CDATA[
+			SELECT basis.basis_seq_user_role.nextval AS id FROM DUAL
+		]]>
+		</selectKey>
+	<![CDATA[
+		insert into basis.basis_tb_user_role values
+		  (#id#, #userId#, #posName#, '', sysdate,TO_DATE(to_char(sysdate,'YYYY-MM-DD'),'YYYY-MM-DD'),to_date('9999-01-01','yyyy-MM-dd'),'U')
+	]]>
+	</insert>
+
+
+
+	<select id="kunnrSearchCount" parameterClass="kunnr"
+		resultClass="java.lang.Integer">
+		<![CDATA[
+		select 
+		count(t.kunnr)
+		from crm.crm_tb_kunnr t left join crm.crm_tb_kunnrbusiness b  on t.kunnr=b.kunnr 
+		where 1=1
+
+		]]>
+		<dynamic>
+			<isNotEmpty property="kunnr" prepend="and">
+			<![CDATA[t.kunnr=#kunnr#]]>
+			</isNotEmpty>
+			<isNotEmpty property="name1" prepend="and">
+			<![CDATA[t.name1 like #name1,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="channelId" prepend="and">
+			<![CDATA[t.channel_Id =#channelId#]]>
+			</isNotEmpty>
+			<isNotEmpty property="status" prepend="and">
+			<![CDATA[t.status =#status#]]>
+			</isNotEmpty>
+			<isNotEmpty property="businessManager" prepend="and">
+			<![CDATA[b.business_Manager like #businessManager,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="businessCompetent" prepend="and">
+			<![CDATA[b.business_Competent like #businessCompetent,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="orgId" prepend="and">
+				<isEmpty property="bhxjFlag">
+			<![CDATA[t.org_id =#orgId#]]>
+				</isEmpty>
+				<isNotEmpty property="bhxjFlag">
+			<![CDATA[t.org_id in(select o.org_id
+                   from basis.basis_tb_org o
+                    where o.state = 'Y'
+                    start with o.org_id = #orgId#
+                    connect by nocycle prior o.org_id = o.org_parent_id
+			)]]>
+				</isNotEmpty>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="kunnrSearch" parameterClass="kunnr" resultClass="kunnr">
+		<include refid="global.paginationStart" />
+		<![CDATA[
+		select t.kunnr,
+		t.name1,
+		t.name3,
+		t.mob_number mobNumber,
+		c.channel_name channelName,
+		t.konzs,
+		t.kp_phone kpPhone,
+		t.province,t.city,t.area,t.town,
+		z.zwl01t||z.zwl02t||z.zwl03t||z.zwl04t||t.street1 street1,
+		z.zwl01t||z.zwl02t||z.zwl03t||z.zwl04t||t.street1 bgXzAddress,
+		t.tel_number telNumber,
+		t.fax_number  faxNumber,
+		t.locco,
+		t.bukrs,
+		b.werks,
+		t.bank,
+		t.bank_account bankAccount,
+		t.health_number healthNumber,
+		t.BUSINESS_LICENSE businessLicense,
+		t.stceg,
+		b.business_Manager businessManager,
+		b.MANAGER_MOBILE managerMobile,
+		b.business_Competent businessCompetent,
+		b.COMPETENT_MOBILE competentMobile,
+		z1.zwl01t||z1.zwl02t||z1.zwl03t||z1.zwl04t||t.street as street,
+		t.name102,
+		t.name102tel,
+		t.name102mob,
+		t.maximum as maximum,
+        d.item_value as maximumTxt,
+		b.LASTYEAR_SALES lastyearSales,
+		b.THEYEAR_SALES theyearSales,
+		b.COVER_AREA coverArea,
+		t.status,
+		b.kunnr_leader as kunnrLeader,
+		b.kunnr_phone as kunnrPhone,
+		t.warehouse_area as warehouseArea,
+        t.nature_enterprise as natureEnterprise,
+        t.fp_recipient as fpRecipient,
+        t.fp_address as fpAddress,
+        t.fp_contact_phone as fpContactPhone,
+        t.org_id as orgId,
+        t.org_name as orgName,
+        t.zc_address as zcAddress,
+        z1.zwl01 as shProvince,
+        z1.zwl02 as shCity,
+        z1.zwl03 as shArea,
+        t.sh_town as shTown,
+        z1.zwl01t||z1.zwl02t||z1.zwl03t||z1.zwl04t  as shXzAddress
+		from crm.crm_tb_kunnr t left join crm.crm_tb_kunnrbusiness b  on t.kunnr=b.kunnr 
+		left join  crm.crm_tb_channel c on t.channel_Id=c.channel_Id
+		left join  crm.crm_tb_zwlqy z on t.town=z.zwl04
+		left join  crm.crm_tb_zwlqy z1 on t.sh_town=z1.zwl04
+		left join crm.crm_tb_dict d on d.item_name=t.maximum and d.item_state='U'
+        left join crm.crm_tb_dict_type p on p.dict_type_id=d.dict_type_id and d.item_state='U' and p.dict_type_value='最大可通行车型'
+		where 1=1
+		]]>
+		<dynamic>
+			<isNotEmpty property="kunnr" prepend="and">
+			<![CDATA[t.kunnr=#kunnr#]]>
+			</isNotEmpty>
+			<isNotEmpty property="name1" prepend="and">
+			<![CDATA[t.name1 like #name1,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="channelId" prepend="and">
+			<![CDATA[t.channel_Id =#channelId#]]>
+			</isNotEmpty>
+			<isNotEmpty property="status" prepend="and">
+			<![CDATA[t.status =#status#]]>
+			</isNotEmpty>
+			<isNotEmpty property="orgId" prepend="and">
+				<isEmpty property="bhxjFlag">
+			<![CDATA[t.org_id =#orgId#]]>
+				</isEmpty>
+				<isNotEmpty property="bhxjFlag">
+			<![CDATA[t.org_id in(select o.org_id
+                   from basis.basis_tb_org o
+                    where o.state = 'Y'
+                    start with o.org_id = #orgId#
+                    connect by nocycle prior o.org_id = o.org_parent_id
+			)]]>
+				</isNotEmpty>
+			</isNotEmpty>
+		</dynamic>
+		<!-- <![CDATA[order by t.status, t.create_date desc]]> -->
+		<include refid="global.orderBy" />
+		<include refid="global.paginationEnd" />
+	</select>
+	<!-- -->
+
+	<update id="updateKunnrMobile" parameterClass="allUsers">
+		update
+		crm.crm_tb_kunnr k
+		set k.mob_number=#mobile#
+		where k.kunnr=#isOffice#
+	</update>
+</sqlMap>

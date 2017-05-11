@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+		<body class="easyui-layout">	
+	<form  method="post" target="hideFrame"> 
+           <div id="p_add" region="center" class="easyui-panel"
+			title="字典类型修改"
+			data-options="iconCls:'icon-edit'">
+          
+						<table id="table_01" width="100%" cellspacing="0" border="0">
+                                        <tr>
+											
+											<td class="head" nowrap>
+												类型名称<font color='red'>*</font>：
+											</td>
+											<td>
+											  <input type="hidden" id="dictTypeId" name="cmsTbDictType.dictTypeId" value="$!{cmsTbDictType.dictTypeId}" />
+                                              <input id="dictTypeName"   name="cmsTbDictType.dictTypeName" value="$!{cmsTbDictType.dictTypeName}" class="easyui-validatebox"
+								data-options="required:true" validType="length[0,50]">
+											 
+											</td>
+                                         </tr>
+                                        <tr>
+                                            <td class="head" nowrap>
+												类型值<font color='red'>*</font>：
+											</td>
+											
+											<td >
+												<input id="dictTypeValue"   name="cmsTbDictType.dictTypeValue" value="$!{cmsTbDictType.dictTypeValue}" class="easyui-validatebox"
+								data-options="required:true" validType="length[0,100]">
+											</td>
+                                        </tr>
+										<tr>
+											
+											<td class="head" nowrap>
+                                                                                                                                   备注：
+											</td>
+											<td  >
+												  <textarea class="easyui-validatebox" name="cmsTbDictType.remark" id="remark" cols ="26" rows = "2" validType="length[0,100]">$!{cmsTbDictType.remark}</textarea>
+													
+											</td>
+										</tr>
+                                  </table>
+                               
+           </div>
+		<div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+				<a class="easyui-linkbutton" icon="icon-ok" href="javascript:save_dictType()">确定</a>
+				<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:cencel()">取消</a>
+			</div>
+	
+		 </form>
+           <iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>	</body>
+
+     <script type="text/javascript" src="$!{env.imgUrl}/js/platform/dict/dictTypeUpdate.js"></script>
+
+</html>

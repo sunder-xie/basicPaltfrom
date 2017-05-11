@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="basisPlatform"
+  id="myeclipse.1401432197512"
+  context-root="/basisPlatform"
+  j2ee-spec="6.0"
+  archive="basisPlatform.war">
+  <attributes>
+    <attribute name="webrootdir" value="src/main/webapp" />
+  </attributes>
+</project-module>
+

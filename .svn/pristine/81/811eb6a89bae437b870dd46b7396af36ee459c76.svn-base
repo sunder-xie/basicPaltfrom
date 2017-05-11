@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<title>新闻栏目明细创建</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+	 	#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui", "ckeditor","editor", "upload", "dwr"])
+		#JS_ENV_VAL()	
+    </head>
+	<body class="easyui-layout" text=#000000 bgColor=#ffffff  >
+		<form enctype="multipart/form-data"  target="hideFrame" method="post">
+		
+			<input type="hidden" id="totalShow" name="totalShow" value=${totalParentId}/>
+			<input type="hidden" id="filename" name="filename" value=${filename}/>
+			<input type="hidden" id="totalParentId" name="totalParentId" value=${totalParentId}/>
+			<input type="hidden" id="detailId" name="detailId" value="$!{detailId}"/>
+			
+			<div region="center" class="easyui-panel" title="新闻栏目明细修改" data-options="iconCls:'icon-edit'" style="padding: 2px; background: #fafafa;">
+                <fieldset>
+							<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+									 <td noWrap><div>所属栏目<FONT color="#ff0000">*</FONT>
+								<input id="totalParentTotal" name="totalParentTotal" value=${totalParentTotal} class="easyui-combobox" 
+									data-options="valueField:'total_title',textField:'total_name',url:appUrl + '/newsAction!searchNewsTotalListbox.jspa'" />
+                                 </div>
+                                     </td>
+								</tr>
+                                <tr> <td noWrap><div>栏目名称<FONT color="#ff0000">*</FONT>&nbsp;<input  type="text" name="delailTitle" id="delailTitle"  value="$!{delailTitle}" /></div>
+										可见组织:
+										<input  id="orgs" name="orgs" type="hidden" value="$!{orgs}">
+										<input type="text" id="orgName" name="orgName" readonly value="$!{orgName}">
+								       <a class="easyui-linkbutton"  href="javascript:newtree2()">组织</a><FONT color="#ff0000">(不选默认全部可见)</FONT>
+								</td></tr>
+								<tr >
+							<td >
+										<textarea class="ckeditor"  id="delail_content" name="delail_content" >$!{lanNewsDelailbean.delail_content}</textarea>
+        					</td>
+                         </tr>
+						 <tr>
+    				</td>
+					<td colspan="3">
+						附件上传
+						<div id="input">
+							#set($j = 0)
+													#foreach($obj0 in $lanNewsFileList)
+							<input name="fileId" id="file$j" type="hidden"  value="$obj0.news_file_id"/>
+							#set($j = $j + 1)
+							#end
+							<input class="easyui-validatebox" name="upload" id="file0" type="file" value="添加附件" onchange="addFile()" />
+							<font size="2.5" color="red">继续点击添加多个附件</font>
+						</div>
+						<div id="_file">
+							
+						<div style="background-color:#E7EBF7">
+							 #set($i = 0)
+													 #foreach($obj in $lanNewsFileList)
+													<div style="background-color:#E7EBF7" id="file$i+1">
+                                                       <a href="$obj.news_file_url" target="_blank">
+														<span style="font-size: 12px">$obj.news_file_name</span></a>
+		                                            <a class="easyui-linkbutton" href="javascript:removeFile()"><img onclick="removeFile(this,file$i+1)" src= "$!{env.imgUrl}/images/actions/action_del.png" border="0" alt="删除附件"/></a>
+													</div>
+													   #set($i = $i + 1)
+													 #end
+						</div>
+                        </div>
+					</td>
+				 </tr>
+				</table>
+				<div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+        			<a class="easyui-linkbutton" icon="icon-ok" href="javascript:save()">提交</a>
+        			<!--<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:close()">Cancel</a>-->
+        		</div>	
+        		</fieldset>		
+            </div>
+			<input  id="fileInputNumber" type="hidden"  value="0"/>
+			
+		</form>
+		<iframe id="hideFrame" name="hideFrame"	src="$!{env.imgUrl}/image/space.gif" style="height: 0; width: 0"></iframe>
+			 <div id="maintWindow"/> 
+	</body>
+	
+	<script type="text/javascript" src="$!{env.imgUrl}/js/platform/news/update_det_add.js"></script>
+	<script type="text/javascript">
+		var editor = CKEDITOR.replace('delail_content');
+		var flag = false;
+    </script>
+</html>

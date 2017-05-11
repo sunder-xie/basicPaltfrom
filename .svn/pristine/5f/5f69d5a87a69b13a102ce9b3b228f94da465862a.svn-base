@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body class="easyui-layout">
+	<!-- 新建权限点 -->
+	<form method="post" target="hideFrame">
+		<div id="p_add" region="center" class="easyui-panel"
+			title="修改权限点"
+			data-options="iconCls:'icon-edit'">
+
+			<table id="table_01" width="100%" cellspacing="1" border="0">
+				<tr>
+					<td class="head" nowrap>权限点名称</td>
+					<td>
+
+						<div>
+						<input type="hidden" id="conpointId" name="conpointId" value="$!{point.conpointId}"/>
+							<input type="text" id="c_con_name" name="conpointName"  class="easyui-validatebox"
+								data-options="required:true" value="$!{point.conpointName}" validType="length[0,50]"></input>
+						</div></td>
+				</tr>
+				<tr>
+					<td class="head" nowrap>菜单名称</td>
+					<td>
+					<input type="hidden" id="menuId" name="menuId" value="$!{point.menuId}"/>
+					<input id="menuName" name="menuName" value="$!{point.menuName}" readOnly  style="width:150px;" >
+					</select>
+	          </td>
+				</tr>
+			</table>
+		</div>
+		<div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+				<a class="easyui-linkbutton" icon="icon-ok" href="javascript:save_con()">确定</a>
+				<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:cencel()">取消</a>
+			</div>
+	</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+	</body>
+<script type="text/javascript">
+</script>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/conpoint/updateConpoint.js"></script>
+</html>

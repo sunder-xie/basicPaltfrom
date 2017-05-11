@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<body class="easyui-layout">
+		<form method="post" target="hideFrame">
+			<div region="center" class="easyui-panel" title="信息维护" data-options="iconCls:'icon-edit'">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1">
+			<tr>
+				<td class="head" noWrap>上级菜单名称:</td>
+				<td>
+				<select id="pname" name="pname" class="easyui-combobox" style="width:146px;" data-options="required:true"/>
+				<input type="hidden" id="pid" name="menu.pid" value="$!{menu.pid}"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="head" noWrap>菜单名称:</td>
+				<td><input class="easyui-validatebox" id="name" name="menu.name" data-options="required:true" value="$!{menu.name}"/></td>
+					<input type="hidden" id="id" name="menu.id" value="$!{menu.id}"/>
+			</tr>
+			<tr>
+				<td class="head" noWrap>目标:</td>
+				<td><select class="easyui-combobox" id="target" name="menu.target" data-options="required:true">
+						<option value="mainRight">工作台显示</option>
+						<option value="_blank">打开新窗口</option>
+						<option value="NA">菜单文件夹</option>
+                </select>
+				</td>
+			</tr>
+			<tr>
+				<td class="head" noWrap>菜单地址:</td>
+				<td>
+					#if("$!{menu.redirectUrl}" == '')
+						<input class="easyui-validatebox" id="url" name="menu.url" style="width:300px;" value="$!{menu.url}" />
+						<input type="checkbox" name="isRedirect" value="y" >是否属于子系统跳转地址</input>
+					#else
+						<input class="easyui-validatebox" id='url' name="menu.url"  style="width:300px;" value="$!{menu.redirectUrl}" />
+						<input type="checkbox" name="isRedirect" value="y" checked>是否属于跨系统跳转地址</input>
+					#end
+			</td>
+			</tr>
+			<tr>
+				<td class="head" noWrap>显示顺序:</td>
+				<td><input class="easyui-numberspinner" data-options="min:1,max:20,required:true" missingMessage="请输入1~20的数字！" id="orderBy" name="menu.orderBy" value="$!{menu.orderBy}"/></td>
+			</tr>
+			<tr>
+				<td class="head" noWrap>是否经销商菜单:</td>
+				<td>
+					#if("$!{menu.isKuunrMenu}" == '0')
+						<input type="radio" name="menu.isKuunrMenu" value="1" />是
+						<input type="radio" name="menu.isKuunrMenu" value="0" checked />否
+					#else
+						<input type="radio" name="menu.isKuunrMenu" value="1" checked />是
+						<input type="radio" name="menu.isKuunrMenu" value="0" />否
+					#end
+				</td>
+			</tr>
+			<tr>
+				<td class="head" noWrap>是否客户菜单:</td>
+				<td>
+					#if("$!{menu.isCustMenu}" == '0')
+						<input type="radio" name="menu.isCustMenu" value="1" />是
+						<input type="radio" name="menu.isCustMenu" value="0" checked />否
+					#else
+						<input type="radio" name="menu.isCustMenu" value="1" checked />是
+						<input type="radio" name="menu.isCustMenu" value="0" />否
+					#end		
+				</td>
+			</tr>
+		    </table>
+			</div>
+			<div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+				<a class="easyui-linkbutton" icon="icon-ok" href="javascript:submit()">Submit</a>
+				<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:close()">Cancel</a>
+			</div>
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+	</body>
+<script>
+	pname="$!{menu.pname}";
+	targetValue = "$!{menu.target}";
+</script>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/menu/searchMenuDetail.js"></script>
+</html>

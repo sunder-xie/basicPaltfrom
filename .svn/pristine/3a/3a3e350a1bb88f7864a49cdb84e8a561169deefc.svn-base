@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>组织树</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body>
+		<form method="post" target="hideFrame">
+			<div style="overflow:auto;width:220px;float:left">
+				<input type="hidden" id="userIds" name="userIds"/>
+				<!--<input type="hidden" id="orgId" name="orgId" />
+				<input type="hidden" id="orgName" name="orgName" />-->
+				<ul id="orgTree" class="easyui-tree"/>
+				<div id="treeMenu" class="easyui-menu" style="width:220px;"> 
+					<div name="update">select</div>
+				</div> 
+			</div>
+			<div style="width:230px;float:right"> 
+				<table id="datagrid">  
+				</table> 
+			</div>
+		</form>	
+	</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/org/orgTreePage4Post.js"></script>
+<script type="text/javascript">
+    	var from = '$!{from}';
+	</script>
+</html>

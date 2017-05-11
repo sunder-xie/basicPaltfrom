@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<body>
+		<form action="" method="post" target="hideFrame">
+			<input type="hidden" id="rid" name="rid" value="$!{rid}"/>
+			<div class="easyui-panel" title="模板属性创建" data-options="iconCls:'icon-edit'">
+				<table width="100%" border="0" cellpadding="0" cellspacing="1">
+				<tr>
+    				<td class="head" noWrap style="text-align: right">
+    					流程模板
+    				</td>
+					<td noWrap>
+						<select id="modelName" name="modelName" class="easyui-combobox" style="width:150px;" data-options="required:true"/>  
+						<input type="hidden" id="modelId" name="modelId"/>
+					</td>
+                </tr>
+				<tr>
+    				<td class="head" noWrap style="text-align: right">
+    					事务类别
+    				</td>
+					<td noWrap>
+						<input class="easyui-validatebox" type='text' id='planTypeName' name="planTypeName" data-options ="required:true" value="$!{planAttribute.planTypeName}"/>
+					</td>
+                 </tr>
+				 <tr id="nextinfolist">
+					<td class="head" noWrap style="text-align:right">
+						启用/禁用
+					</td>
+					<td noWrap>
+						<input id="planAttFlag" name="planAttFlag"/>	
+					</td>
+				</tr>
+				<tr>
+    				<td class="head" noWrap style="text-align: right">
+    					属性备注
+    				</td>
+					<td noWrap>
+						<textarea name="attMemo" rows="5" cols="40">$!{planAttribute.planAttMemo}</textarea>
+					</td>
+				</tr>
+                </table>
+            </div>
+			<div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+				<a class="easyui-linkbutton" icon="icon-ok" href="javascript:submit()">确定</a>
+				<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:close()">取消</a>
+			</div>
+		</form>
+	  <iframe id="hideFrame" name="hideFrame" style="height: 0; width: 0" ></iframe>
+	</body>
+    <script type="text/javascript">
+		var modelName = '$!{planAttribute.modelName}';
+		var modelId = '$!{planAttribute.modelId}';
+		var planAttFlag = '$!{planAttribute.planAttFlag}';
+		var type = '$!{type}';
+	</script>
+	<script type="text/javascript" src="$!{env.imgUrl}/js/platform/wfe/modelAttribute/createModelAttribute.js"></script>
+</html>

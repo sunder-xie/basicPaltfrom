@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="conpoint">
+	<typeAlias alias="conpoint"
+		type="com.kintiger.platform.conpoint.pojo.Conpoint" />
+
+   <typeAlias alias="menu" type="com.kintiger.platform.menu.pojo.Menu" />
+
+	<select id="getConpointCount" parameterClass="conpoint"
+		resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(t.conpoint_id) from basis.basis_tb_conpoint t
+		where t.state='U'
+	]]>
+		<dynamic>
+			<isNotEmpty property="conpointId" prepend="and">
+			<![CDATA[t.conpoint_id=#conpointId#]]>
+			</isNotEmpty>
+			<isNotEmpty property="conpointName" prepend="and">
+			<![CDATA[t.conpoint_name like #conpointName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="conpointNum" prepend="and">
+			<![CDATA[t.conpoint_num like #conpointNum,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="search" prepend="and">
+			<![CDATA[
+				  ( t.conpoint_id like #search,handler=wildcard# escape '\'
+				 or t.conpoint_num like #search,handler=wildcard# escape '\'
+				 or t.conpoint_name like #search,handler=wildcard# escape '\' )
+			]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="getConpointList" parameterClass="conpoint" resultClass="conpoint">
+		<include refid="global.paginationStart" />
+	<![CDATA[
+		select t.conpoint_id   conpointId,
+			   t.conpoint_name conpointName,
+			   t.conpoint_num  conpointNum,
+			   tt.id           menuId,
+			   tt.name         menuName
+		  from basis.basis_tb_conpoint t, basis.basis_tb_menu_items tt
+		 where t.state = 'U'
+		   and t.menu_id = tt.id
+	]]>
+		<dynamic>
+			<isNotEmpty property="conpointId" prepend="and">
+			<![CDATA[t.conpoint_id=#conpointId#]]>
+			</isNotEmpty>
+			<isNotEmpty property="conpointName" prepend="and">
+			<![CDATA[t.conpoint_name like #conpointName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="conpointNum" prepend="and">
+			<![CDATA[t.conpoint_num like #conpointNum,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="search" prepend="and">
+			<![CDATA[
+				  ( t.conpoint_id like #search,handler=wildcard# escape '\'
+				 or t.conpoint_num like #search,handler=wildcard# escape '\'
+				 or t.conpoint_name like #search,handler=wildcard# escape '\' )
+			]]>
+			</isNotEmpty>
+		</dynamic>
+		<![CDATA[ order by t.conpoint_id desc ]]>
+		<include refid="global.orderBy" />
+		<include refid="global.paginationEnd" />
+	</select>
+	
+	
+	
+	<select id="getConpointListIsExit" parameterClass="conpoint" resultClass="conpoint">
+	<![CDATA[
+		select t.conpoint_id   conpointId,
+			   t.conpoint_name conpointName,
+			   t.conpoint_num  conpointNum,
+			   tt.id           menuId,
+			   tt.name         menuName
+		  from basis.basis_tb_conpoint t, basis.basis_tb_menu_items tt
+		 where t.state = 'U'
+		   and t.menu_id = tt.id
+	]]>
+		<dynamic>
+			<isNotEmpty property="conpointId" prepend="and">
+			<![CDATA[t.conpoint_id=#conpointId#]]>
+			</isNotEmpty>
+			<isNotEmpty property="conpointName" prepend="and">
+			<![CDATA[t.conpoint_name like #conpointName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="conpointNum" prepend="and">
+			<![CDATA[t.conpoint_num like #conpointNum,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+		</dynamic>
+		<![CDATA[ order by t.conpoint_id desc ]]>
+	</select>
+	
+	<select id="getConpointListJson" parameterClass="conpoint" resultClass="conpoint">
+	<![CDATA[
+		select t.conpoint_id   conpointId,
+			   t.conpoint_name conpointName,
+			   t.conpoint_num  conpointNum,
+			   tt.id           menuId,
+			   tt.name         menuName
+		  from basis.basis_tb_conpoint t, basis.basis_tb_menu_items tt
+		 where t.state = 'U'
+		   and t.menu_id = tt.id
+	]]>
+		<dynamic>
+			<isNotEmpty property="conpointId" prepend="and">
+			<![CDATA[t.conpoint_id=#conpointId#]]>
+			</isNotEmpty>
+			<isNotEmpty property="conpointName" prepend="and">
+			<![CDATA[t.conpoint_name like #conpointName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="conpointNum" prepend="and">
+			<![CDATA[t.conpoint_num like #conpointNum,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="search" prepend="and">
+			<![CDATA[
+				  ( t.conpoint_id like #search,handler=wildcard# escape '\'
+				 or t.conpoint_num like #search,handler=wildcard# escape '\'
+				 or t.conpoint_name like #search,handler=wildcard# escape '\' )
+			]]>
+			</isNotEmpty>
+		</dynamic>
+		<![CDATA[ order by t.conpoint_id desc ]]>
+		<include refid="global.orderBy" />
+	</select>
+
+	<update id="deleteConpoint" parameterClass="java.math.BigDecimal">
+	<![CDATA[
+		 update basis.basis_tb_conpoint t set t.state = 'D' ,
+		 t.last_modify = sysdate
+		 where t.conpoint_id =#conpointId#
+	]]>
+	</update>
+	
+	<update id="deleteConpoints" parameterClass="conpoint">
+	<![CDATA[
+		 update basis.basis_tb_conpoint t set t.state = 'D' ,
+		 t.last_modify = sysdate
+		 where t.conpoint_id in
+	]]>
+	<iterate property="codes" open="(" close=")" conjunction=",">#codes[]#
+		</iterate>
+	</update>
+
+	
+	<select id="getConpointMenuPojo" parameterClass="java.math.BigDecimal"
+		resultClass="conpoint">
+	<![CDATA[
+		select t.conpoint_id   conpointId,
+			   t.conpoint_name conpointName,
+			   tt.name         menuName
+		  from basis.basis_tb_conpoint t, basis.basis_tb_menu_items tt
+		 where t.menu_id = tt.id
+		   and t.conpoint_id = #conpointId#
+	]]>
+	</select>
+
+	<update id="modifyConpoint" parameterClass="conpoint">
+	<![CDATA[
+		 update basis.basis_tb_conpoint t set t.conpoint_name=#conpointName#,
+		 t.last_modify = sysdate
+		 where t.conpoint_id =#conpointId#
+	]]>
+	</update>
+
+	<insert id="createConpoint" parameterClass="conpoint">
+		<selectKey resultClass="java.math.BigDecimal" keyProperty="conpointId">
+		<![CDATA[
+			SELECT basis.basis_seq_conpoint.nextval AS conpointId FROM DUAL
+		]]>
+		</selectKey>
+	<![CDATA[
+		insert into basis.basis_tb_conpoint
+		(CONPOINT_ID,
+		CONPOINT_NUM,
+		CONPOINT_NAME,
+		MENU_ID,
+		LAST_MODIFY,
+		STATE) values
+		(#conpointId#,'flag'||#conpointId#,#conpointName#,#menuId#,sysdate,'U')
+	]]>
+	</insert>
+	
+	<select id="isAut" parameterClass="conpoint" resultClass="conpoint">
+	<![CDATA[
+		select c.conpoint_id as conpointId
+		 from basis.basis_vw_CONPOINT c
+		 where c.user_id = #userId#
+		   and c.conpoint_id = #conpointId#
+		   and c.close_flag = #closeFlag#
+	]]>
+	</select>
+	
+	<select id="getPermissions" parameterClass="conpoint" resultClass="conpoint">
+	<![CDATA[
+		select t.conpoint_id as conpointId, t.close_flag as closeFlag
+		  from basis.basis_vw_CONPOINT t
+		 where t.user_id = #userId#
+		   and t.conpoint_id in
+	]]>
+		<iterate property="codes" open="(" close=")" conjunction=",">#codes[]#
+		</iterate>
+	</select>
+	
+	<select id="getRoleConpointCount" parameterClass="conpoint"
+		resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(t.role_conpoint_id)
+		     from basis.basis_tb_role_conpoint t,
+                       basis.basis_tb_conpoint      p,
+                       basis.basis_tb_menu_items    k
+                 where t.conpoint_id = p.conpoint_id
+                   and p.menu_id = k.id
+                   and t.state = 'U'
+                   and p.state = 'U'
+		   and t.role_id = #roleId#
+	]]>
+	</select>
+
+	<select id="getRoleConpointList" parameterClass="conpoint" resultClass="conpoint">
+		<include refid="global.paginationStart" />
+	<![CDATA[
+		select t.role_conpoint_id roleConpointId,
+			   p.conpoint_id      conpointId,
+			   p.conpoint_name    conpointName,
+			   p.conpoint_num     conpointNum,
+			   k.id               menuId,
+			   k.name             menuName,
+			   t.close_flag       closeFlag
+		  from basis.basis_tb_role_conpoint t, basis.basis_tb_conpoint p, basis.basis_tb_menu_items k
+		 where t.conpoint_id = p.conpoint_id
+		   and p.menu_id = k.id
+		   and t.state = 'U'
+		   and p.state = 'U'
+		   and t.role_id = #roleId#
+	]]>
+		<include refid="global.orderBy" />
+		<include refid="global.paginationEnd" />
+	</select>
+	
+	<insert id="createRoleConpoint" parameterClass="conpoint">
+		<selectKey resultClass="java.lang.Long" keyProperty="roleConpointId">
+		<![CDATA[
+			select basis.basis_seq_role_conpoint.nextval as roleConpointId from dual
+		]]>
+		</selectKey>
+	<![CDATA[
+		insert into basis.basis_tb_role_conpoint
+		  (ROLE_CONPOINT_ID, ROLE_ID, CONPOINT_ID, CLOSE_FLAG, LAST_MODIFY, STATE)
+		values
+		  (#roleConpointId#, #roleId#, #conpointId#, #closeFlag#, sysdate, 'U')
+	]]>
+	</insert>
+	
+	<select id="getRoleConpointById" parameterClass="java.lang.Long" resultClass="conpoint">
+	<![CDATA[
+		select t.role_id       roleId,
+			   p.conpoint_id   conpointId,
+			   p.conpoint_name conpointName,
+			   p.conpoint_num  conpointNum,
+			   k.id            menuId,
+			   k.name          menuName,
+			   t.close_flag    closeFlag
+		  from basis.basis_tb_role_conpoint t, basis.basis_tb_conpoint p, basis.basis_tb_menu_items k
+		 where t.conpoint_id = p.conpoint_id
+		   and p.menu_id = k.id
+		   and t.state = 'U'
+		   and p.state = 'U'
+		   and t.role_conpoint_id = #roleConpointId#
+	]]>
+	</select>
+	
+	<update id="updateRoleConpoint" parameterClass="conpoint">
+	<![CDATA[
+		update basis.basis_tb_role_conpoint t
+		   set t.last_modify = sysdate
+	]]>
+		<dynamic>
+			<isNotEmpty property="codes">
+			<![CDATA[
+				, t.state = 'D'
+				where t.role_conpoint_id in 
+			]]>
+				<iterate property="codes" open="(" close=")" conjunction=",">#codes[]#
+				</iterate>
+			</isNotEmpty>
+			<isEmpty property="codes">
+			<![CDATA[
+				, t.conpoint_id = #conpointId#
+				, t.close_flag  = #closeFlag#
+				where t.role_conpoint_id = #roleConpointId#
+			]]>
+			</isEmpty>
+		</dynamic>
+	</update>
+	
+	
+	<select id="getRolesByConpointId" parameterClass="conpoint" resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(*)
+       from basis.basis_tb_role_conpoint t,
+       basis.basis_tb_conpoint      p,
+       basis.basis_tb_roles         r
+ where t.conpoint_id = p.conpoint_id
+   and t.role_id = r.role_id
+   and t.state = 'U'
+   and p.state = 'U'
+   and t.state = 'U'
+       and t.conpoint_id =#conpointId#
+	]]>
+	<!-- <iterate property="codes" open="(" close=")" conjunction=",">#codes[]#
+		</iterate>-->
+	</select> 
+</sqlMap>

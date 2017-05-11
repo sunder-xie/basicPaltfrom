@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="staffAmountAction" class="com.kintiger.platform.staffAmount.action.StaffAmountAction"
+		parent="baseAction" scope="request">
+		<property name="staffAmountService" ref="staffAmountService" />
+		<property name="iOrgService" ref="iOrgService" />
+		
+	</bean>
+	
+	<bean id="staffAmountService" class="com.kintiger.platform.staffAmount.service.impl.StaffServiceImpl">
+		<property name="iStaffDao" ref="iStaffDao" />
+		<property name="transactionTemplate" ref="transactionTemplate"></property>
+	</bean>
+
+	<bean id="iStaffDao" class="com.kintiger.platform.staffAmount.dao.impl.StaffDaoImpl"
+		parent="baseDao">
+	</bean>
+	
+	<bean id="iOrgService" class="com.kintiger.platform.org.service.impl.OrgServiceImpl">
+		<property name="orgDao" ref="orgDao" />
+		<property name="webserviceURL">
+			<value></value>
+		</property>
+	</bean>
+
+	<bean id="orgDao" class="com.kintiger.platform.org.dao.impl.OrgDaoImpl"
+		parent="baseDao">
+	</bean>
+</beans>

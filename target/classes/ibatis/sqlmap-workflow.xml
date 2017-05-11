@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="workflow">
+	<typeAlias alias="roleList"
+		type="com.kintiger.platform.activitiWebEdit.pojo.WorkFlowRole" />
+	<select id="searchRole" resultClass="roleList">
+		<![CDATA[
+				select  r.role_id as roleid ,r.role_name as rolename,r.last_modify as lastmodify from basis.basis_tb_roles r where r.role_type='WFE' and r.state ='U' 
+ 		]]>
+ 		 	<dynamic>
+			<isNotEmpty property="rolename" prepend=" and ">
+			<![CDATA[ r.role_name like  '%' || #rolename# || '%'   ]]>
+			</isNotEmpty>
+			</dynamic>
+	</select>
+		<select id="searchRoleCount" resultClass="java.lang.Integer">
+		<![CDATA[
+				select  count(*) from basis.basis_tb_roles r where r.descn='WFE' and r.state ='U'	
+ 		]]>
+ 				<dynamic>
+			<isNotEmpty property="rolename" prepend=" and ">
+			<![CDATA[ r.role_name like  '%' || #rolename# || '%'  ]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+</sqlMap>

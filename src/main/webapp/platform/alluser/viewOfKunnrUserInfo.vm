@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<body >
+		<form method="post" target="hideFrame">
+			<div region="center" class="easyui-panel" title="人员信息修改" data-options="iconCls:'icon-edit'">
+				<input type="hidden" id="userId" value="$!{userId}"/>
+				<input type="hidden"  name="kunnrId"  value="$!{allUsers.isOffice}"  id="kunnrId"  />
+				<input type="hidden"    value="$!{allUsers.isOffice}"  id="custKunnr1"  />
+			<table width="100%" border="0" cellpadding="0" cellspacing="1">
+        			<tr>
+                        <td class="head" noWrap>用户ID(<font color='red'>登录账号</font>):</td>
+        				<td><input class="easyui-validatebox"  id="loginId" name="allUsers.loginId" 
+							data-options="required:true" missingMessage="请输入正确的用户ID" value="$!{allUsers.loginId}" readonly>
+							<!--<input type="button" onclick="testId(document.getElementById('loginId').value)" value="测试是否可用"/>-->
+						</td>
+        			</tr>
+        			<tr>
+        				<td class="head" noWrap>用户姓名<font color='red'>*</font>:</td>
+        				<td><input class="easyui-validatebox"  id="userName" name="allUsers.userName" 
+							data-options="required:true" missingMessage="请输入正确的用户名" value="$!{allUsers.userName}" readonly></td>
+						<td class="head" noWrap>开始工作时间:</td>
+        				<td>
+        				<input class="easyui-datebox"  id="startDate" name="allUsers.startDate" readonly value="$!{allUsers.startDate}"></td>
+        				</td>
+						
+        			</tr>
+        			<tr>
+						
+						<td class="head" noWrap>性别:</td>
+						<td>
+							<input type="hidden" id="sexValue" value="$!{allUsers.sex}"/>
+                        <select id="sex"  name="allUsers.sex" style="width:100px;" required="true" >
+									<option value="M"   readonly>男</option>
+									<option value="F"   readonly>女</option>
+						</select>			
+						</td>	
+						
+							<td class="head" noWrap>办公传真:</td>
+        				<td><input class="easyui-validatebox"  id="workFax" name="allUsers.workFax" value="$!{allUsers.workFax}"></td>
+                    
+        				<!--<td><input class="easyui-validatebox"  id="sex" name="sex" ></td>-->
+        			</tr>
+        			<tr>
+						
+        				<td class="head" noWrap>邮箱地址<font color='red'>*</font>:</td>
+        				<td>
+        				<input class="easyui-validatebox"  id="email" name="allUsers.email" data-options="required:true"
+							missingMessage="请输入邮箱" validType="email" invalidMessage="请输入正确的邮箱格式,如：xxx@kintiger.com" value="$!{allUsers.email}"></td>
+						
+        				
+						<td class="head" noWrap>身份证号码:</td>
+        				<td><input class="easyui-validatebox"  id="idCard" name="allUsers.idCard" value="$!{allUsers.idCard}"></td>
+        			</tr>
+        			
+        			<tr>
+						<td class="head" noWrap>公务手机<font color='red'>*</font>:</td>
+        				<td>
+        				<input class="easyui-validatebox"  id="busMobilephone" name="allUsers.busMobilephone" data-options="required:true"
+							missingMessage="请输入手机号" validType="length[11,11]" invalidMessage="请输入正确的11位手机号" value="$!{allUsers.busMobilephone}"></td>
+						<td class="head" noWrap>办公电话:</td>
+        				<td><input class="easyui-validatebox"  id="phone" name="allUsers.phone" value="$!{allUsers.phone}"></td>
+        			</tr>
+        			<tr>
+        				<td class="head" noWrap>通信地址:</td>
+						<td >
+							<input class="easyui-validatebox"  id="address" name="allUsers.address" value="$!{allUsers.address}">
+						</td>
+						<td class="head" noWrap>备注:</td>
+        				<td><input class="easyui-validatebox"  id="remark" name="allUsers.remark" value="$!{allUsers.remark}"></td>
+        			</tr>
+						<tr>
+							<td class="head" noWrap>私人手机<font color='red'>*</font>:</td>
+        				<td>
+        				<input class="easyui-validatebox"  id="mobile" name="allUsers.mobile" data-options="required:true"
+							missingMessage="请输入手机号" validType="length[11,11]" invalidMessage="请输入正确的11位手机号" value="$!{allUsers.mobile}"></td>
+					</tr>
+					<tr>
+						#if  ("A" ==$!{isoffKunnr} )
+        				<td class="head" noWrap>编制数:</td>
+						<td class="even" noWrap><input type="text" class="easyui-numberbox"  value="$!{allUsers.staffNubmer}" name="allUsers.staffNubmer" id="staffNubmer"       /></td>
+						#else 
+						<td class="head" noWrap><input type="hidden"   name="allUsers.staffNubmer" id="staffNubmer"  value="$!{allUsers.staffNubmer}"     /></td>
+						#end
+					</tr>
+					<tr>
+						<td class="head" noWrap><font color='green'>温馨提示：</font></td>
+						<td>
+							<font color='green'>用户ID和用户名不可修改在查询页面修改</font>
+						</td>
+					</tr>
+					
+		     </table>
+ </table>
+			</div>
+			<div region="south" border="false" style="text-align:right;height:50px;line-height:50px;">
+				<a class="easyui-linkbutton"  href="javascript:resetPwd(document.getElementById('userId').value)">密码修改</a>
+				<a class="easyui-linkbutton" icon="icon-ok" href="javascript:submit()">修改</a>
+				<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:close()">取消</a>
+			</div>
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+		 <div id="maintWindow"/>
+		  <div id="updatePwd" icon="icon-save" style="padding:5px;width:400px;height:200px;">
+			<p>
+				<td class="head" noWrap>&nbsp;&nbsp;新密码<font color='red'>*</font>:</td>
+        				<td>
+        				<input class="easyui-validatebox"  type="password" id="passWd" value='' name="allUsers.passWd" data-options="required:true" validType="length[6,99]" missingMessage="请输入6位及以上的密码" invalidMessage="请输入6位及以上的密码"/>
+                            <font color='green'>请输入6位及以上的密码</font>
+				</td>
+			</p>
+			<p>
+				<td class="head" noWrap>确认密码<font color='red'>*</font>:</td>
+        				<td>
+        				<input class="easyui-validatebox" type="password" id="repassWd" value='' name="statirepassWdonId" validType="equalTo['#passWd']" invalidMessage="两次输入密码不匹配"></td>
+                            <font color='green'>请确认两次输入的密码相同</font>
+				</td>
+			</p>
+		 </div>
+	</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/alluser/updateKunnrUserInfo.js"></script>
+</html>

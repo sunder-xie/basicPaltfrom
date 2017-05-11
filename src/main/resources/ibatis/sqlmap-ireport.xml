@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ireport">
+	<typeAlias alias="type"
+		type="com.kintiger.platform.ireport.pojo.IreportType" />
+ 
+	<insert id="saveModle" parameterClass="type">
+	<![CDATA[
+		insert into basis.BASIS_TB_IREPORT
+		  (IREPORT_ID,
+		   IREPORT_FILENAME,
+		   IREPORT_UPLOADER,
+		   IREPORT_UPLOADTIME,
+		   IREPORT_REMAN,
+		   IREPORT_ispagination,
+		   IREPORT_pageNum,
+		   IREPORT_MODLEFILENAME,
+		   IREPORT_ISDELETE,
+		   IREPORT_UPLOADERID)
+		values
+		  (#ID#,
+		   #FILENAME#,
+		   #UPLOADER#,
+		   #UPLOADTIME#,
+		   #REMAN#,
+		   #is_pagination#,
+		   #pageNum#,
+		   #modleFilename#,
+		   #IS_DELETE#,
+		   #UPLOADERID#
+		   )
+	]]>
+
+	</insert>
+
+	<select id="getreportModleList" parameterClass="type"
+		resultClass="type">
+	<![CDATA[
+		select t.IREPORT_ID as ID,
+			   t.IREPORT_FILENAME as FILENAME,
+			   t.IREPORT_UPLOADER as UPLOADER,
+			   t.IREPORT_UPLOADTIME as UPLOADTIME,
+			   t.IREPORT_REMAN as REMAN,
+			   t.IREPORT_ispagination as is_pagination,
+		   	   t.IREPORT_pageNum as pageNum,
+		       t.IREPORT_MODLEFILENAME as modleFilename,
+			   t.IREPORT_ISDELETE as IS_DELETE  ,
+		       t.IREPORT_UPLOADERID as UPLOADERID
+			   from basis.basis_tb_ireport t where IREPORT_ISDELETE ='0'
+			   
+			
+	]]>
+		<isNotEmpty property="ID" prepend="and">
+			<![CDATA[  t.IREPORT_ID like #ID,handler=wildcard# escape '\' ]]>
+		</isNotEmpty>
+		<isNotEmpty property="FILENAME" prepend="and">
+			<![CDATA[  t.IREPORT_FILENAME like #FILENAME,handler=wildcard# escape '\' ]]>
+		</isNotEmpty>
+	</select>
+
+
+	<update id="deleteModle" parameterClass="type">
+	<![CDATA[
+		update basis.basis_tb_ireport t
+		   set t.IREPORT_ISDELETE   = #IS_DELETE#
+		 where t.IREPORT_ID = #ID#
+	]]>
+	</update>
+	<update id="updateModle" parameterClass="type">
+	<![CDATA[
+		update basis.basis_tb_ireport t
+		   set t.IREPORT_REMAN = #REMAN#,
+			   t.IREPORT_ispagination = #is_pagination#,
+		   	   t.IREPORT_pageNum = #pageNum#
+		 	where t.IREPORT_ID = #ID#
+	]]>
+	</update>
+	<!-- <delete id="deleteModle" parameterClass="type"> <![CDATA[ delete basis.basis_tb_menu_items 
+		t where t.id in ]]> <iterate property="codes" open="(" close=")" conjunction=",">#codes[]# 
+		</iterate> <![CDATA[ and not exists (select 1 from basis.basis_tb_role_menu 
+		p where t.id = p.menu_id) and not exists (select 1 from basis.basis_tb_menu_items 
+		q where t.id = q.pid) ]]> </delete> -->
+
+</sqlMap>

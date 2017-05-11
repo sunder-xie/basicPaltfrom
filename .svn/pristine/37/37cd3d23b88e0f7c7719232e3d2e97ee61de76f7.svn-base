@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+#CSSM(["easyui","style"])
+#JSM(["jquery", "easyui"])
+#JS_ENV_VAL()
+<title>香飘飘Exp系统登录</title>
+<style type="text/css">
+/**************public*******************/
+html{*overflow:auto;_overflow-y:scroll;}
+body{cursor:default;-webkit-text-size-adjust:none;font-size:12px;font-family:Arial;-webkit-text-size-adjust:none;background:#BF8668 url($!{env.imgUrl}/images/xpp/img01.jpg) no-repeat center top;height:665px;}
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td{padding:0;margin:0;}
+table{border-collapse:collapse;border-spacing:0;}
+fieldset,img{border:0;}
+address,caption,cite,code,dfn,em,th,var{font-weight:normal;font-style:normal;}
+strong{font-style:normal;}
+ol,ul,li{list-style:none outside none;}
+caption{text-align:left;}
+h1,h2,h3,h4,h5,h6{font-weight:normal;font-size:100%;}
+q:before,q:after{content:'';}
+abbr,acronym{border:0;} 
+a{outline:none;cursor:pointer;*outline:expression(this.hideFocus=true);text-decoration:none;}
+img,object{vertical-align:top;}
+input{outline:none;*outline:expression(this.hideFocus=true);}
+button::-moz-focus-inner, input[type="reset"]::-moz-focus-inner, input[type="button"]::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="file"] > input[type="button"]::-moz-focus-inner{border:none;padding:0;}
+.clear{zoom:1;}
+.clear:after{visibility:hidden;display:block;font-size:0;content:"1";clear:both;height:0;}
+.fl{float:left;_display:inline;}
+.fr{float:right;_display:inline;}
+
+/******************内容*********************/
+.bodyer{width:1120px;margin:auto;}
+.bodyer .login{padding:36px 0 45px 243px;}
+.main{width:430px;padding-left:53px;}
+.main h1{padding:28px 0 40px 0;}
+.main .innermain input{background:url($!{env.imgUrl}/images/xpp/input_bg.jpg) no-repeat;width:217px;height:32px;line-height:32px;padding:0 3px;border:0;margin-bottom:15px;}
+.main .innermain input.sub_btn{padding:0;background:url($!{env.imgUrl}/images/xpp/sub_btn.png) no-repeat;width:107px;height:47px;cursor:pointer;margin:10px 0 0 167px;}
+.mainleft{padding:10px 30px 0 0;}
+
+</style>
+<!--[if IE 6]>
+	<script src="js/IE6PNG.js"></script>
+	<script type="text/javascript">
+		IE6PNG.fix('.png');
+	</script>
+<![endif]-->
+</head>
+
+<body>
+<form  action="loginAction!login.jspa" method="post">
+<div class="bodyer">
+	<div class="content fr">
+    	<div class="login">    	<!--<a href="#"><img src="$!{env.imgUrl}/images/xpp/log.png" alt="香飘飘" class="png" /></a>-->
+    	<br/>
+    	<br/>
+    	<br/>
+    	<br/>
+    	<br/>
+    	<br/>
+    	<br/>
+    	<br/>
+    	<br/>
+    	<br/></div>
+        <div class="main">
+        	<h1><img src="$!{env.imgUrl}/images/xpp/text01.png" alt="企业信息集成系统" class="png" /></h1>
+            <div class="innermain">
+            	<div class="clear">
+                    <div class="mainleft fl"><img src="$!{env.imgUrl}/images/xpp/text02.png" alt="EXP" class="png" /></div>
+                    <div class="fl">
+                        <input type="text" maxLength='50' id='passport' name='passport' autocomplete="on" value="$!{passport}"></input><br />
+                        <input type="password"  maxLength='50' name='password' autocomplete="off"/>
+                    </div>
+                </div>
+                <input type="submit" value="" name="" id="" class="sub_btn" onclick="submit()"/>
+				<span id="logfail" style="color:#e81331;font-size:12px;">$!{failMessage}</span>
+				 	<br/>
+          系统管理员联系方式：</br>
+          Email:<a href="#"><font color="blue" size="2">exp@zjxpp.com</font></a> 手机:<a href="#"><font color="blue" size="2">18657270151</font></a> 短号:<a href="#"><font color="blue" size="2">721151</font></a> 
+          </br>座机:<a href="#"><font color="blue" size="2">057128807307</font></a> QQ群:<a href="#"><font color="blue" size="2">316257628</font></a>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/login/login.js"></script>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body>
+        <form method="post">
+		<div class="easyui-panel" title="岗位选择" data-options="collapsible:true,iconCls:'icon-search'" style="padding: 2px;width:1135px;">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1">
+			<tr>
+				<td class="head" noWrap>岗位编号:</td>
+				<td><input class="easyui-validatebox"  id="stationId" name="stationId" readonly>
+						<a class="easyui-linkbutton"  href="javascript:choseStation()">选择</a></td>
+				
+				<td class="head" noWrap>岗位名称:</td>
+				<td><input class="easyui-validatebox" id="stationName" name="stationName" readonly></td>
+					<input type="hidden"  name="orgIds" id="orgIds"/>
+			</tr>
+		    </table>
+			</div>
+			<br>
+		<div class="easyui-panel" title="配置" data-options="collapsible:true,iconCls:'icon-search'" style="padding: 2px;">
+			<div>
+				<div  style="border:1px solid #95B8E7;float:left;height:410px;width:460px;overflow:scroll;">
+				<ul id="orgTree" class="easyui-tree"/>
+				<div id="treeMenu" class="easyui-menu" style="min-height:50px"> 
+					<div name="update">选择</div>
+				</div> 
+			</div>
+			<div style="border:1px solid #95B8E7;min-width:460px;min-height:379px;float:left;">
+                <div style="border:1px solid #95B8E7;width:462px;min-height:30px">
+					<a id='save' href="javascript:save();" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+				</div>
+				 <div style="border:1px solid #95B8E7;width:462px;min-height:30px">
+						<font color='green' size="2">温馨提示：</font>
+						<font color='green' size="2">左边为已经选择列表,拖至右边删除.</font>
+                 </div>
+				<div style="min-height:200px;">
+					<div id="source" style="border:1px solid #95B8E7;width:230px;overflow:scroll;height:344px;float:left;"> 
+        			</div>
+					<div id="target" style="border:1px solid #95B8E7;width:230px;overflow:scroll;height:344px;float:left;">
+        			</img>
+                </div>
+            </div>
+			</div>
+		</div>
+		</div>
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+	 <div id="maintRole"/> 
+	</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/station/stationOrgPre.js"></script>
+</html>

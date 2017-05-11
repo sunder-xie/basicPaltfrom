@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<body class="easyui-layout">
+		<form method="post" id="aForm"  target="hideFrame">
+			<div region="center" class="easyui-panel" title="职务创建" data-options="iconCls:'icon-edit'">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1">
+			<tr>
+				<td class="head" noWrap>所在组织:</td>
+				<td>
+					<input type="text" id="empOrgName" name="empPost.empOrgName" class="easyui-validatebox" data-options="required:true" missingMessage="请选择组织" readonly/>
+					<input type="hidden" class="easyui-numberbox" name="empPost.empOrgId" id="empOrgId" />
+					<input type=button value=选择  onclick="choseOrg()"/>
+				</td>
+			</tr>
+            <tr>
+			</tr>
+			<tr>
+			</tr>
+            </tr>
+			<tr>
+				<td class="head" noWrap>职务名称:</td>
+				<td>
+					<input id="empPostName" name="empPost.empPostName"  style="width:150px;" class="easyui-validatebox"
+						data-options="required:true" missingMessage="请输入职务名称"/>  
+			</td>
+			</tr>
+		    </table>
+			</div>
+			<div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+				<a class="easyui-linkbutton" icon="icon-ok" href="javascript:submit()">创建</a>
+				<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:close()">取消</a>
+			</div>
+		
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+		<div id="maintStaff"/>
+	</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/post/toCreateEmpPost.js"></script>
+</html>

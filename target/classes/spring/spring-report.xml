@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="reportAction" class="com.kintiger.platform.report.action.ReportAction"
+		parent="baseAction" scope="request">
+		<property name="reportService" ref="reportService" />
+	</bean>
+	<bean id="reportService" class="com.kintiger.platform.report.service.impl.ReportServiceImpl">
+	    <property name="reportDao" ref="reportDao" /><!--
+	     <property name="transactionTemplate" ref="transactionTemplate"></property>
+	--></bean>
+	<bean id="reportDao" class="com.kintiger.platform.report.dao.impl.ReportDaoImpl"
+		parent="baseDao">
+	</bean>
+</beans>

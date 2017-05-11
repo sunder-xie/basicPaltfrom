@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body>
+		<form method="post">
+			<div style="overflow:auto;width:58%;float:left">
+				<div class="easyui-panel" title="模板事务类别" data-options="collapsible:true,iconCls:'icon-search'">
+					<table width="100%" border="0" cellpadding="0" cellspacing="1">
+						<tr>
+							<td class="head" noWrap>
+								所属流程模板
+							</td>
+							<td>
+								<input class="easyui-validatebox" id="modelName" name="modelName"/>
+							</td>
+							<!--
+							<td class="head" noWrap>
+								事务类别
+							</td>
+							<td>
+								<input class="easyui-validatebox" id="planTypeName" name="planTypeName"/>
+							</td>
+							-->
+							<td class="head" noWrap>
+								启用/禁用
+							</td>
+							<td>
+								<input id="planAttFlag" name="planAttFlag"/>
+							</td>
+							<td>
+								<a href="javascript:search_1()" class="easyui-linkbutton" iconCls="icon-search">查询</a>
+								<a href="javascript:clearValue_1()" class="easyui-linkbutton" iconCls="icon-clear">重置</a> 	
+							</td>
+						</tr>
+					</table>
+				</div>
+				<table id="datagrid_1"></table>
+			</div>
+			
+			<div style="width:40%;float:right">
+				<div class="easyui-panel" title="属性明细" data-options="collapsible:true">
+					<table width="100%" border="0" cellpadding="0" cellspacing="1">
+						<tr>
+							<td class="head" noWrap>
+								属性名
+							</td>
+							<td>
+								<input class="easyui-validatebox" id="planAttContent" name="planAttContent"/>
+							</td>
+							<td>
+								<a href="javascript:search_2()" class="easyui-linkbutton" iconCls="icon-search">查询</a>
+								<a href="javascript:clearValue_2()" class="easyui-linkbutton" iconCls="icon-clear">重置</a> 	
+							</td>
+						</tr>
+					</table>
+                </div>
+				<table id="datagrid_2"></table> 
+            </div>
+			<input type="hidden" id="planAttId" />
+			<input type="hidden" id="ids" name="ids" />
+			<input type="hidden" id="deleteType" />
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+		<div id="maintModelAtt"/>
+	</body>
+	<script type="text/javascript" src="$!{env.imgUrl}/js/platform/wfe/modelAttribute/searchModelAttribute.js"></script>
+</html>

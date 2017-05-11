@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<title>新闻栏目明细创建</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+	 	#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui", "ckeditor","editor", "upload", "dwr"])
+		#JS_ENV_VAL()	
+    </head>
+	<body class="easyui-layout" text=#000000 bgColor=#ffffff>
+		<form action="" enctype="multipart/form-data" id="sform" name="sform" method="post" >
+			<input type="hidden" id="totalShow" name="totalShow"/>
+			<input type="hidden" id="totalParentId" name="totalParentId"/>
+			<div region="center" class="easyui-panel" title="新闻栏目明细创建" data-options="iconCls:'icon-edit'" style="padding: 2px; background: #fafafa;">
+              <fieldset>
+							<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+								<tr>
+								
+								</tr>
+                                <tr>
+									 <td  noWrap colspan="2"><div> 所  属 分  类 <FONT color="#ff0000">*
+								<input id="totalParentTotal" name="totalParentTotal" class="easyui-combobox" 
+									data-options="valueField:'total_title',textField:'total_name',url:appUrl + '/newsAction!searchNewsTotalListbox.jspa'  " />
+                                 </div></td>
+								</tr>
+                                <tr> <td  noWrap><div>通知公告主题<FONT color="#ff0000">*</FONT>&nbsp;<input  type="text" name="delailTitle" id="delailTitle" /></div>
+                                		<input type="hidden" id="zzjg" name="zzjg" value=""></input>
+										<div><p>可见组织:<a class="easyui-linkbutton"  href="javascript:newtree2('gszz')">公司组织</a>
+										<FONT color="#ff0000">(选择公司部门请选中)</FONT>
+										</div>
+										<div>组织:<input  id="orgs" name="orgs" type="hidden" value="$!{orgs}">
+											<input type="text" id="orgName" name="orgName" readonly value="$!{orgName}">
+								    		<a href="javascript:clear('orgs','orgName')"  class="easyui-linkbutton">清除</a>
+								       <div><p>可见组织:<a class="easyui-linkbutton"  href="javascript:newtree2('jxszz')">经销商组织</a>
+								       <FONT color="#ff0000"><input type="checkbox" name="cFlag" id="cFlag" value="C"/>打√默认全体经销商</FONT>
+								       </div>
+								      	 	组织:<input  id="orgs2" name="orgs2" type="hidden" value="$!{orgs2}">
+											<input type="text" id="orgName2" name="orgName2" readonly value="$!{orgName2}">
+								       	    <a href="javascript:clear('orgs2','orgName2')"  class="easyui-linkbutton">清除</a>
+								       	</div>
+						 			</td>		
+								</tr>
+								<tr >
+        					<td >
+        						<textarea class="ckeditor"  id="delail_content" name="delail_content"></textarea>
+        					</td>
+                         </tr>
+						 <tr>
+    				</td>
+					<td colspan="3">
+						附件上传
+						<div id="input">
+							<input class="easyui-validatebox" name="upload" id="file0" type="file" value="添加附件" onchange="addFile()" />
+							<font size="2.5" color="red">继续点击添加多个附件</font>
+						</div>
+						<div id="_file"></div>
+					</td>
+				 </tr>
+				</table>
+				<div region="south" border="false" style="text-align:center;height:30px;line-height:30px;">
+        			<a class="easyui-linkbutton" icon="icon-ok" href="javascript:save()">提交</a>
+        			<!--<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:reset()">取消</a>-->
+        		</div>	
+        		</fieldset>		
+            </div>
+			<input  id="fileInputNumber" type="hidden"  value="0"/>
+		</form>
+		<iframe id="hideFrame" name="hideFrame"	src="$!{env.imgUrl}/image/space.gif" style="height: 0; width: 0"></iframe>
+			 <div id="maintWindow"/> 
+	</body>
+	
+	<script type="text/javascript" src="$!{env.imgUrl}/js/platform/news/news_det_add.js"></script>
+<script type="text/javascript">
+		var editor = CKEDITOR.replace('delail_content');
+		var flag = false;
+    </script>
+</html>

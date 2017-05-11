@@ -1,0 +1,28 @@
+		<form method="post">
+			<div >
+				<div class="easyui-panel" title="周回款汇总" data-options="collapsible:true">
+					<table width="100%" border="0" cellpadding="0" cellspacing="1">
+				  <tr>
+				   <td class="head" noWrap>经销商:</td>
+				   <td><input id="id" name="id"   class="easyui-combobox"    style="width:147px;"   />
+                   </td>
+				   <td class="head" noWrap>查询或清空:</td>
+				      <td>
+							<a href="javascript:search_1()" class="easyui-linkbutton" iconCls="icon-search">Search</a>
+							<a href="javascript:clearValue_1()" class="easyui-linkbutton" iconCls="icon-clear">Clear</a>
+						</td>
+					</tr>
+				</table>
+                </div>
+				<table id="datagrid_1"></table> 
+			</div>			
+			<!--该hidden区域用来暂存从总单传过来的值-->
+			<input type="hidden" id="custId" name="custId" />
+			 <div id="toolbar2" class="datagrid-toolbar" >
+		        <input id="ss" class="easyui-searchbox" searcher="searcher" prompt="请填写客户代码或客户名称" customer="#mm" style="width:300px"></input>		
+		     </div>
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+		<div id="maintModelAtt"/>
+	</body>
+	<script type="text/javascript" src="$!{env.appUrl}/platform/report/backsection4week/backsection.js"></script>

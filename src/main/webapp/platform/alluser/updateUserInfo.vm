@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<body class="easyui-layout">
+		<form method="post" target="hideFrame">
+			<div region="center" class="easyui-panel" title="人员信息修改" data-options="iconCls:'icon-edit'">
+				<input type="hidden" id="userId" value="$!{userId}"/>
+			<table width="100%" border="0" cellpadding="0" cellspacing="1">
+        			<tr>
+                        <td class="head" noWrap>用户ID(<font color='red'>登录账号</font>):</td>
+        				<td><input class="easyui-validatebox"  id="loginId" name="allUsers.loginId" 
+							data-options="required:true" missingMessage="请输入正确的用户ID" value="$!{allUsers.loginId}" readonly>
+							<!--<input type="button" onclick="testId(document.getElementById('loginId').value)" value="测试是否可用"/>-->
+						</td>
+        			</tr>
+        			<tr>
+        				<td class="head" noWrap>用户姓名<font color='red'>*</font>:</td>
+        				<td><input class="easyui-validatebox"  id="userName" name="allUsers.userName" 
+							data-options="required:true" missingMessage="请输入正确的用户名" value="$!{allUsers.userName}" readonly></td>
+						<td class="head" noWrap>开始工作时间:</td>
+        				<td>
+        				<input class="easyui-datebox"  id="startDate" name="allUsers.startDate" readonly value="$!{allUsers.startDate}"></td>
+        				</td>
+						
+        			</tr>
+        			<tr>
+						<td class="head" noWrap>组织:</td>
+        				<td>
+        				<input class="easyui-validatebox"  id="orgName" name="allUsers.orgName"   value="$!{allUsers.orgName}" readonly >
+						<input class="easyui-validatebox" type='hidden' id="orgId" name="allUsers.orgId" value="$!{allUsers.orgId}">
+						<!--<input type="button"  value="组织"  onclick="selectOrgTree()"/>-->
+                        <a class="easyui-linkbutton"  href="javascript:selectOrgTree()">组织</a>
+						</td>
+						<td class="head" noWrap>性别:</td>
+						<td>
+							<input type="hidden" id="sexValue" value="$!{allUsers.sex}"/>
+                        <select id="sex"  name="allUsers.sex" style="width:100px;" required="true" >
+									<option value="M"   readonly>男</option>
+									<option value="F"   readonly>女</option>
+						</select>			
+						</td>	
+        				<!--<td><input class="easyui-validatebox"  id="sex" name="sex" ></td>-->
+        			</tr>
+        			<tr>
+						
+        				<td class="head" noWrap>邮箱地址<font color='red'>*</font>:</td>
+        				<td>
+        				<input class="easyui-validatebox"  id="email" name="allUsers.email" data-options="required:true"
+							missingMessage="请输入邮箱" validType="email" invalidMessage="请输入正确的邮箱格式,如：xxx@kintiger.com" value="$!{allUsers.email}"></td>
+						
+        				
+						<td class="head" noWrap>身份证号码:</td>
+        				<td><input class="easyui-validatebox"  id="idCard" name="allUsers.idCard" value="$!{allUsers.idCard}"></td>
+        			</tr>
+        			
+        			<tr>
+						<td class="head" noWrap>手机<font color='red'>*</font>:</td>
+        				<td>
+        				<input class="easyui-validatebox"  id="busMobilephone" name="allUsers.busMobilephone" data-options="required:true"
+							missingMessage="请输入手机号" validType="length[11,11]" invalidMessage="请输入正确的11位手机号" value="$!{allUsers.busMobilephone}"></td>
+						<td class="head" noWrap>办公电话:</td>
+        				<td><input class="easyui-validatebox"  id="phone" name="allUsers.phone" value="$!{allUsers.phone}"></td>
+        			</tr>
+        			<tr>
+        				<td class="head" noWrap>通信地址:</td>
+						<td >
+							<input class="easyui-validatebox"  id="address" name="allUsers.address" value="$!{allUsers.address}">
+						</td>
+						<td class="head" noWrap>备注:</td>
+        				<td><input class="easyui-validatebox"  id="remark" name="allUsers.remark" value="$!{allUsers.remark}"></td>
+        			</tr>
+					<tr>
+						<td class="head" noWrap>岗位:</td>
+        				<td>
+							<input colspan='3' id="roleIds" name="allUsers.roleIds"  style="width:250px;" value="$!{roleIds}" >
+								<input  id="stationNames" type="hidden"  style="width:155px;" value="$!{stationNames}" >
+                                        </input>
+						</td>
+						<td class="head" noWrap>办公传真:</td>
+        				<td><input class="easyui-validatebox"  id="workFax" name="allUsers.workFax" value="$!{allUsers.workFax}"></td>
+                    </tr>
+					<tr>
+        				<td class="head" noWrap>职务:</td>
+        				<td>
+        				<input class="easyui-validatebox"  id="empPostName"    value="$!{allUsers.empPostName}"   readonly >
+						<input class="easyui-validatebox" type='hidden' id="empPostId" name="allUsers.empPostId" value="$!{allUsers.empPostId}">
+						<input class="easyui-validatebox" type='hidden' id="orgId1" >
+						<!--<input type="button"  value="组织"  onclick="selectOrgTree()"/>-->
+                        <a class="easyui-linkbutton" id="postButton" href="javascript:selectOrgTree4Post()">职务</a>
+        				</td>	
+						<td class="head" noWrap>人员类别</td>
+						
+						<td>
+						#if($!{allUsers.hqSign} == '1')
+								 <input type="radio" name="allUsers.hqSign" value="1" checked> 总部  </input>
+								  <input type="radio" name="allUsers.hqSign" value="0"> 非总部  </input>
+												#else
+								  <input type="radio" name="allUsers.hqSign" value="1" > 总部  </input>
+								  <input type="radio" name="allUsers.hqSign" value="0" checked> 非总部  </input>
+												#end	
+                      
+                        </td>	
+        			</tr>
+        			<tr>
+        				<td class="head" noWrap></td>
+        			</tr>
+					<tr>
+        				<td class="head" noWrap></td>
+        			</tr>
+					<tr>
+        				<td class="head" noWrap></td>
+        			</tr>
+					<tr>
+        				<td class="head" noWrap></td>
+        			</tr>
+					<tr>
+        				<td class="head" noWrap></td>
+        			</tr>
+					<tr>
+        				<td class="head" noWrap></td>
+        			</tr>
+					<tr>
+						<td class="head" noWrap><font color='green'>温馨提示：</font></td>
+						<td>
+							<font color='green'>用户ID和用户名不可修改，岗位在查询页面修改</font>
+						</td>
+					</tr>
+		    </table>
+			<div id="toolbar" class="datagrid-toolbar" >
+				<input id="ss" class="easyui-searchbox" searcher="searcher" prompt="请填写查询条件" menu="#mm" style="width:300px"></input>		
+			</div>
+			</div>
+			<div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+				<a class="easyui-linkbutton"  href="javascript:resetPwd(document.getElementById('userId').value)">密码重置</a>
+				<a class="easyui-linkbutton" icon="icon-ok" href="javascript:submit()">修改</a>
+				<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:close()">取消</a>
+			</div>
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+		 <div id="maintWindow"/>
+	</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/alluser/updateUserInfo.js"></script>
+</html>

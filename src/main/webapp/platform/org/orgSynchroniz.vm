@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>组织人员AD初始化</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body>
+	<form>
+    <center>
+	<img src="$!{env.imgUrl}/images/actions/sync.gif" title="点击进行数据同步" style="cursor:pointer;" onclick="sync();">
+	</img>
+	<div id="p" class="easyui-progressbar" style="width:450px;"></div>
+	</center>
+    </form>
+	<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+	</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/org/orgSynchroniz.js"></script>
+</html>

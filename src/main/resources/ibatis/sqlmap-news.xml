@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="news">
+	<typeAlias alias="lanNewsTotal" type="com.kintiger.platform.news.pojo.NewsTotal" />
+	<typeAlias alias="lanNewsDetail" type="com.kintiger.platform.news.pojo.NewsDetail" />
+	<typeAlias alias="lanNewsFile" type="com.kintiger.platform.news.pojo.NewsFile" />
+	<typeAlias alias="lanNewsRecord" type="com.kintiger.platform.news.pojo.NewsRecord" />
+	<typeAlias alias="isRead" type="com.kintiger.platform.news.pojo.IsRead" />
+	<typeAlias alias="organ" type="com.kintiger.platform.news.pojo.Organ" />
+	
+	<!-- 删除新闻附件 -->
+	<delete id="deleteNewsFile" parameterClass="lanNewsFile">
+	    <![CDATA[
+			delete office.office_tb_news_file t where t.detail_id=#detail_id#
+		]]>
+	</delete>
+	
+	<!-- 通知公告之发送至多组织 -->
+	<insert id="createOrgan" parameterClass="organ">
+		<selectKey resultClass="java.lang.Long" keyProperty="id">
+		<![CDATA[
+			select office.office_seq_lan_news_organ.NEXTVAL as id from dual
+		]]>
+		</selectKey>
+		<![CDATA[
+			insert into office.office_tb_lan_news_organ(
+				ID,
+				DELAIL_ID,
+				ORG_ID
+				)
+			values (
+				#id#,
+				#delailId#,
+				#orgId#
+				)
+		]]>
+	</insert>
+	<!-- 先读一轮登陆用户有没有过 -->
+	<select id="getIsRead" parameterClass="isRead"
+		resultClass="isRead">
+		<![CDATA[
+			select t.delail_id, t.user_id, t.total_id, t.is_read
+			  from basis.basis_tb_news_isread t
+			 where t.delail_id = #delailId#
+			   and t.user_id = #userId#
+		]]>
+	</select>
+	<!-- 这个用户没有读的话就插入一条 -->
+	<insert id="insertIsRead" parameterClass="isRead">
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            <![CDATA[
+                select BASIS.BASIS_SEQ_NEWS_ISREAD.nextval as id from dual 
+            ]]>
+        </selectKey>
+        <![CDATA[
+            insert into  basis.basis_tb_news_isread
+            (
+			    delail_id, user_id, total_id, is_read, id
+            )
+            values(
+                #delailId#,#userId#,#totalId#,#isRead#,#id#
+            )
+        ]]>
+	</insert> 
+	<!-- 登陆者的组织获取新闻明细 -->
+	<select id="getNewsList" parameterClass="lanNewsDetail"
+		resultClass="lanNewsDetail">
+	<![CDATA[
+		select *
+		  from (select nt.total_id,
+					   nt.total_name,
+					   nt.total_sign,
+					   nt.total_show,
+					   nd.delail_id,
+					   nd.delail_title,
+					   nd.delail_content,
+					   nd.detail_date,
+					   nd.delail_operator,
+					   nd.clicks_ratio,
+					   nd.css_flag,
+					   (case
+						 when (sysdate - 3) <= nd.detail_date then
+						  'Y'
+						 else
+						  'N'
+					   end) as new_flag,
+					   rank() over(partition by nt.total_id order by nt.total_code, nd.detail_date desc) rnak
+				  from office.office_tb_lan_news_total  nt,
+					   office.office_tb_lan_news_delail nd,
+					   office.office_tb_lan_news_organ o
+				 where nt.total_id = nd.total_id
+				   and nd.delail_id=o.delail_id
+				   and nt.total_flag = 'Y'
+				   and nt.total_parent_id = 0
+				   and nd.delail_flag = 'Y'
+				  and (o.org_id in ]]>
+		<iterate property="codes" open="(" close=")" conjunction=",">#codes[]#
+		</iterate>
+		<![CDATA[)
+		order by nt.total_code, nd.detail_date desc)
+		where rnak < 9
+		]]>
+	</select>
+
+	<select id="getNewsTotalList" resultClass="lanNewsTotal">
+	<![CDATA[
+		  select *
+		  from office.office_tb_lan_news_total nt
+		   where nt.total_show = 'Y'
+		   and nt.total_flag = 'Y'
+		   and nt.total_parent_id = 1
+		 order by nt.total_code
+	]]>
+	</select>
+
+	<select id="getNewsDetailList" parameterClass="lanNewsTotal"
+		resultClass="lanNewsDetail">
+	<![CDATA[
+		select *
+		  from (select row_.*, rownum rownum_
+			  from (select nd.*,
+						   (case
+							 when (sysdate - 3) <= nd.detail_date then
+							  'Y'
+							 else
+							  'N'
+						   end) as new_flag
+					  from office.office_tb_lan_news_delail nd
+					 where 1 = 1
+					   and nd.delail_flag = 'Y'
+					   and nd.total_id = #total_id#
+					   and nd.org_name = '1'
+					 order by nd.last_modify desc) row_
+			 where rownum < 8)
+		 where rownum_ >= 0
+	]]>
+	</select>
+	<!-- 点击更多获取新闻数量统计 -->
+	<select id="getNewsDetailMoreListCount" parameterClass="lanNewsTotal"
+		resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(*)
+		  from office.office_tb_lan_news_delail nd 
+		  left join office.office_tb_lan_news_organ o on nd.delail_id=o.delail_id
+		  where 1 = 1 
+		and nd.delail_flag = 'Y'
+		and nd.org_name = '1'
+	]]>
+		<dynamic>
+			<isNotEmpty property="total_id" prepend="and">
+			<![CDATA[ nd.total_id = #total_id#]]>
+			</isNotEmpty>
+			<isNotEmpty property="total_name" prepend="and">
+			<![CDATA[ nd.delail_title like #total_name,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="codes" prepend="and">
+			<![CDATA[ (o.org_id in ]]>
+				<iterate property="codes" open="(" close=")" conjunction=",">#codes[]#
+				</iterate>
+				<![CDATA[)]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<!-- 点击更多获取新闻 -->
+	<select id="getNewsDetailMoreList" parameterClass="lanNewsTotal"
+		resultClass="lanNewsDetail">
+		<include refid="global.paginationStart" />
+		<![CDATA[
+			 select *
+			  from office.office_tb_lan_news_delail nd 
+			  left join office.office_tb_lan_news_organ o on nd.delail_id=o.delail_id
+			   where 1 = 1
+			 and nd.delail_flag = 'Y'
+			 and nd.org_name = '1'
+		]]>
+		<dynamic>
+			<isNotEmpty property="total_id" prepend="and">
+			<![CDATA[ nd.total_id = #total_id#]]>
+			</isNotEmpty>
+			<isNotEmpty property="total_name" prepend="and">
+			<![CDATA[ nd.delail_title like #total_name,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="codes" prepend="and">
+			<![CDATA[ (o.org_id in ]]>
+				<iterate property="codes" open="(" close=")" conjunction=",">#codes[]#
+				</iterate>
+				<![CDATA[)]]>
+			</isNotEmpty>
+		</dynamic>  
+	<![CDATA[ order by nd.last_modify desc ]]>
+		<include refid="global.paginationEnd" />
+	</select>
+
+	<select id="getNewsDetail" parameterClass="lanNewsDetail"
+		resultClass="lanNewsDetail">
+	<![CDATA[
+		 select  nd.*,
+		 			nd.option_org as optionOrg,
+		 			nd.option_orgname as optionOrgName
+			  from office.office_tb_lan_news_delail nd
+			 where 1=1
+			  and nd.delail_id = #delail_id#
+	]]>
+	</select>
+	<update id="updateNewsDetail" parameterClass="lanNewsDetail">
+	<![CDATA[
+		update  office.office_tb_lan_news_delail t set t.last_modify = sysdate,
+		t.option_orgs=#optionOrgs#,
+		t.OPTION_ORGNAME=#optionOrgName#
+	]]>
+		<dynamic>
+			<isNotEmpty property="clicks_ratio" prepend=",">
+			<![CDATA[ t.clicks_ratio =#clicks_ratio# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="delail_title" prepend=",">
+			<![CDATA[ t.delail_title =#delail_title# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="total_id" prepend=",">
+			<![CDATA[ t.total_id =#total_id# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="css_flag" prepend=",">
+			<![CDATA[ t.css_flag =#css_flag# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="delail_content" prepend=",">
+			<![CDATA[ t.delail_content =#delail_content# ]]>
+			</isNotEmpty>
+
+		</dynamic>
+	<![CDATA[
+		 where t.delail_id = #delail_id#
+	]]>
+	</update>
+	<select id="getNewsFileList" parameterClass="lanNewsFile"
+		resultClass="lanNewsFile">
+	<![CDATA[
+		select * from  office.office_tb_news_file t
+			 where 1=1
+			  and t.detail_id = #detail_id#
+			  and t.news_del_flag = 'Y'
+	]]>
+	</select>
+	<select id="getNewsTreeTypeList" parameterClass="lanNewsTotal"
+		resultClass="lanNewsTotal">
+	<![CDATA[
+		  select *
+			  from office.office_tb_lan_news_total nt
+			   where 1 = 1
+			   and nt.total_flag = 'Y'
+			   and nt.total_id <> 1
+			   and nt.total_parent_id = #total_parent_id#
+			 order by nt.total_id
+	]]>
+	</select>
+
+	<insert id="createNewsTotal" parameterClass="lanNewsTotal">
+		<selectKey resultClass="java.lang.Long" keyProperty="total_id">
+		<![CDATA[
+			select to_number(office.office_seq_lan_news_total.NEXTVAL) as total_id from dual
+		]]>
+		</selectKey>
+	<![CDATA[
+		insert into office.office_tb_lan_news_total(
+			total_id,
+			total_parent_id,
+			total_name,
+			total_title,
+			total_date,
+			total_code,
+			total_show,
+			total_sign,
+			total_flag,
+			last_modify,
+			total_upload_sign
+			)
+		values (
+			#total_id#,
+			#total_parent_id#,
+			#total_name#,
+			#total_title#,
+			sysdate,
+			#total_code#,
+			#total_show#,
+			#total_sign#,
+			#total_flag#,
+			sysdate,
+			#total_upload_sign#
+			)
+	]]>
+	</insert>
+	<select id="getNewsTotalJsonCount" parameterClass="lanNewsTotal"
+		resultClass="java.lang.Integer">
+	<![CDATA[
+		  select count(*)
+		  from office.office_tb_lan_news_total nt
+		   where   nt.total_flag = 'Y'
+		   and nt.total_parent_id = 0
+	]]>
+		<dynamic>
+			<isNotEmpty property="total_name" prepend="and">
+			<![CDATA[ nt.total_name like #total_name,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<select id="getNewsTotalJsonList" parameterClass="lanNewsTotal"
+		resultClass="lanNewsTotal">
+		<include refid="global.paginationStart" />
+	<![CDATA[
+		  select *
+		  from office.office_tb_lan_news_total nt
+		   where  nt.total_flag = 'Y'
+		   and nt.total_parent_id = 0
+	]]>
+		<dynamic>
+			<isNotEmpty property="total_name" prepend="and">
+			<![CDATA[ nt.total_name like #total_name,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+		</dynamic>
+		<include refid="global.paginationEnd" />
+	</select>
+	<select id="getNewsDetailJsonCount" parameterClass="lanNewsDetail"
+		resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(*)
+				  from office.office_tb_lan_news_delail t,office.office_tb_lan_news_total d
+				  where t.total_id = d.total_id
+				  and t.delail_flag = 'Y'
+				 and d.total_flag = 'Y'
+	]]>
+		<dynamic>
+			<isNotEmpty property="total_name" prepend="and">
+			<![CDATA[ d.total_name like #total_name,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="delail_title" prepend="and">
+			<![CDATA[ t.delail_title like #delail_title,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="codes" prepend="and">
+			<![CDATA[ (t.OPTION_ORG is null or t.OPTION_ORG in ]]>
+				<iterate property="codes" open="(" close=")" conjunction=",">#codes[]#
+				</iterate>
+				<![CDATA[)]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<!-- 通知公告发布页面新闻列表明细 -->
+	<select id="getNewsDetailJsonList" parameterClass="lanNewsDetail"
+		resultClass="lanNewsDetail">
+		<include refid="global.paginationStart" />
+	<![CDATA[
+		  select t.delail_id,
+				 t.total_id,
+				 t.delail_title,
+				 t.delail_operator,
+				 t.detail_date,
+				 t.clicks_ratio,
+				 d.total_name,
+				 t.option_orgname optionOrgName
+				  from office.office_tb_lan_news_delail t,
+				  	office.office_tb_lan_news_total d
+				  where t.total_id = d.total_id
+				  		and t.delail_flag = 'Y'
+				 		and d.total_flag = 'Y'
+	]]>
+		<dynamic>
+			<isNotEmpty property="total_name" prepend="and">
+			<![CDATA[ d.total_name like #total_name,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="delail_title" prepend="and">
+			<![CDATA[ t.delail_title like #delail_title,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="total_id" prepend="and">
+			<![CDATA[ t.total_id =#total_id# ]]>
+			</isNotEmpty>
+		</dynamic>
+	<![CDATA[ order by t.last_modify desc ]]>
+		<include refid="global.paginationEnd" />
+	</select>
+	
+	<update id="deleteNewsDetail" parameterClass="lanNewsDetail">
+	<![CDATA[
+		update office.office_tb_lan_news_delail t set t.delail_flag='N',t.last_modify =sysdate where t.delail_id in
+	]]>
+		<iterate property="codes" open="(" close=")" conjunction=",">#codes[]#
+		</iterate>
+	</update>
+	
+	<!--  -->
+	<insert id="createNewsDetail" parameterClass="lanNewsDetail">
+		<selectKey resultClass="java.lang.Long" keyProperty="delail_id">
+		<![CDATA[
+			select to_number(office.office_seq_lan_news_delail.NEXTVAL) as delail_id from dual
+		]]>
+		</selectKey>
+		<![CDATA[
+			insert into office.office_tb_lan_news_delail(
+				DELAIL_ID,
+				TOTAL_ID,
+				DELAIL_TITLE,
+				DELAIL_CONTENT,
+				DELAIL_OPERATOR,
+				DETAIL_DATE,
+				CLICKS_RATIO,
+				ORG_NAME,
+				DELAIL_FLAG,
+				LAST_MODIFY,
+				CSS_FLAG,
+				OPTION_ORGS,
+				OPTION_ORGNAME
+				)
+			values (
+				#delail_id#,
+				#total_id#,
+				#delail_title#,
+				#delail_content#,
+				#delail_operator#,
+				sysdate,
+				#clicks_ratio#,
+				#org_name#,
+				'Y',
+				sysdate,
+				#css_flag#,
+				#optionOrgs#,
+				#optionOrgName#
+				)
+		]]>
+	</insert>
+	
+	<insert id="createNewsFile" parameterClass="lanNewsFile">
+		<selectKey resultClass="java.lang.Long" keyProperty="news_file_id">
+		<![CDATA[
+			select to_number(office.office_seq_news_file.NEXTVAL) as news_file_id from dual
+		]]>
+		</selectKey>
+	<![CDATA[
+		insert into office.office_tb_news_file(
+			NEWS_FILE_ID,
+			NEWS_FILE_NAME,
+			DETAIL_ID, 
+			NEWS_FILE_URL,
+			CREATE_DATE,
+			LAST_MODIFY,
+			NEWS_DEL_FLAG
+			)
+		values (
+			#news_file_id#,
+			#news_file_name#,
+			#detail_id#,
+			#news_file_url#,
+			sysdate,
+			sysdate,
+			'Y'
+			)
+	]]>
+	</insert>
+	<update id="updateNewsTotal" parameterClass="lanNewsTotal">
+	<![CDATA[
+		update  office.office_tb_lan_news_total t set t.last_modify = sysdate
+	]]>
+		<dynamic>
+			<isNotEmpty property="total_name" prepend=",">
+			<![CDATA[ t.total_name =#total_name# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="total_title" prepend=",">
+			<![CDATA[ t.total_title =#total_title# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="total_code" prepend=",">
+			<![CDATA[ t.total_code =#total_code# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="total_show" prepend=",">
+			<![CDATA[ t.total_show =#total_show# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="total_sign" prepend=",">
+			<![CDATA[ t.total_sign =#total_sign# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="total_flag" prepend=",">
+			<![CDATA[ t.total_flag =#total_flag# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="total_upload_sign" prepend=",">
+			<![CDATA[ t.total_upload_sign =#total_upload_sign# ]]>
+			</isNotEmpty>
+		</dynamic>
+	<![CDATA[
+		  where t.total_id in
+	]]>
+		<dynamic>
+			<iterate property="total_ids" open="(" close=")" conjunction=",">
+				#total_ids[]#
+			</iterate>
+		</dynamic>
+	</update>
+	<select id="getNewsTotal" parameterClass="lanNewsTotal"
+		resultClass="lanNewsTotal">
+	<![CDATA[
+		  select *
+		  from office.office_tb_lan_news_total t
+		   where t.total_id = #total_id#
+	]]>
+	</select>
+	<update id="updateNewsFile" parameterClass="lanNewsFile">
+	<![CDATA[
+		update  office.office_tb_news_file t set t.last_modify = last_modify
+	]]>
+		<dynamic>
+			<isNotEmpty property="news_del_flag" prepend=",">
+			<![CDATA[ t.news_del_flag =#news_del_flag# ]]>
+			</isNotEmpty>
+		</dynamic>
+	<![CDATA[
+		 where 1 =1 
+	]]>
+		<dynamic>
+			<isNotEmpty property="detail_id" prepend="and">
+			<![CDATA[ t.detail_id = #detail_id# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="codes" prepend="and">
+			<![CDATA[ t.news_file_id not in ]]>
+				<iterate property="codes" open="(" close=")" conjunction=",">#codes[]#
+				</iterate>
+			</isNotEmpty>
+		</dynamic>
+	</update>
+	<select id="getTotalShowCount" resultClass="java.lang.Integer">
+	<![CDATA[
+		  select count(*) from office.office_tb_lan_news_total t where t.total_show='Y' and t.total_flag='Y'
+	]]>
+	</select>
+
+	<insert id="addRecord" parameterClass="lanNewsRecord">
+		<selectKey resultClass="java.lang.Long" keyProperty="id">
+		<![CDATA[
+			select to_number(office.OFFICE_SEQ_LAN_NEWS_RECORD.NEXTVAL) as id from dual
+		]]>
+		</selectKey>
+	<![CDATA[
+		insert into office.office_tb_lan_news_record values
+		(#id#,#detailId#,#userName#,sysdate，#startTime#,#startTime#)
+	]]>
+	</insert>
+
+	<update id="recordScanTime" parameterClass="lanNewsRecord">
+	<![CDATA[
+		update
+		office.office_tb_lan_news_record t set t.end_time = #endTime# where t.id
+		= #id#
+	]]>
+	</update>
+	<select id="blurNewsCode" parameterClass="lanNewsTotal"
+		resultClass="java.lang.Integer">
+	<![CDATA[
+		  select count(*) from office.office_tb_lan_news_total t where  t.total_flag='Y'  and t.total_code =#total_code#
+	]]>
+	</select>
+
+</sqlMap>

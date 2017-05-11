@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="newsAction" class="com.kintiger.platform.news.action.NewsAction"
+		parent="baseAction" scope="request">
+		<property name="newsService" ref="newsService"></property>
+		<property name="oaNewsFilePath">
+			<value>${news.filePath}</value>
+		</property>
+		<property name="orgService" ref="orgService"></property>
+		<property name="allUserService" ref="allUserService"></property>
+	</bean>
+
+	<bean id="newsService" class="com.kintiger.platform.news.service.impl.NewsServiceImpl">
+		<property name="newsDao" ref="newsDao" />
+	</bean>
+
+	<bean id="newsDao" class="com.kintiger.platform.news.dao.impl.NewsDaoImpl"
+		parent="baseDao">
+	</bean>
+</beans>

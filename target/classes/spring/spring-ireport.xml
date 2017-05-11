@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="IreportAction" class="com.kintiger.platform.ireport.action.IreportAction"
+		parent="baseAction" scope="request">
+		<property name="reportService" ref="reportService" />
+		<property name="ireportpath"><value>${irepot.upload.filePath}</value></property> 
+	</bean>
+		<bean id="reportService"
+		class="com.kintiger.platform.ireport.service.impl.ReportServiceImpl">
+		<property name="reportDao" ref="reportDao" />
+		<property name="ireportpath"><value>${irepot.upload.filePath}</value></property> 
+	</bean>
+	<bean id="reportDao" class="com.kintiger.platform.ireport.dao.impl.ReportDaoImpl"
+		parent="baseDao"></bean>
+		
+</beans>

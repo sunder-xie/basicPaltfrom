@@ -1,0 +1,903 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="account">
+	
+	<typeAlias alias="singleTotal" type="com.kintiger.platform.account.pojo.SingleTotal" />
+	<typeAlias alias="singleDetail" type="com.kintiger.platform.account.pojo.SingleDetail" />
+	<typeAlias alias="workPlan" type="com.kintiger.platform.account.pojo.WorkPlanTotal" />
+	<typeAlias alias="cmsDict" type="com.kintiger.platform.dict.pojo.CmsTbDict" />
+	<typeAlias alias="allUser" type="com.kintiger.platform.allUser.pojo.AllUsers" />
+	<typeAlias alias="payeeInfo" type="com.kintiger.platform.account.pojo.PayeeInfo" />
+	<typeAlias alias="processEventTotal" type="com.kintiger.platform.webservice.pojo.ProcessEventTotal" />
+	<typeAlias alias="proEventDetail" type="com.kintiger.platform.wfe.pojo.ProEventDetail" />
+	
+	<insert id="saveEntity_singleTotal" parameterClass="singleTotal">
+		<selectKey resultClass="java.lang.Long" keyProperty="plan_id">
+		<![CDATA[
+			SELECT basis.basis_seq_form_total.nextval as plan_id from dual
+		]]>
+		</selectKey> 
+	<![CDATA[
+		insert into office.office_tb_form_total(PLAN_ID, TRANSACTION_ID, ORG_ID, USER_ID, PAY_EE, PAY_ACCOUNT, COST_ORG_ID, COST_CENTER,
+			 PAY_TYPE, TOTAL_MONEY, MEMO, PLAN_FLAG, CREATE_DATE, CREATOR_ID, MODIFY_DATE, OPERATOR_ID, COST_CENTER_TYPE, HAS_PLAY_MONEY)
+		values(#plan_id#, #transaction_id#, #org_id#, #user_id#, #pay_ee#, #pay_account#, #cost_org_id#, #cost_center#, #pay_type#, #total_money:NUMBER#,
+			#memo#, 'Y', sysdate, #creator_id#, sysdate, #operator_id#, #cost_center_type#, 'N')
+	]]>	
+	</insert>
+	
+	<insert id="saveEntity_singleDetail" parameterClass="singleDetail">
+		<selectKey resultClass="java.lang.Long" keyProperty="detail_id">
+		<![CDATA[
+			SELECT basis.basis_seq_form_detail.nextval as detail_id from dual
+		]]>
+		</selectKey> 
+	<![CDATA[
+		insert into office.office_tb_form_detail(DETAIL_ID, PLAN_ID, COST_TYPE, COST_DATE, COST_PURPOSE, INVOICE_NUM,
+			 INVOICE_AMOUNT, AUDIT_MONEY, COST_MEMO)
+		values(#detail_id#, #plan_id#, #cost_type#, #cost_date#, #cost_purpose#, #invoice_num#, 
+			#invoice_amount:NUMBER#, #audit_money#, #cost_memo#)
+	]]>	
+	</insert>
+	
+	<select id="getUserRoles" parameterClass="allUser" resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(t.station_role_id) from basis.basis_tb_station_role t, basis.basis_tb_station_user r
+		where t.station_id = r.station_id
+		and r.user_id = #userId#
+		and t.role_id = #roleIds#
+	]]>		
+	</select>
+	
+	<update id="playMoney" parameterClass="java.lang.String">
+	<![CDATA[	
+		update office.office_tb_form_total t set t.has_play_money = 'Y'
+		where t.plan_id in ($ids$)
+	]]>	
+	</update>
+	
+	<!-- 通过主键查询唯一一条报销单 -->
+	<select id="searchSingleTotalByPlanId" parameterClass="java.lang.Long" resultClass="singleTotal">
+	<![CDATA[
+		select wt.plan_id			plan_id, 
+			wt.transaction_id		transaction_id, 
+			r.event_title			title, 
+			wt.user_id				user_id, 
+			v.emp_name				user_name, 
+			wt.org_id				org_id, 
+			g.org_name				org_name, 
+			wt.cost_org_id			cost_org_id, 
+			g1.org_name				cost_org_name,
+			wt.cost_center			cost_center,
+			case when  wt.cost_center = '0000' then '无项目'
+       		else (select l.title from office.office_tb_workplan_total l where wt.cost_center = l.totalid(+) and rownum = 1)          
+       		end 					cost_center_name,
+			wt.total_money  		total_money,
+			wt.audit_money 			audit_money,
+      		wt.pay_type    	 		pay_type,
+      		wt.create_date 			create_date,
+      		wt.has_play_money		has_play_money,
+      		wt.pay_ee				pay_ee,
+      		wt.pay_account			pay_account,
+      		wt.memo					memo
+		from office.office_tb_form_total wt,
+			 workflow.workflow_tb_event_total r,
+			 basis.basis_tb_salesemp_info v,
+			 basis.basis_tb_org g,
+			 basis.basis_tb_org g1
+		where wt.transaction_id = to_char(r.event_id(+))
+		and wt.user_id = v.emp_id(+)
+		and wt.org_id = g.org_id(+)
+		and wt.cost_org_id = g1.org_id(+)
+		and wt.plan_id = #plan_id#
+	]]>	
+	</select>
+	
+	<!-- 通过报销单主键查询报销明显列表(无分页)  -->
+	<select id="searchSingleDetailByPlanId" parameterClass="java.lang.Long" resultClass="singleDetail">
+	<![CDATA[
+		select 	t.detail_id,
+       			t.plan_id,
+       			t.cost_type,
+       			r.item_name		cost_type_content,
+       			t.cost_date,
+       			t.cost_purpose,
+       			t.invoice_num,
+       			t.invoice_amount,
+       			t.cost_memo
+  		from office.office_tb_form_detail t, basis.basis_tb_dict r, basis.basis_tb_dict_type s
+ 		where t.plan_id = #plan_id#
+ 			and t.cost_type = r.item_value(+)
+   			and r.dict_type_id = s.dict_type_id
+   			and s.dict_type_value = 'costType'
+   	]]>
+	</select>
+
+	<!-- 报销单查询 -->
+	<select id="searchTraReimburCount" parameterClass="singleTotal" resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(wt.plan_id) from 
+			office.office_tb_form_total wt,
+			workflow.workflow_tb_event_total r,
+			basis.basis_tb_salesemp_info v
+		where wt.plan_flag = 'Y'
+		and wt.transaction_id = to_char(r.event_id(+))
+		and wt.user_id = v.emp_id(+)
+		and r.status in (0,1,2)
+	]]>
+	<dynamic>
+		<isNotEmpty property="eventId" prepend="and">
+		<![CDATA[ r.event_id like #eventId,handler=wildcard# escape '\' ]]>
+		</isNotEmpty>
+		<isNotEmpty property="title" prepend="and">
+		<![CDATA[ r.event_title like #title,handler=wildcard# escape '\' ]]>
+		</isNotEmpty>
+		<isNotEmpty property="status" prepend="and">
+		<![CDATA[ r.status = #status# ]]>
+		</isNotEmpty>
+		<isNotEmpty property="user_name" prepend="and">
+		<![CDATA[ v.emp_name like #user_name,handler=wildcard# escape '\' ]]>
+		</isNotEmpty>
+		<isNotEmpty property="startDate" prepend="and">
+		<![CDATA[ wt.create_date > #startDate# ]]>
+		</isNotEmpty>
+		<isNotEmpty property="endDate" prepend="and">
+		<![CDATA[ wt.create_date < #endDate# + 1 ]]>
+		</isNotEmpty>
+		<isNotEmpty property="has_play_money" prepend="and">
+		<![CDATA[ wt.has_play_money = #has_play_money# ]]>
+		</isNotEmpty>
+		<isNotEmpty property="user_id" prepend="and">
+		<![CDATA[ wt.user_id = #user_id# ]]>
+		</isNotEmpty>
+	</dynamic>
+	</select>
+	
+	<select id="searchTraReimburList" parameterClass="singleTotal" resultClass="singleTotal">
+	<include refid="global.paginationStart" />
+	<![CDATA[
+		select wt.plan_id			plan_id, 
+			wt.transaction_id		transaction_id, 
+			r.event_title			title, 
+			wt.pay_ee				pay_ee,
+			wt.org_id				org_id, 
+			g.org_name				org_name, 
+			wt.cost_org_id			cost_org_id, 
+			g1.org_name				cost_org_name,
+			wt.cost_center			cost_center,
+			case when  wt.cost_center = '0000' then '无项目'
+       		else (select l.title from office.office_tb_workplan_total l where wt.cost_center = l.totalid(+) and rownum = 1)          
+       		end 					cost_center_name,
+			wt.total_money  		total_money,
+			nvl(wt.audit_money, wt.total_money)          audit_money,
+      		wt.pay_type    	 		pay_type,
+      		wt.memo  				memo,
+      		wt.create_date 			create_date,
+      		wt.financial_doc_num    financial_doc_num,
+      		r.status				status,
+      		wt.has_play_money		has_play_money
+		from office.office_tb_form_total wt,
+			 workflow.workflow_tb_event_total r,
+			 basis.basis_tb_org g,
+			 basis.basis_tb_org g1
+		where  wt.plan_flag = 'Y'
+		and wt.transaction_id = to_char(r.event_id(+))
+		and wt.org_id = g.org_id(+)
+		and wt.cost_org_id = g1.org_id(+)
+		and r.status in (0,1,2)
+	]]>
+	<dynamic>
+		<isNotEmpty property="eventId" prepend="and">
+		<![CDATA[ r.event_id like #eventId,handler=wildcard# escape '\' ]]>
+		</isNotEmpty>
+		<isNotEmpty property="title" prepend="and">
+		<![CDATA[ r.event_title like #title,handler=wildcard# escape '\' ]]>
+		</isNotEmpty>
+		<isNotEmpty property="status" prepend="and">
+		<![CDATA[ r.status = #status# ]]>
+		</isNotEmpty>
+		<isNotEmpty property="user_name" prepend="and">
+		<![CDATA[ wt.pay_ee like #pay_ee,handler=wildcard# escape '\' ]]>
+		</isNotEmpty>
+		<isNotEmpty property="startDate" prepend="and">
+		<![CDATA[ wt.create_date > #startDate# ]]>
+		</isNotEmpty>
+		<isNotEmpty property="endDate" prepend="and">
+		<![CDATA[ wt.create_date < #endDate# + 1 ]]>
+		</isNotEmpty>
+		<isNotEmpty property="has_play_money" prepend="and">
+		<![CDATA[ wt.has_play_money = #has_play_money# ]]>
+		</isNotEmpty>
+		<isNotEmpty property="user_id" prepend="and">
+		<![CDATA[ wt.user_id = #user_id# ]]>
+		</isNotEmpty>
+	</dynamic>
+	<![CDATA[ order by wt.create_date desc ]]>
+	<include refid="global.paginationEnd" />
+	</select>
+	
+	<!-- 导出到Excel的报销单列表查询  -->
+	<select id="searchTraReimburListToExcel" parameterClass="singleTotal" resultClass="singleTotal">
+	<![CDATA[
+		select wt.plan_id			plan_id, 
+			wt.transaction_id		transaction_id, 
+			r.event_title			title, 
+			wt.pay_ee				pay_ee,
+			wt.org_id				org_id, 
+			g.org_name				org_name, 
+			wt.cost_org_id			cost_org_id, 
+			g1.org_name				cost_org_name,
+			wt.cost_center			cost_center,
+			case when  wt.cost_center = '0000' then '无项目'
+       		else (select l.title from office.office_tb_workplan_total l where wt.cost_center = l.totalid(+) and rownum = 1)          
+       		end 					cost_center_name,
+			wt.total_money  		total_money,
+			nvl(wt.audit_money, wt.total_money)          audit_money,
+			wt.pay_account			pay_account,
+      		wt.pay_type    	 		pay_type,
+      		wt.memo					memo,
+      		wt.create_date 			create_date,
+      		wt.financial_doc_num    financial_doc_num,
+      		r.status				status,
+      		wt.has_play_money		has_play_money
+		from office.office_tb_form_total wt,
+			 workflow.workflow_tb_event_total r,
+			 basis.basis_tb_org g,
+			 basis.basis_tb_org g1
+		where  wt.plan_flag = 'Y'
+		and wt.transaction_id = to_char(r.event_id(+))
+		and wt.org_id = g.org_id(+)
+		and wt.cost_org_id = g1.org_id(+)
+		and r.status in (0,1,2)
+	]]>
+	<dynamic>
+		<isNotEmpty property="eventId" prepend="and">
+		<![CDATA[ r.event_id like #eventId,handler=wildcard# escape '\' ]]>
+		</isNotEmpty>
+		<isNotEmpty property="title" prepend="and">
+		<![CDATA[ r.event_title like #title,handler=wildcard# escape '\' ]]>
+		</isNotEmpty>
+		<isNotEmpty property="status" prepend="and">
+		<![CDATA[ r.status = #status# ]]>
+		</isNotEmpty>
+		<isNotEmpty property="user_name" prepend="and">
+		<![CDATA[ wt.pay_ee like #pay_ee,handler=wildcard# escape '\' ]]>
+		</isNotEmpty>
+		<isNotEmpty property="startDate" prepend="and">
+		<![CDATA[ wt.create_date > #startDate# ]]>
+		</isNotEmpty>
+		<isNotEmpty property="endDate" prepend="and">
+		<![CDATA[ wt.create_date < #endDate# + 1 ]]>
+		</isNotEmpty>
+		<isNotEmpty property="has_play_money" prepend="and">
+		<![CDATA[ wt.has_play_money = #has_play_money# ]]>
+		</isNotEmpty>
+	</dynamic>
+	</select>
+	
+	<!-- 报销单明显查询 -->
+	<select id="searchSingleDetailCount" parameterClass="singleDetail" resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(t.detail_id) from office.office_tb_form_detail t
+		where t.plan_id = #plan_id#
+	]]>
+	<dynamic>
+		<isNotEmpty property="cost_date" prepend="and">
+		<![CDATA[ t.cost_date = #cost_date# ]]>
+		</isNotEmpty>
+		<isNotEmpty property="cost_purpose" prepend="and">
+		<![CDATA[ t.cost_purpose like #cost_purpose,handler=wildcard# escape '\' ]]>
+		</isNotEmpty>
+	</dynamic>
+	</select>
+	
+	<select id="searchSingleDetailList" parameterClass="singleDetail" resultClass="singleDetail">
+		<include refid="global.paginationStart" />
+	<![CDATA[
+		select 	t.detail_id,
+       			t.plan_id,
+       			t.cost_type,
+       			r.item_name		cost_type_content,
+       			t.cost_date,
+       			t.cost_purpose,
+       			t.invoice_num,
+       			t.invoice_amount,
+       			t.cost_memo
+  		from office.office_tb_form_detail t, basis.basis_tb_dict r, basis.basis_tb_dict_type s
+ 		where t.plan_id = #plan_id#
+ 			and t.cost_type = r.item_value(+)
+   			and r.dict_type_id = s.dict_type_id
+   			and s.dict_type_value = 'costType'
+	]]>
+	<dynamic>
+		<isNotEmpty property="cost_date" prepend="and">
+		<![CDATA[ t.cost_date = #cost_date# ]]>
+		</isNotEmpty>
+		<isNotEmpty property="cost_purpose" prepend="and">
+		<![CDATA[ t.cost_purpose like #cost_purpose,handler=wildcard# escape '\' ]]>
+		</isNotEmpty>
+	</dynamic>
+	<include refid="global.paginationEnd" />
+	</select>
+	
+	
+	<!-- 查询项目或者部门  -->
+	<select id="searchWorkPlanCount" parameterClass="workPlan" resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(T.totalid) from
+		(select distinct wt.totalid, wt.title
+  			from office.office_tb_workplan_total wt
+  			left join office.office_tb_person p on wt.totalid = p.project_id
+ 			where p.status = 'Y'
+   			and wt.status = '1'
+   			and p.user_id = #pro_manager_id#) T
+		where 1=1
+	]]>
+	<dynamic>
+		<isNotEmpty property="title" prepend="and">
+		<![CDATA[ 
+			( T.title like #title,handler=wildcard# escape '\'
+			or T.totalid like #title,handler=wildcard# escape '\')
+		]]>
+		</isNotEmpty>
+	</dynamic>
+	</select>
+	
+	<select id="searchWorkPlan" parameterClass="workPlan" resultClass="workPlan">
+	<include refid="global.paginationStart" />
+	<![CDATA[
+		select T.* from 
+		(select distinct wt.totalid, wt.title
+  			from office.office_tb_workplan_total wt
+  			left join office.office_tb_person p on wt.totalid = p.project_id
+ 			where p.status = 'Y'
+   			and wt.status = '1'
+   			and p.user_id = #pro_manager_id#) T
+		where 1=1
+	]]>
+	<dynamic>
+		<isNotEmpty property="title" prepend="and">
+		<![CDATA[ 
+			( T.title like #title,handler=wildcard# escape '\'
+			or T.totalid like #title,handler=wildcard# escape '\')
+		]]>
+		</isNotEmpty>
+	</dynamic>
+	<![CDATA[ order by T.totalid ]]>
+	<include refid="global.paginationEnd" />
+	</select>
+
+	
+	<!-- 查询费用类型  -->	
+	<select id="searchCostTypeCount" parameterClass="cmsDict" resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(t.item_id)
+		from basis.basis_tb_dict t, basis.basis_tb_dict_type r
+		where t.dict_type_id = r.dict_type_id
+		and t.item_state = 'U'
+		and r.dict_type_value = #dictTypeValue#
+	]]>
+	<dynamic>
+		<isNotEmpty property="itemName" prepend="and">
+		<![CDATA[ 
+			( t.item_name like #itemName,handler=wildcard# escape '\' 
+			or t.item_id like #itemName,handler=wildcard# escape '\' 
+			or t.item_value like #itemName,handler=wildcard# escape '\'
+			)
+		]]>
+		</isNotEmpty>
+	</dynamic>
+	</select>
+		
+	<select id="searchCostTypeList" parameterClass="cmsDict" resultClass="cmsDict">
+	<include refid="global.paginationStart" />
+	<![CDATA[
+		select t.item_id itemId, t.item_name itemName, t.item_value itemValue
+		from basis.basis_tb_dict t, basis.basis_tb_dict_type r
+		where t.dict_type_id = r.dict_type_id
+		and t.item_state = 'U'
+		and r.dict_type_value = #dictTypeValue#
+	]]>
+	<dynamic>
+		<isNotEmpty property="itemName" prepend="and">
+		<![CDATA[ 
+			( t.item_name like #itemName,handler=wildcard# escape '\' 
+			or t.item_id like #itemName,handler=wildcard# escape '\' 
+			or t.item_value like #itemName,handler=wildcard# escape '\'
+			)
+		]]>
+		</isNotEmpty>
+	</dynamic>
+	<![CDATA[ order by t.item_value asc ]]>
+	<include refid="global.paginationEnd" />
+	</select>
+	
+	<select id="getStationIdByDetailId" parameterClass="java.lang.Long" resultClass="java.lang.String">
+	<![CDATA[
+		select cur_sta_id from workflow.workflow_tb_event_detail where event_dtl_id=#eventDetailId#
+	]]>
+	</select>
+	
+	<update id="updateSingleTotal" parameterClass="singleTotal">
+	<![CDATA[
+		update office.office_tb_form_total a 
+		set a.cost_org_id=#cost_org_id#,
+			a.cost_center=#cost_center#,
+			a.pay_type=#pay_type#,
+			a.total_money=#total_money#,
+			a.audit_money=#audit_money#,
+			a.memo=#memo#,
+			a.cost_center_type=#cost_center_type#
+		where a.transaction_id=#transaction_id#
+	]]>
+	</update>
+	
+	<update id="updateSingleDetail" parameterClass="singleDetail">
+	<![CDATA[
+		update office.office_tb_form_detail a 
+		set a.cost_type=#cost_type#,
+		a.cost_date=#cost_date#,
+		a.cost_purpose=#cost_purpose#,
+		a.invoice_num=#invoice_num#,
+		a.invoice_amount=#invoice_amount#,
+		a.audit_money=#audit_money#,
+		a.cost_memo=#cost_memo#
+		where a.detail_id=#detail_id#
+	]]>
+	</update>
+	
+	<update id="updateCostCenter" parameterClass="singleTotal">
+	<![CDATA[
+		update osap.act_ru_variable s set s.text_=#cost_center# where s.proc_inst_id_=#transaction_id# and s.name_='projectId'
+	]]>
+	</update>
+	
+	<select id="getPayeeInfoCount" parameterClass="payeeInfo" resultClass="java.lang.Integer">
+		<![CDATA[
+			select count(1) from office.office_tb_payee_info t where t.flag='Y'
+		]]>	
+		<dynamic>
+			<isNotEmpty property="payee" prepend="and">
+				<![CDATA[  t.payee like #payee,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="payAccount" prepend="and">
+				<![CDATA[  t.payaccount like #payAccount,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getPayeeInfoList" parameterClass="payeeInfo" resultClass="payeeInfo">
+		<include refid="global.paginationStart" />
+		<![CDATA[
+			select  t.id as id,
+					t.payee as payee,
+					t.payaccount as payAccount,
+					t.payarea as payArea,
+					t.paybank as payBank,
+					t.payareacode as payAreaCode,
+					t.paybankalias as payBankAlias,
+					t.paybankalicode as payBankAliCode,
+					t.paybankcode as payBankCode,
+					t.email as email
+			from office.office_tb_payee_info t where t.flag='Y'
+		]]>	
+		<dynamic>
+			<isNotEmpty property="payee" prepend="and">
+				<![CDATA[  t.payee like #payee,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="payAccount" prepend="and">
+				<![CDATA[  t.payaccount like #payAccount,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+		</dynamic>
+		<![CDATA[ order by t.id desc ]]>
+		<include refid="global.paginationEnd" />
+	</select>
+	
+	<insert id="addPayeeInfo" parameterClass="payeeInfo">
+		<selectKey resultClass="java.lang.Long" keyProperty="id">
+			<![CDATA[
+				select office.office_seq_payee_info.nextval as id from dual
+			]]>
+		</selectKey> 
+		<![CDATA[
+			insert into office.office_tb_payee_info(id, payee, payaccount, payarea, paybank, payareacode,
+			 	paybankalias, paybankalicode, paybankcode, email, flag, creator, createdate)
+			values(#id#, #payee#, #payAccount#, #payArea#, #payBank#, #payAreaCode#, #payBankAlias#, #payBankAliCode#,
+				#payBankCode#, #email#, 'Y', #creator#, sysdate)
+		]]>	
+	</insert>
+	
+	<update id="removePayeeInfo" parameterClass="java.util.HashMap">
+		<![CDATA[
+			update office.office_tb_payee_info t 
+			set t.flag='N',
+				t.modifier=#modifier#,
+				t.modifydate=sysdate					
+			where t.id=#id#
+		]]>
+	</update>
+	
+	<select id="getPayeeInfoById" parameterClass="java.lang.Long" resultClass="payeeInfo">
+		<![CDATA[
+			select  t.id as id,
+					t.payee as payee,
+					t.payaccount as payAccount,
+					t.payarea as payArea,
+					t.paybank as payBank,
+					t.payareacode as payAreaCode,
+					t.paybankalias as payBankAlias,
+					t.paybankalicode as payBankAliCode,
+					t.paybankcode as payBankCode,
+					t.email as email
+			from office.office_tb_payee_info t where t.flag='Y' and t.id=#id#
+		]]>
+	</select>
+	
+	<update id="modifyPayeeInfo" parameterClass="payeeInfo">
+		<![CDATA[
+			update office.office_tb_payee_info t 
+			set t.payee=#payee#,
+				t.payaccount=#payAccount#,
+				t.payarea=#payArea#,
+				t.paybank=#payBank#,
+				t.payareacode=#payAreaCode#,
+				t.paybankalias=#payBankAlias#,
+				t.paybankalicode=#payBankAliCode#,
+				t.paybankcode=#payBankCode#,
+				t.email=#email#,
+				t.modifier=#modifier#,
+				t.modifydate=sysdate	
+			where t.id=#id#
+		]]>
+	</update>
+	
+	<select id="getPayeeCount" parameterClass="payeeInfo" resultClass="java.lang.Integer">
+		<![CDATA[
+			select count(distinct t.payee)
+			from office.office_tb_payee_info t where t.flag='Y'
+		]]>
+		<dynamic>
+			<isNotEmpty property="searchStr" prepend="and">
+				<![CDATA[ 
+					( t.payee like #searchStr,handler=wildcard# escape '\'
+					or t.payAccount like #searchStr,handler=wildcard# escape '\')
+				]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getPayeeList" parameterClass="payeeInfo" resultClass="payeeInfo">
+		<include refid="global.paginationStart" />
+		<![CDATA[
+			select  distinct t.payee
+			from office.office_tb_payee_info t where t.flag='Y'
+		]]>
+		<dynamic>
+			<isNotEmpty property="searchStr" prepend="and">
+				<![CDATA[ 
+					( t.payee like #searchStr,handler=wildcard# escape '\'
+					or t.payAccount like #searchStr,handler=wildcard# escape '\')
+				]]>
+			</isNotEmpty>
+		</dynamic>
+		<include refid="global.paginationEnd" />
+	</select>
+	
+	<select id="getPayeeInfoCountByName" parameterClass="java.lang.String" resultClass="java.lang.Integer">
+		<![CDATA[
+			select count(1)
+			from office.office_tb_payee_info t where t.flag='Y' and t.payee=#userName#
+		]]>
+	</select>
+	
+	<select id="getDefaultPayee" parameterClass="java.lang.String" resultClass="payeeInfo">
+		<![CDATA[
+			select  t.id as id,
+					t.payee as payee,
+					t.payaccount as payAccount
+			from office.office_tb_payee_info t 
+			where t.id=(select max(a.id) from office.office_tb_payee_info a where a.flag='Y' and a.payee=#userName#)
+		]]>
+	</select>
+	
+	<select id="getPayAccountCount" parameterClass="payeeInfo" resultClass="java.lang.Integer">
+		<![CDATA[
+			select  count(1)
+			from office.office_tb_payee_info t where t.flag='Y'
+		]]>
+		<dynamic>
+			<isNotEmpty property="payee" prepend="and">
+				<![CDATA[ 
+					( t.payee like #payee,handler=wildcard# escape '\')
+				]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getPayAccountList" parameterClass="payeeInfo" resultClass="payeeInfo">
+		<![CDATA[
+			select  t.id as id,
+					t.payaccount as payAccount
+			from office.office_tb_payee_info t where t.flag='Y'
+		]]>
+		<dynamic>
+			<isNotEmpty property="payee" prepend="and">
+				<![CDATA[ 
+					( t.payee like #payee,handler=wildcard# escape '\')
+				]]>
+			</isNotEmpty>
+		</dynamic>
+		<![CDATA[ order by t.id desc ]]>
+	</select>
+	
+	<select id="getHisEventCount" parameterClass="processEventTotal" resultClass="java.lang.Integer">
+		<![CDATA[
+			select count(1) 
+			from workflow.workflow_tb_event_total t
+			where t.initator=#initator# and t.model_id='fix_bx' and t.status in (0,1,2)
+		]]>
+		<isNotEmpty property="eventTitle" prepend="and">
+			<![CDATA[ 
+				( t.event_id like #eventTitle,handler=wildcard# escape '\'
+				or t.event_title like #eventTitle,handler=wildcard# escape '\')
+			]]>
+		</isNotEmpty>
+	</select>
+	
+	<select id="getHisEventList" parameterClass="processEventTotal" resultClass="processEventTotal">
+		<include refid="global.paginationStart" />
+		<![CDATA[
+			select  t.event_id     eventId,
+					t.event_title  eventTitle,
+					t.creatdate   creatdate
+			from workflow.workflow_tb_event_total t
+			where t.initator=#initator# and t.model_id='fix_bx' and t.status in (0,1,2)
+		]]>
+		<isNotEmpty property="eventTitle" prepend="and">
+			<![CDATA[ 
+				( t.event_id like #eventTitle,handler=wildcard# escape '\'
+				or t.event_title like #eventTitle,handler=wildcard# escape '\')
+			]]>
+		</isNotEmpty>
+		<![CDATA[ order by t.creatdate desc ]]>
+		<include refid="global.paginationEnd" />
+	</select>
+	
+	<select id="getSingleDetailList" parameterClass="java.lang.String" resultClass="singleDetail">
+		<![CDATA[
+			select 	t.detail_id,
+       				t.plan_id,
+       				t.cost_type,
+       				r.item_name		cost_type_content,
+       				t.cost_date,
+       				t.cost_purpose,
+       				t.invoice_num,
+       				t.invoice_amount,
+       				t.cost_memo
+  			from office.office_tb_form_total o, office.office_tb_form_detail t, basis.basis_tb_dict r, basis.basis_tb_dict_type s
+ 			where o.plan_id = t.plan_id
+ 				and o.transaction_id=#transactionId#
+ 				and t.cost_type = r.item_value(+)
+   				and r.dict_type_id = s.dict_type_id
+   				and s.dict_type_value = 'costType'
+		]]>
+	</select>
+	
+	<update id="updateFinancialDocNum" parameterClass="java.util.HashMap">
+		<![CDATA[
+			update office.office_tb_form_total t set t.financial_doc_num=#financial_doc_num#
+			where t.transaction_id=#transaction_id#
+		]]>
+	</update>
+	
+	<select id="countSingleTotal" parameterClass="java.lang.String" resultClass="java.lang.Integer">
+		<![CDATA[
+			select count(1) from office.office_tb_form_total t 
+			where t.transaction_id=#transaction_id#
+		]]>
+	</select>
+	
+	<update id="batchUpdateFinancialDocNum" parameterClass="singleTotal">
+		<![CDATA[
+			update office.office_tb_form_total t set t.financial_doc_num=#financial_doc_num#
+			where t.transaction_id=#transaction_id#
+		]]>
+	</update>
+	
+	<select id="getAuditorListByEventId" parameterClass="java.lang.Long" resultClass="proEventDetail">
+		<![CDATA[
+			select a.cur_user_id as curUserId,
+       			p.emp_name as curUserName
+ 			from workflow.workflow_tb_event_detail a
+  			left join basis.basis_tb_salesemp_info p on a.cur_user_id = p.emp_id
+			where a.event_dtl_id in (select min(t.event_dtl_id)
+                            from workflow.workflow_tb_event_detail t
+                           where t.event_id = #transaction_id#
+                             and t.operation <> 9
+                             and t.cur_sta_id <> 'start'
+                           group by t.cur_user_id)
+ 						order by a.event_dtl_id
+		]]>
+	</select>
+	
+	<select id="getReimburDetailCount" parameterClass="singleDetail" resultClass="java.lang.Integer">
+		<![CDATA[
+			select count(1) 
+			from (select  a.cost_type,
+						r.item_name			cost_type_content,
+						a.cost_date,
+						a.cost_purpose,
+						a.invoice_num,
+						a.invoice_amount,
+						a.audit_money,
+						a.cost_memo,
+						b.transaction_id,
+						b.pay_ee			payee,
+						c.title				project,
+						c.pro_manager		project_manager,
+						t.last_modify  		financial_operate_date,
+						v.status,
+						a.detail_id
+				from office.office_tb_form_detail a 
+					left join office.office_tb_form_total b on a.plan_id = b.plan_id
+					left join office.office_tb_workplan_total c on b.cost_center = c.totalid
+					left join basis.basis_tb_dict r on a.cost_type = r.item_value
+					left join basis.basis_tb_dict_type s on r.dict_type_id = s.dict_type_id
+					left join workflow.workflow_tb_event_total v on (b.transaction_id = v.event_id)
+					left join workflow.workflow_tb_event_detail t on (b.transaction_id = t.event_id and t.cur_sta_id = 'financial' and t.operation='1')
+				where s.dict_type_value = 'costType' and v.status in (0,1,2)) u where 1=1
+		]]>
+		<dynamic>
+			<isNotEmpty property="transaction_id" prepend="and">
+				<![CDATA[ u.transaction_id like '%'||#transaction_id#||'%' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="payee" prepend="and">
+				<![CDATA[ u.payee like #payee,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="project" prepend="and">
+				<![CDATA[ u.project like #project,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="cost_type_content" prepend="and">
+				<![CDATA[ u.cost_type_content like #cost_type_content,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="status" prepend="and">
+				<![CDATA[ u.status like #status,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="start_date" prepend="and">
+				<![CDATA[ u.financial_operate_date > #start_date# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="end_date" prepend="and">
+				<![CDATA[ u.financial_operate_date < #end_date# + 1 ]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getReimburDetailList" parameterClass="singleDetail" resultClass="singleDetail">
+		<include refid="global.paginationStart" />
+		<![CDATA[
+			select u.* 
+			from (select  a.cost_type,
+						r.item_name			cost_type_content,
+						a.cost_date,
+						a.cost_purpose,
+						a.invoice_num,
+						a.invoice_amount,
+						a.audit_money,
+						a.cost_memo,
+						b.transaction_id,
+						b.pay_ee			payee,
+						c.title				project,
+						c.pro_manager		project_manager,
+						t.last_modify  		financial_operate_date,
+						v.status,
+						a.detail_id
+				from office.office_tb_form_detail a 
+					left join office.office_tb_form_total b on a.plan_id = b.plan_id
+					left join office.office_tb_workplan_total c on b.cost_center = c.totalid
+					left join basis.basis_tb_dict r on a.cost_type = r.item_value
+					left join basis.basis_tb_dict_type s on r.dict_type_id = s.dict_type_id
+					left join workflow.workflow_tb_event_total v on (b.transaction_id = v.event_id)
+					left join workflow.workflow_tb_event_detail t on (b.transaction_id = t.event_id and t.cur_sta_id = 'financial' and t.operation='1')
+				where s.dict_type_value = 'costType' and v.status in (0,1,2)) u where 1=1
+		]]>
+		<dynamic>
+			<isNotEmpty property="transaction_id" prepend="and">
+				<![CDATA[ u.transaction_id like '%'||#transaction_id#||'%' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="payee" prepend="and">
+				<![CDATA[ u.payee like #payee,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="project" prepend="and">
+				<![CDATA[ u.project like #project,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="cost_type_content" prepend="and">
+				<![CDATA[ u.cost_type_content like #cost_type_content,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="status" prepend="and">
+				<![CDATA[ u.status like #status,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="start_date" prepend="and">
+				<![CDATA[ u.financial_operate_date > #start_date# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="end_date" prepend="and">
+				<![CDATA[ u.financial_operate_date < #end_date# + 1 ]]>
+			</isNotEmpty>
+		</dynamic>
+		<![CDATA[ order by u.transaction_id desc, u.detail_id desc ]]>
+		<include refid="global.paginationEnd" />
+	</select>
+	
+	<select id="getReimburDetailListNoPage" parameterClass="singleDetail" resultClass="singleDetail">
+		<![CDATA[
+			select u.* 
+			from (select  a.cost_type,
+						r.item_name			cost_type_content,
+						a.cost_date,
+						a.cost_purpose,
+						a.invoice_num,
+						a.invoice_amount,
+						a.audit_money,
+						a.cost_memo,
+						b.transaction_id,
+						b.pay_ee			payee,
+						c.title				project,
+						c.pro_manager		project_manager,
+						t.last_modify  		financial_operate_date,
+						v.status,
+						a.detail_id
+				from office.office_tb_form_detail a 
+					left join office.office_tb_form_total b on a.plan_id = b.plan_id
+					left join office.office_tb_workplan_total c on b.cost_center = c.totalid
+					left join basis.basis_tb_dict r on a.cost_type = r.item_value
+					left join basis.basis_tb_dict_type s on r.dict_type_id = s.dict_type_id
+					left join workflow.workflow_tb_event_total v on (b.transaction_id = v.event_id)
+					left join workflow.workflow_tb_event_detail t on (b.transaction_id = t.event_id and t.cur_sta_id = 'financial' and t.operation='1')
+				where s.dict_type_value = 'costType' and v.status in (0,1,2)) u where 1=1
+		]]>
+		<dynamic>
+			<isNotEmpty property="transaction_id" prepend="and">
+				<![CDATA[ u.transaction_id like '%'||#transaction_id#||'%' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="payee" prepend="and">
+				<![CDATA[ u.payee like #payee,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="project" prepend="and">
+				<![CDATA[ u.project like #project,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="cost_type_content" prepend="and">
+				<![CDATA[ u.cost_type_content like #cost_type_content,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="status" prepend="and">
+				<![CDATA[ u.status like #status,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="start_date" prepend="and">
+				<![CDATA[ u.financial_operate_date >= #start_date# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="end_date" prepend="and">
+				<![CDATA[ u.financial_operate_date < #end_date# + 1 ]]>
+			</isNotEmpty>
+		</dynamic>
+		<![CDATA[ order by u.transaction_id desc, u.detail_id desc ]]>
+	</select>
+	
+	<select id="getDefaultCompanyCode" parameterClass="java.lang.Long" resultClass="java.lang.String">
+	<![CDATA[
+		select t.bpmcompanycode
+		 from office.office_tb_payee_info t 
+		 where t.id=(select max(a.id) from office.office_tb_payee_info a where a.flag='Y' and a.userid=#empId#)
+	]]>
+	</select>
+	
+	<select id="getSalesOrgCount" parameterClass="java.lang.String" resultClass="java.lang.Integer">
+		<![CDATA[
+			select count(1)
+  			from dual
+ 			where 51235 in (select a.org_id
+            	from basis.basis_tb_org a
+                start with a.org_id = #orgId#
+                connect by prior a.org_parent_id = a.org_id)
+		]]>
+	</select>
+	
+</sqlMap>

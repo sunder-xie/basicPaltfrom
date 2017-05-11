@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<body class="easyui-layout">
+		<form method="post" id="aForm"  target="hideFrame">
+			<div region="center" class="easyui-panel" title="信息维护" data-options="iconCls:'icon-edit'">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1">
+			<tr>
+			  <td class="head" noWrap>
+					 栏目名称<FONT color="#ff0000">*</FONT>	</td>
+			  <td class="even" noWrap>
+			  <input type="text" id="totalName" name="totalName" style="width:150px;" >
+			 </td>
+		    </tr>
+			<tr>
+				<td class="head" noWrap>文件上传:</td>
+				<td>
+					<input type="radio"  name="totalUploadSign" value="Y" />是
+					<input type="radio" name="totalUploadSign" value="N" checked />否
+				</td>			
+			</tr>
+			#if($!{totalShow_flag} == "true")
+			<tr >
+				<td class="head" noWrap>图片显示:</td>
+				<td>
+					<input type="radio" name="totalShow" value="Y"   />是
+					<input type="radio" name="totalShow" value="N"   checked />否
+				</td>
+			</tr>
+			#end
+			<tr >
+				<td class="head" noWrap>
+					跑马灯显示:
+				</td>
+				<td >
+ 					<label><input type="radio" name="totalSign" value="Y">是</label>
+					<label><input type="radio" name="totalSign" value="N" checked="checked">否</label>
+				</td>
+			</tr>
+			<tr >
+				<td class="head" noWrap>
+					排序码<FONT color="#ff0000">*</FONT>											</td>
+				<td >
+					<input class="easyui-numberspinner" data-options="min:10,required:true" missingMessage="排序码请输入10以上的数！"  id="totalCode" name="totalCode"  style="width:150px;"/>
+				</td>
+			</tr>
+		    </table>
+			</div>
+			<div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+				<a class="easyui-linkbutton" icon="icon-ok" href="javascript:createNewsTotal()">确定</a>
+				<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:close()">取消</a>
+			</div>
+		
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+		<div id="maintNews"/>
+	</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/news/createNewsTotal.js"></script>
+</html>

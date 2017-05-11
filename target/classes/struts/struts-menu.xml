@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="menu" extends="kintiger-default">
+		<action name="menuAjaxAction" class="menuAjaxAction"></action>
+		<action name="menuAction" class="menuAction">
+			<result name="searchMenu">/platform/menu/searchMenu.vm</result>
+			<result name="createPrepare">/platform/menu/createMenu.vm</result>
+			<result name="updatePrepare">/platform/menu/searchMenuDetail.vm</result>
+			<result name="searchSelectedMenu4Role">/platform/menu/searchSelectedMenu4Role.vm</result>
+			<result name="searchSelectedMenu4Add">/platform/menu/searchSelectedMenu4Add.vm</result>
+			<result type="redirect" name="menuRedirect">${redirectUrl}</result>
+			<result name="menuRedirect2post">/platform/menu/ssoPost.vm</result>
+			<result name="ssoPre">/platform/menu/sso.vm</result>
+			<result name="ssoCreatePre">/platform/menu/createSso.vm</result>
+
+		</action>
+	</package>
+</struts>

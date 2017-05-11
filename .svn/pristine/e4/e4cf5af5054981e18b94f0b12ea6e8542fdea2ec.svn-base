@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+	#CSSM(["easyui","style"])
+	#JSM(["jquery", "easyui"])
+	#JS_ENV_VAL()
+</head>
+<style>
+.nearRight {
+	text-align: right;
+	padding-right: 25px;
+}
+</style>
+<body>
+	<form method="post" target="hideFrame">
+		<div id="p_search" class="easyui-panel" title="参数列表"
+			style="padding: 2px; background: #fafafa;" data-options="collapsible:true,iconCls:'icon-search'">
+			<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="1">
+				<tr id="1">
+					<td class="nearRight">销售区域(必填)：</td>
+					<td>
+						<input type="text" name='cont_1' readonly="readonly" />
+						<input type="hidden" name='coni_1' id="org_id" />
+						<input type="button" name='bot_1' onclick="newtree2()" value="选择" />
+					</td>
+				</tr>
+				<tr id="2">
+					<td class="nearRight">客户编号：</td>
+					<td>
+						<input type="text" name='cont_2' readonly="readonly" />
+                       	<input type="hidden" name='coni_2' readonly="readonly" id="kunnr"/>
+                       	<input type="button" name='bot_2' onclick="newtree1()" value="选择" />
+					</td>
+				</tr>
+				<tr id="4">
+					<td class="nearRight">日期：</td>
+					<td>
+						<input type="text" size="20" onClick="WdatePicker()" class="Wdate" 
+							name="cont_4" onchange="ac(this.value,4)" id="cont_4"/>
+						<input type="hidden" name='coni_4' readonly="readonly" id="v_date" />
+					</td>
+				</tr>
+				<tr id="8">
+					<td class="nearRight">年度：</td>
+					<td>
+						#set($yearList=["2012","2013","2014","2015","2016","2017"])
+						<select id='cont_8' size=1 name='cont_8' onchange="ac(this.value, 8)"> 
+							#foreach($y in $!{yearList}) 
+							#if($y == $!{year})
+							<option value="$y" selected=true>$y</option> 
+							#else
+							<option value="$y">$y</option> 
+							#end #end
+						</select>
+						<input type="hidden" name='coni_8' readonly="readonly" id="year"/>
+					</td>
+				</tr>
+				<tr id="16">
+					<td class="nearRight">月份：</td>
+					<td>
+						#set($monthList=["01","02","03","04","05","06","07","08","09","10","11","12"])
+						<select id='cont_16' size=1 name='cont_16' onchange="ac(this.value,16)"> 
+							#foreach($m in $!{monthList})
+							#if($m == $!{month})
+							<option value="$m" selected=true>$m</option> 
+							#else
+							<option value="$m">$m</option> 
+							#end #end
+						</select>
+						<input type="hidden" name='coni_16' readonly="readonly" id="month"/>
+					</td>
+				</tr>
+				<tr id="32">
+					<td class="nearRight">拜访人：</td>
+					<td>
+						<input type="text" name='coni_32' id="emp_name" />
+					</td>
+				</tr>
+				<tr id="64">
+					<td class="nearRight">日期：</td>
+					<td>
+						<input type="text" name='coni_64' id="v_date2" />
+						(日期格式：201603)
+					</td>
+				</tr>
+				<tr>
+					<td class="nearRight"><input type="button" onclick="viewFineReport();" value="查看报表" /></td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+	</form>
+  <iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+  <div id="frreport" style="display: none">$!{frreport}</div>
+  <div id="right" style="display: none">$!{right}</div>
+  <div id="pid" style="display: none">$!{pid}</div>
+  <div id="maintWindow"/>
+</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/boform/createFineReportQuery.js?version=20160921"></script>
+</html>

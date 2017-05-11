@@ -1,0 +1,9 @@
+resource.loader =  webapp
+directive.foreach.counter.initial.value = 0
+directive.foreach.counter.name = velocityCount
+runtime.log.logsystem.class = org.apache.velocity.runtime.log.SimpleLog4JLogSystem
+input.encoding = GBK
+output.encoding = GBK
+velocimacro.library.autoreload = true
+webapp.resource.loader.cache = false
+webapp.resource.loader.class = org.apache.velocity.tools.view.servlet.WebappLoader

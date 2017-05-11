@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	
+	</head>
+	<body>
+		<form method="post" enctype="multipart/form-data" target="hideFrame3">
+			&nbsp;&nbsp;<input type="file" name="upload" id="uploadImgFile"/>
+			<br/><br/>
+			&nbsp;&nbsp;<input type="button" value="上传到服务器" onclick="javascript:uploadImage();" />
+		</form>	
+	</body>
+	<iframe id="hideFrame3" name="hideFrame3"  style="height: 0; width: 0"></iframe>
+	<script type="text/javascript" src="$!{env.imgUrl}/js/platform/file/uploadImage.js"></script>
+</html>

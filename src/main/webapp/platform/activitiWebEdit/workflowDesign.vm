@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		  <title>Process Diagram</title>
+		  #JS_ENV_VAL()	
+	#WORKFLOW()
+</head>
+
+<body id="designer" class="easyui-layout">
+	<div region="west" split="true" iconCls="palette-icon" title="节点面板" style="width:150px;">
+		<div class="easyui-accordion" fit="true" border="false">
+<!--				<div id="connection" title="Connection" iconCls="palette-menu-icon" class="palette-menu">-->
+<!--					<a href="#" class="easyui-linkbutton" plain="true" iconCls="sequence-flow-icon">SequenceFlow</a><br>-->
+<!--				</div>-->
+				<div id="event" title="节点" iconCls="palette-menu-icon" class="palette-menu">
+					<a href="#" class="easyui-linkbutton" plain="true" iconCls="start-event-icon" wfModel="Start" >开始</a><br>
+					<a href="#" class="easyui-linkbutton" plain="true" iconCls="end-event-icon" wfModel="End">结束</a><br>
+					<a href="#" class="easyui-linkbutton" plain="true" iconCls="user-task-icon" wfModel="UserTask">任务</a><br>
+					<a href="#" class="easyui-linkbutton" plain="true" iconCls="exclusive-gateway-icon" wfModel="ExclusiveGateway" shape="$!{env.imgUrl}/images/platform/activitiWebEdit/icons/type.gateway.exclusive.png">
+					分支</a><br>
+				</div>
+				<!--
+				<div id="task" title="Task" iconCls="palette-menu-icon" selected="true" class="palette-menu">
+					
+					
+				</div>
+			-->
+		</div>
+	</div>
+	<div id="process-panel" region="center" split="true"  iconCls="process-icon" title="流程设计面板">
+		
+				<div id="process-definition-tab">
+							<div id="designer-area" title="流程设计" style="POSITION: absolute;width:100%;height:100%;padding: 0;border: none;overflow:auto;">
+								<div id="paintarea" style="POSITION: absolute;WIDTH: 3000px; HEIGHT: 3000px" ></div>
+							</div>
+							<div id="xml-area" title="XML" style="width:100%;height:100%;overflow:hidden;overflow-x:hidden;overflow-y:hidden;">
+								<textarea id="descriptorarea" rows="38" style="width: 100%;height:100%;padding: 0;border: none;" readonly="readonly"></textarea>
+							</div>
+				</div>
+	</div>
+	<div id="properties-panel" region="east" split="true" iconCls="properties-icon" title="Properties" style="width:300px;" >
+	</div>
+	
+	<!-- toolbar -->
+	<div id="toolbar-panel" region="north" border="false" style="height:36px;background:#E1F0F2;">
+			<form method="post" target="hideFrame">
+				<input type="hidden" id="xmlString" name="xmlString"></input>
+				<input type="hidden" id="processname" name="processname"></input>
+        		<div style="background:#E1F0F2;padding:5px;">
+        <!--			<a href="javascript:void(0)" id="sb1" class="easyui-splitbutton" menu="#edit-menu" iconCls="icon-edit">Edit</a>-->
+        			<a href="javascript:void(0)" id="sb2" class="easyui-splitbutton" menu="#mm2" iconCls="icon-ok" onclick="javascript:submit_process()">发布流程</a>
+        <!--			<a href="javascript:void(0)" id="mb2" class="easyui-menubutton" menu="#xml/diagram" onclick="viewXMLOrDiagram()">XML/Diagram</a>
+        			<a href="javascript:void(0)" id="mb3" class="easyui-menubutton" menu="#mm3" iconCls="icon-help">Help</a>-->
+        		</div>
+            </form>
+		<div id="edit-menu" style="width:150px;">
+		<div iconCls="icon-undo" onclick="undo()">Undo</div>
+		<div iconCls="icon-redo" onclick="redo()">Redo</div>
+		<div class="menu-sep"></div>
+<!--		<div onclick="openProcessDef()">Open</div>-->
+		<div iconCls="icon-save" onclick="saveProcessDef()">Save</div>
+		<div><a href="#" onclick="exportProcessDef(this)">Export</a></div>
+		</div>
+		<div id="mm3" style="width:150px;">
+			<div>Help</div>
+			<div class="menu-sep"></div>
+			<div>About</div>
+		</div>
+	</div>
+	<!-- task context menu -->
+	<div id="task-context-menu" class="easyui-menu" style="width:120px;">
+		<div id="properties-task-context-menu" iconCls="properties-icon">查看属性</div>
+
+		<div id="delete-task-context-menu" iconCls="icon-remove">删除节点</div>
+	</div>
+	<!-- listener configuration window -->
+	<div id="listener-win" title="Listener Configuration" style="width:750px;height:500px;">
+	</div>
+	<!-- candidate configuration window -->
+	<div id="task-candidate-win" title="" style="width:750px;height:500px;">
+	</div>
+			<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+			 <div id="maintWindow"/> 
+			 <div id="taskWindow"/>
+			 <iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+</body>
+		<!--自定义流程js -->
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/activitiWebEdit/workflow_design.js"></script>
+
+</html>
+<script type="text/javascript">
+	createCanvas(false);
+
+</script>

@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+#JSM(["jquery"])
+#JS_ENV_VAL()
+<link href="$!{env.imgUrl}/css/main.css" rel="stylesheet" type="text/css" />
+<link href="$!{env.imgUrl}/css/Overleaf.css" rel="stylesheet" type="text/css" />
+<title></title>
+<style type="text/css">
+<!--
+.Microsoft {
+	font-family:微软雅黑;
+}
+.Arial {
+	font-family:宋体;
+	
+
+}
+
+div{
+ float:none;
+}
+
+#NewsDetail{
+ width:892px;overflow:hidden;
+ padding-bottom:35px;
+}
+#NewsDetailUl,#NewsDetailTitle,#NewsDetailTime,#NewsDetailContent,.pagenext
+{
+ width:862px;
+}
+#NewsDetailContent
+{
+	padding-bottom:35px;
+}
+ul.pagenext
+{
+margin:0px auto;
+text-align:center;
+line-height:23px;
+margin-top:10px;
+padding-top:15px;
+border-top:1px dashed #d2d2d2
+}
+ul.pagenext li
+{
+text-align:left;
+width:862px;
+color:#000000;
+display:block;
+}
+
+.STYLE1 {
+	color: #FF0000;
+	font-family: "宋体";
+	font-size: 13px;
+}
+-->
+</style>
+
+
+</head>
+<body style="background-color:#EAF2FF;">
+<input type="hidden" id="recordId" name="recordId" value="$!{recordId}"/>
+<div id="TopBg">
+  <!--top-->
+ 
+  <ul id="MenuAll">
+   
+  </ul>
+</div>
+<div class="MainAll Normal">
+  <!--main-->
+  <div class="MainAll">
+  <div id="NewsDetail" class="Arial">
+	<ul id="NewsDetailUl">
+		<li id="NewsDetailTitle">$!{lanNewsDelailbean.delail_title}</li>
+		<li id="NewsDetailTime">
+		<span class="STYLE1">发布者：</span>$!{lanNewsDelailbean.delail_operator}　　
+		<span class="STYLE1">发布日期：</span>$!date.format('yyyy-MM-dd HH:mm',$!{lanNewsDelailbean.detail_date}) 
+		<span class="STYLE1">预览数：</span>$!{lanNewsDelailbean.clicks_ratio}
+
+		</li>
+        <li id="NewsDetailContent">$!{lanNewsDelailbean.delail_content}</li>
+		#if($!{upload_sign} == "Y")
+			#if($!{totalShow}=='Y')
+		<span class="STYLE1">图片浏览：</span>		
+			<li id="NewsDetailContent">
+		　　#foreach($lanNewsFile in $lanNewsFileList)
+			<img src='$!{lanNewsFile.news_file_url}' title="$!{lanNewsFile.news_file_name}" align="absMiddle" width="400px"/>
+			#end
+			</li>
+			#else
+ 		<span class="STYLE1">附件下载：</span>
+			<li id="NewsDetailContent">
+		　　#foreach($lanNewsFile in $lanNewsFileList)
+			<a href="$!{lanNewsFile.news_file_url}"  target="_blank">$!{lanNewsFile.news_file_name}</a>
+			#end
+			</li>
+			#end
+		#end
+    </ul>
+</div>
+
+  </div>
+</div>
+<div id="BotBg">
+  <div id="Copyright" class="Normal">
+	Copyright (c)2013 杭州剑齿虎信息科技有限公司  All rights reserved.
+  </div>
+</div>
+</body>
+<script type="text/javascript">   
+    window.onunload = onunload_handler;   
+    function onunload_handler(){   
+    $.
+		ajax({
+			type : "post",
+			url : appUrl
+					+ '/newsAction!recordScanTime.jspa?recordId='+$("#recordId").val()
+		});
+    }   
+</script>   
+</html>

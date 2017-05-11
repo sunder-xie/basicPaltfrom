@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body class="easyui-layout">
+		<!-- 查看角色 -->
+	<form method="post" target="hideFrame">
+			<div id="v_search" region="center" class="easyui-panel" title="查询条件" data-options="iconCls:'icon-edit'">
+				<div align="center">
+					 <label for="con">角色ID</label>
+					<input type="text" id="s_role_id" name="s_role_id" ></input>
+                     
+					 <label for="con">角色名称</label>
+					<input type="text" id="s_role_name" name="s_role_name" ></input>
+                     <a id="search_role" href="javascript:s_role_search();"
+						class="easyui-linkbutton" data-options="iconCls:'icon-search'"
+						>查询</a>
+				</div>
+			<table id="role_list"></table>
+			
+			</div>
+	</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+	</body>
+<script type="text/javascript">
+var conpointId = '$!{conpointId}';
+
+</script>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/role/searchRole4Config.js"></script>
+</html>

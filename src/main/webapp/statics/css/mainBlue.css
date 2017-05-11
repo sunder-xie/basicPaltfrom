@@ -1,0 +1,18 @@
+@charset "utf-8";
+
+a:link,a:visited{
+	color:#575757;
+	text-decoration:none;
+}
+
+a font {
+	color: #000;
+}
+
+.tabs-header {
+	background: -moz-linear-gradient(top, #FFF, #EFF8FF);
+}
+
+.menutree {
+	background-color: #FFF;
+}

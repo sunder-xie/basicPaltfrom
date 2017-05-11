@@ -1,0 +1,1079 @@
+
+/*=====OverleaColumn======*/
+#OverleaColumn{
+	width:212px;
+	height:auto;
+	background-color:#ffffff;
+	border-left:1px solid #cfcfcf;
+	border-right:1px solid #cfcfcf;
+	border-bottom:1px solid #cfcfcf;
+}
+/*=====Left Navigation======*/
+#LeftNav{
+	width:210px;
+	height:auto;
+	padding:1px;
+	margin-bottom:10px;
+	background-color:#ffffff;
+	border-left:1px solid #cfcfcf;
+	border-right:1px solid #cfcfcf;
+	border-bottom:1px solid #cfcfcf;
+}
+.LeftNavLi{
+	width:145px;
+	height:28px;
+	float:left;
+	padding-left:65px;
+	background:url(../images/LeftNavBg.gif) repeat;
+}
+.LeftNavIcon{
+	width:14px;
+	height:auto;
+	float:left;
+	padding-top:9px;
+}
+.LeftNav{
+	width:120px;
+	height:auto;
+	float:left;
+	color:#d11d1a;
+	padding-top:8px;
+	font-weight:bold;
+}
+/*=====New Recommended======*/
+#NewRec{
+	width:392px;
+	height:277px;
+	padding:2px;
+	background-color:#ffffff;
+	border-top:1px solid #cfcfcf;
+	border-left:1px solid #cfcfcf;
+	border-bottom:1px solid #cfcfcf;
+}
+#NewRecBg{
+	width:370px;
+	height:235px;
+	padding-top:41px;
+	padding-left:22px;
+	background:url(../images/NewReBg.gif) repeat;
+}
+#NewRecPic{
+	width:178px;
+	height:auto;
+	padding-top:16px;
+}
+#NewRecName{
+	width:170px;
+	height:38px;
+	color:#d11d1a;
+	font-size:22px;
+	line-height:38px;
+	font-weight:bold;
+}
+#NewRecContent{
+	width:170px;
+	height:auto;
+	color:#5d5d5d;
+	line-height:20px;
+}
+#NewRecDw{ 
+	position:absolute;
+	top:-1px;
+	left:-1px;
+}
+/*=====Right272======*/
+.Right272{
+	width:272px;
+	height:auto;
+}
+/*=====News270======*/
+.News270{
+	width:270px;
+	height:241px;
+	padding-top:10px;
+	padding-bottom:2px;
+	background-color:#ffffff;
+}
+.News270Li{
+	background:url(../images/NewsIcon.gif) no-repeat;
+	width:250px;
+	height:auto;
+	float:none;
+	text-indent:16px;
+	line-height:24px;
+	text-align:left;
+	margin:0px auto;
+	background-position:left center;
+	border-bottom:1px solid #f9e7e9;
+}
+/*=====Survey======*/
+.OtherSurveyLi{
+	background:url(../images/NewsIcon.gif) no-repeat;
+	width:250px;
+	height:auto;
+	float:none;
+	text-indent:16px;
+	line-height:29px;
+	text-align:left;
+	margin:0px auto;
+	background-position:left center;
+	border-bottom:1px solid #f9e7e9;
+}
+/*=====Bulletin======*/
+#Bulletin{
+	width:212px;
+	height:262px;
+	padding-top:14px;
+	background-color:#ffffff;
+	border-left:1px solid #cfcfcf;
+	border-right:1px solid #cfcfcf;
+	border-bottom:1px solid #cfcfcf;
+}
+.BulletinGm{
+	width:182px;
+	height:auto;
+	float:none;
+	color:#000000;
+	line-height:22px;
+	margin:0px auto 5px auto;
+}
+.BulletinButton{
+	width:94px;
+	height:19px;
+	border:0px;
+	color:#FFFFFF;
+	font-size:12px;
+	cursor:pointer;
+	line-height:17px;
+	padding-left:7px;
+	text-align:left;
+	vertical-align:middle;
+	background:url(../images/DetailBg.gif) no-repeat;
+}
+/*=====New News======*/
+#NewNews{
+	width:652px;
+	height:auto;
+	background-color:#ffffff;
+	padding:15px 0px 15px 15px;
+	border-left:1px solid #cfcfcf;
+	border-right:1px solid #cfcfcf;
+	border-bottom:1px solid #cfcfcf;
+}
+.NewNews{
+	width:322px;
+	height:auto;
+}
+#NewNewsH1{
+	width:322px;
+	height:22px;
+	color:#d11d1a;
+	font-size:14px;
+	font-weight:bold;
+}
+#NewNewsH3{
+	width:322px;
+	height:auto;
+	text-align:right;
+	padding-bottom:10px;
+	margin-bottom:5px;
+	border-bottom:1px dotted #cfcfcf;
+}
+.NewNewsLi{
+	background:url(../images/NewsIcon.gif) no-repeat;
+	width:322px;
+	height:auto;
+	float:none;
+	text-indent:16px;
+	line-height:26px;
+	text-align:left;
+	margin:0px auto;
+	background-position:left center;
+	border-bottom:1px solid #f9e7e9;
+}
+/*=====Overleaf Media News======*/
+#OverMediaNews{
+	width:333px;
+	height:auto;
+	border-left:1px solid #cfcfcf;
+	border-right:1px solid #cfcfcf;
+	border-bottom:1px solid #cfcfcf;
+}
+/*=====Industry News======*/
+#IndustryNews{
+	width:333px;
+	height:auto;
+	border-right:1px solid #cfcfcf;
+	border-bottom:1px solid #cfcfcf;
+}
+/*=====Other News======*/
+.OtherNews{
+	width:333px;
+	height:360px;
+	padding-top:3px;
+	padding-bottom:5px;
+}
+.OtherNewsLi{
+	background:url(../images/NewsIcon.gif) no-repeat;
+	width:311px;
+	height:auto;
+	float:none;
+	text-indent:16px;
+	line-height:29px;
+	text-align:left;
+	margin:0px auto;
+	background-position:left center;
+	border-bottom:1px solid #f9e7e9;
+}
+/*=====Society Duty======*/
+#SocietyDuty{
+	width:212px;
+	height:auto;
+	border:1px solid #cfcfcf;
+	background-color:#ffffff;
+}
+#SociDutyPic{
+	width:188px;
+	height:auto;
+	padding:12px;
+}
+#SociDutyIntr{
+	width:178px;
+	height:auto;
+	float:none;
+	color:#d11d1a;
+	font-size:14px;
+	line-height:24px;
+	margin:0px auto;
+	font-weight:bold;
+	padding-left:10px;
+	padding-bottom:5px;
+}
+/*=====Charity======*/
+.Charity{
+	width:212px;
+	height:auto;
+	padding-top:3px;
+	padding-bottom:8px;
+	background-color:#ffffff;
+}
+#RightCharity{
+	width:667px;
+	height:auto;
+	padding-top:6px;
+	padding-bottom:12px;
+	background-color:#ffffff;
+	border-left:1px solid #cfcfcf;
+	border-right:1px solid #cfcfcf;
+	border-bottom:1px solid #cfcfcf;
+}
+.RightCharityLi{
+	background:url(../images/NewsIcon.gif) no-repeat;
+	width:632px;
+	height:auto;
+	float:none;
+	text-indent:16px;
+	line-height:46px;
+	text-align:left;
+	margin:0px auto;
+	background-position:left center;
+	border-bottom:1px dotted #cfcfcf;
+}
+/*=====CEO Message======*/
+#CEOMessage{
+	width:659px;
+	height:auto;
+	padding:4px;
+	margin-bottom:10px;
+	border:1px solid #cfcfcf;
+	background-color:#ffffff;
+}
+#CEOMessageBg{
+	width:629px;
+	height:203px;
+	padding-top:20px;
+	padding-left:30px;
+	background:url(../images/CEOMessageBg.gif) repeat;
+}
+.CEOMesGm{
+	width:448px;
+	height:auto;
+	line-height:24px;
+	padding-right:20px;
+}
+#Message{
+	width:468px;
+	height:auto;
+}
+#MessagePic{
+	width:143px;
+	height:173px;
+}
+/*=====Overleaf Product======*/
+#OverleafProduct{
+	width:396px;
+	height:auto;
+	background-color:#ffffff;
+	border-top:1px solid #cfcfcf;
+	border-left:1px solid #cfcfcf;
+	border-right:1px solid #cfcfcf;
+}
+.ProductList{
+	width:386px;
+	height:auto;
+	padding:11px 10px 10px 0px;
+	border-bottom:1px solid #cfcfcf;
+}
+.ProductPic{
+	width:96px;
+	height:auto;
+	text-align:center;
+}
+.Producth1{
+	width:278px;
+	height:auto;
+	color:#ba0821;
+	line-height:20px;
+	font-weight:bold;
+}
+.Producth2{
+	width:278px;
+	height:auto;
+	line-height:20px;
+}
+.Producth3{
+	width:278px;
+	height:auto;
+	line-height:20px;
+	text-align:right;
+}
+/*=====Health Tips======*/
+#HealthTips{
+	width:270px;
+	height:435px;
+	background-color:#ffffff;
+	border-top:1px solid #cfcfcf;
+	border-right:1px solid #cfcfcf;
+	border-bottom:1px solid #cfcfcf;
+}
+#HealthTipsUl{
+	width:270px;
+	height:auto;
+	padding-top:5px;
+	padding-bottom:6px;
+}
+.HealthTipsLi{
+	background:url(../images/NewsIcon.gif) no-repeat;
+	width:250px;
+	height:auto;
+	float:none;
+	text-indent:16px;
+	line-height:32px;
+	text-align:left;
+	margin:0px auto;
+	background-position:left center;
+	border-bottom:1px solid #f9e7e9;
+}
+/*=====Key Account======*/
+#KeyAccount{
+	width:212px;
+	height:auto;
+	padding-top:18px;
+	background-color:#ffffff;
+	border-left:1px solid #cfcfcf;
+	border-right:1px solid #cfcfcf;
+	border-bottom:1px solid #cfcfcf;
+}
+.KeyAccountPic{
+width:212px;
+height:auto;
+text-align:center;
+padding-bottom:10px;
+}
+/*=====About======*/
+#About{
+	width:603px;
+	height:auto;
+	padding:38px 30px 27px 34px;
+	background-color:#ffffff;
+	border:1px solid #cfcfcf;
+}
+.AboutLi{
+	width:603px;
+	height:auto;
+	line-height:24px;
+}
+/*=====Contact Address======*/
+#ContactAdd{
+	width:667px;
+	height:auto;
+	padding-top:32px;
+	padding-left:30px;
+	padding-bottom:22px;
+	border:1px solid #cfcfcf;
+	background:url(../images/ContactBg.gif) repeat;
+}
+.ContactAll{
+	width:609px;
+	height:auto;
+}
+#ContactLogo{
+	width:264px;
+	height:auto;
+}
+#ContactLine{
+	width:341px;
+	height:3px;
+	font-size:0px;
+	margin-top:10px;
+	border:1px solid #aeaeae;
+	background:url(../images/ContactBg1.gif) repeat;
+}
+#ContactLine1{
+	width:607px;
+	height:3px;
+	font-size:0px;
+	border:1px solid #d6d6d6;
+	background:url(../images/ContactBg1.gif) repeat;
+}
+.ContactIcon{
+	width:44px;
+	height:auto;
+}
+.ContactAddress{
+	width:565px;
+	height:29px;
+	line-height:29px;
+	border-bottom:1px solid #aeaeae;
+}
+.ContactMarg{
+	margin-bottom:18px;
+}
+/*=====Recruitment======*/
+.RecruitmentPic{
+	width:190px;
+	height:auto;
+	padding:11px 11px 0px 11px;
+	background-color:#ffffff;
+	border-left:1px solid #cfcfcf;
+	border-right:1px solid #cfcfcf;
+}
+#ApplyInfo{
+	width:190px;
+	height:auto;
+	line-height:20px;
+	padding:11px 7px 11px 15px;
+	background-color:#ffffff;
+	border-left:1px solid #cfcfcf;
+	border-right:1px solid #cfcfcf;
+	border-bottom:1px solid #cfcfcf;
+}
+.RegisterPad{padding:5px;}
+.RegisterColor{color:#000000;}
+.RegisterColor1{color:#c10f23;font-size:14px;line-height:22px;}
+.RegisterColor2{color:#575757;}
+.RecInput{
+	width:120px;
+	height:16px;
+	border-top:1px solid #808080;
+	border-left:1px solid #808080;
+	border-right:1px solid #d4d0c8;
+	border-bottom:1px solid #d4d0c8;
+}
+.RecInput1{
+	width:60px;
+	height:31px;
+	border:0px;
+	line-height:31px;
+	border-bottom:1px dotted #d4d0c8;
+}
+.RecInput2{
+	width:192px;
+	height:31px;
+	border:0px;
+	line-height:31px;
+	border-bottom:1px dotted #d4d0c8;
+}
+.RecInput3{
+	width:126px;
+	height:31px;
+	border:0px;
+	line-height:31px;
+	border-bottom:1px dotted #d4d0c8;
+}
+.RecInput4{
+	width:522px;
+	height:31px;
+	border:0px;
+	line-height:31px;
+	border-bottom:1px dotted #d4d0c8;
+}
+.RecInput5{
+	width:106px;
+	height:16px;
+	border:1px solid #cfcfcf;
+}
+/*=====Interactive Search======*/
+#InteSearch{
+	width:210px;
+	height:auto;
+	padding:1px;
+	background-color:#ffffff;
+	border-left:1px solid #cfcfcf;
+	border-right:1px solid #cfcfcf;
+}
+#InteSearchBg{
+	width:210px;
+	height:70px;
+	padding-top:16px;
+	background:url(../images/SearchBg.gif) repeat;
+}
+.InteSearchLi{
+	width:182px;
+	height:auto;
+	float:none;
+	margin:0px auto;
+	text-align:center;
+	padding-bottom:12px;
+}
+.InteSearchInput{
+	width:180px;
+	height:16px;
+	border-top:1px solid #808080;
+	border-left:1px solid #808080;
+	border-right:1px solid #d4d0c8;
+	border-bottom:1px solid #d4d0c8;
+}
+/*=====Interactive PicJs======*/
+#IntePicJs{
+	width:375px;
+	height:auto;
+	padding:15px;
+	border:1px solid #cfcfcf;
+	background-color:#ffffff;
+}
+#InteJsPic{
+	width:375px;
+	height:234px;
+}
+#InteJsPicNo{
+	width:365px;
+	height:27px;
+	color:#006641;
+	font-size:14px;
+	font-weight:bold;
+	padding-left:8px;
+	border:1px solid #cfcfcf;
+	background:url(../images/InteJsPicBg.gif) repeat;
+}
+.InteJsPicNo1{
+	width:15px;
+	height:15px;
+	float:right;
+	color:#ffffff;
+	font-weight:bold;
+	text-align:center;
+	margin-left:2px;
+	background-color:#d11d1a;
+	cursor:hand;
+}
+.InteJsPicNo2{
+	width:15px;
+	height:15px;
+	float:right;
+	color:#008253;
+	text-align:center;
+	margin-left:2px;
+	background-color:#c0c0c0;
+	cursor:hand;
+}
+/*=====Interactive Video======*/
+#InteVideoAll{
+	width:231px;
+	height:263px;
+	padding:15px;
+	background-color:#ffffff;
+	border-top:1px solid #cfcfcf;
+	border-right:1px solid #cfcfcf;
+	border-bottom:1px solid #cfcfcf;
+}
+#InteVideo{
+	width:231px;
+	height:242px;
+}
+#InteVideoNews{
+	width:231px;
+	height:auto;
+	line-height:22px;
+	text-align:center;
+	font-weight:bold;
+}
+/*=====Interactive Poster======*/
+.IntePoster{
+	width:405px;
+	height:auto;
+	background-color:#ffffff;
+	border-left:1px solid #cfcfcf;
+	border-right:1px solid #cfcfcf;
+}
+.IntePosterList{
+	width:399px;
+	height:auto;
+	padding-top:12px;
+	padding-left:6px;
+	float:left;
+	display:inline;
+}
+.IntePosterLi{
+	width:99px;
+	height:80px;
+	text-align:center;
+}
+/*=====Interactive News======*/
+.InteNews{
+	width:261px;
+	height:auto;
+	background-color:#ffffff;
+	border-right:1px solid #cfcfcf;
+	border-bottom:1px solid #cfcfcf;
+}
+#InteNewPosts{
+	width:261px;
+	height:271px;
+	padding-top:10px;
+	padding-bottom:12px;
+}
+.InteNewsLi{
+	background:url(../images/NewsIcon.gif) no-repeat;
+	width:237px;
+	height:auto;
+	float:none;
+	text-indent:16px;
+	line-height:29px;
+	text-align:left;
+	margin:0px auto;
+	background-position:left center;
+	border-bottom:1px solid #f9e7e9;
+}
+.InteNewsLi1{
+	background:url(../images/NewsIcon.gif) no-repeat;
+	width:237px;
+	height:auto;
+	float:none;
+	text-indent:16px;
+	line-height:24px;
+	text-align:left;
+	margin:0px auto;
+	background-position:left center;
+	border-bottom:1px solid #f9e7e9;
+}
+#InteHotPosts{
+	width:261px;
+	height:75px;
+	padding-top:7px;
+	padding-bottom:10px;
+}
+/*=====New Promotions======*/
+#NewPromotions{
+	width:212px;
+	height:auto;
+	padding-top:12px;
+	padding-bottom:16px;
+	background-color:#ffffff;
+}
+/*=====News List======*/
+.NewsListPage{
+	width:653px;
+	height:27px;
+	line-height:27px;
+	text-align:right;
+	padding-right:14px;
+	border:1px solid #cfcfcf;
+	background:url(../images/GrayBg.gif) repeat;
+}
+#NewsList{
+	width:667px;
+	height:auto;
+	padding-top:34px;
+	padding-bottom:14px;
+	background-color:#ffffff;
+	border-left:1px solid #cfcfcf;
+	border-right:1px solid #cfcfcf;
+}
+.NewsListUl{
+	width:598px;
+	height:93px;
+	float:none;
+	margin:0px auto 20px auto;
+	border-bottom:1px solid #f9e7e9;
+}
+.NewsListLiTitle{
+	background:url(../images/NewsIcon.gif) no-repeat;
+	width:598px;
+	height:24px;
+	text-indent:16px;
+	line-height:24px;
+	text-align:left;
+	font-weight:bold;
+	background-position:left center;
+}
+.NewsListLi{
+	width:582px;
+	height:auto;
+	line-height:20px;
+	padding-left:16px;
+	margin-bottom:12px;
+}
+.NewsListColor{
+	color:#FF0000;
+	font-weight:bold;
+}
+/*=====News Detail======*/
+#NewsDetail{
+	width:667px;
+	height:auto;
+	padding-top:16px;
+	padding-bottom:68px;
+	border:1px solid #cfcfcf;
+	background-color:#ffffff;
+}
+#NewsDetailUl{
+	width:605px;
+	height:auto;
+	float:none;
+	margin:0px auto;
+}
+#NewsDetailTitle{
+	width:605px;
+	height:32px;
+	font-size:14px;
+	font-weight:bold;
+	text-align:center;
+	line-height:32px;
+	border-bottom:1px solid #c7c7c7;
+}
+#NewsDetailTime{
+	width:605px;
+	height:38px;
+	text-align:center;
+	line-height:38px;
+}
+#NewsDetailContent{
+	width:605px;
+	height:auto;
+	line-height:26px;
+}
+/*=====Interactive Video======*/
+#InteVideoCy{
+	width:578px;
+	height:auto;
+	padding:44px 45px 45px 44px;
+	border:1px solid #cfcfcf;
+	background-color:#ffffff;
+}
+#InteVideoLarge{
+	width:578px;
+	height:auto;
+}
+#InteVideoT{
+	width:578px;
+	height:38px;
+	font-size:14px;
+	font-weight:bold;
+	text-align:center;
+}
+/*=====Interactive List======*/
+#InteList{
+	width:644px;
+	height:auto;
+	padding:11px 0px 11px 23px;
+	background-color:#ffffff;
+	border-left:1px solid #cfcfcf;
+	border-right:1px solid #cfcfcf;
+}
+.InteListDiv{
+	width:122px;
+	height:auto;
+	margin-bottom:12px;
+}
+.InteVideoPic{
+	width:112px;
+	height:auto;
+	float:none;
+	margin:0px auto;
+	padding-bottom:1px;
+}
+.InteVideoFont{
+	width:105px;
+	height:34px;
+	float:none;
+	margin:0px auto;
+	padding-top:4px;
+	padding-left:7px;
+	line-height:16px;
+	background-color:#eaeaea;
+}
+/*=====Interactive Water List======*/
+.InteWaterList{
+	width:659px;
+	height:auto;
+	padding:15px 0px 25px 8px;
+	background-color:#ffffff;
+}
+.InteWaterListDiv{
+	width:326px;
+	height:auto;
+	margin-bottom:12px;
+}
+.InteWaterListPic{
+	width:314px;
+	height:auto;
+	float:none;
+	margin:0px auto;
+}
+.InteWaterListName{
+	width:314px;
+	height:auto;
+	float:none;
+	color:#006641;
+	font-size:14px;
+	margin:0px auto;
+	padding-top:8px;
+	font-weight:bold;
+}
+/*=====Duty List======*/
+#DutyList{
+	width:667px;
+	height:auto;
+	padding-top:10px;
+	padding-bottom:8px;
+	background-color:#ffffff;
+	border-left:1px solid #cfcfcf;
+	border-right:1px solid #cfcfcf;
+}
+/*=====Duty Commitment======*/
+#DutyCom{
+	width:659px;
+	height:auto;
+	padding:4px;
+	border:1px solid #cfcfcf;
+	background-color:#ffffff;
+}
+#DutyComBg{
+	width:629px;
+	height:auto;
+	padding-top:20px;
+	padding-left:30px;
+	padding-bottom:30px;
+	background:url(../images/CEOMessageBg.gif) repeat;
+}
+.DutyCom{
+	width:608px;
+	height:auto;
+	line-height:24px;
+}
+.DutyCom1{
+	width:289px;
+	height:auto;
+	line-height:24px;
+	margin-right:20px;
+}
+/*=====Guestbook======*/
+#Guestbook{
+	width:667px;
+	height:auto;
+	padding-top:20px;
+	padding-bottom:20px;
+	border:1px solid #cfcfcf;
+	background-color:#ffffff;
+}
+.GuestbookDiv{
+	width:627px;
+	height:auto;
+	float:none;
+	margin:0px auto 20px auto;
+	padding-top:6px;
+	padding-bottom:8px;
+	line-height:18px;
+	border:1px solid #cfcfcf;
+	background-color:#f6f6f6;
+}
+.GuestbookDiv1{
+	width:627px;
+	height:auto;
+	float:none;
+	margin:0px auto 10px auto;
+	padding-top:6px;
+	padding-bottom:8px;
+	line-height:18px;
+	border:1px solid #cfcfcf;
+}
+.GuestbookDiv2{
+	width:627px;
+	height:auto;
+	float:none;
+	text-align:center;
+	margin:0px auto 10px auto;
+	padding-top:6px;
+	padding-bottom:8px;
+	line-height:18px;
+}
+.GuestbookDiv2{
+	width:627px;
+	height:auto;
+	float:none;
+	text-align:center;
+	margin:0px auto 10px auto;
+	padding-top:6px;
+	padding-bottom:8px;
+	line-height:18px;
+}
+.GuestbookText{
+	width:627px;
+	height:100px;
+}
+.GuestbookInput{
+	width:120px;
+	height:16px;
+	border:1px solid #cfcfcf;
+}
+.GuestbookInput1{
+	width:54px;
+	height:16px;
+	border:1px solid #cfcfcf;
+}
+/*=====Images======*/
+#Images{
+	width:890px;
+	height:auto;
+	float:none;
+	clear:both;
+	margin:0px auto 10px auto;
+	padding-top:45px;
+	padding-bottom:30px;
+	border:1px solid #cfcfcf;
+	background-color:#ffffff;
+}
+#ImagesPic{
+	width:800px;
+	height:600px;
+	float:none;
+	margin:0px auto;
+}
+#ImagesLi{
+	width:800px;
+	height:auto;
+	float:none;
+	margin:0px auto;
+	padding-top:20px;
+	text-align:center;
+}
+.ImagesButton{
+	width:81px;
+	height:36px;
+	border:0px;
+	color:#ffffff;
+	font-size:16px;
+	line-height:36px;
+	cursor:pointer;
+	text-align:center;
+	font-weight:bold;
+	vertical-align:middle;
+	background:url(../images/Backdrop.jpg) no-repeat;
+}
+/*=====Interactive_Vote======*/
+#Interactive_Vote{
+	width:637px;
+	height:auto;
+	line-height:18px;
+	padding:15px 0px 15px 30px;
+	border:1px solid #cfcfcf;
+	background-color:#ffffff;
+}
+.Interactive_Vote{
+	padding-bottom:16px;
+}
+.Inte_Vote_Line{
+	border-bottom:1px solid #cfcfcf;
+}
+.Inte_Vote_Title{
+	color:#333333;
+	font-size:16px;
+	font-weight:bold;
+}
+/*=====Recruitment List======*/
+.RecList{
+	width:598px;
+	height:auto;
+	float:none;
+	line-height:18px;
+	margin:0px auto 20px auto;
+}
+.RecListButton{
+	width:59px;
+	height:26px;
+	border:0px;
+	color:#ffffff;
+	font-size:14px;
+	cursor:pointer;
+	text-align:center;
+	font-weight:bold;
+	padding-bottom:3px;
+	vertical-align:middle;
+	background:url(../images/RecList.jpg) no-repeat;
+}
+.RecListButtonLi{
+	width:59px;
+	height:34px;
+	line-height:34px;
+}
+.RecListJobs{
+	width:539px;
+	height:34px;
+	color:#c00e23;
+	font-size:14px;
+	line-height:34px;
+	font-weight:bold;
+}
+.RecListJobs1{
+	width:598px;
+	height:auto;
+	padding-bottom:20px;
+	border-bottom:1px solid #f9e7e9;
+}
+/*=====Client======*/
+.Client{
+	width:667px;
+	height:auto;
+	padding-bottom:38px;
+	background-color:#ffffff;
+}
+.ClientH1{
+	width:667px;
+	height:60px;
+	text-align:center;
+}
+.ClientUl{
+	width:667px;
+	height:auto;
+	text-align:center;
+}
+.Bank{
+	margin:auto 10px;
+}
+#HotelsUl{
+	width:662px;
+	height:auto;
+	padding-left:5px;
+}
+.HotelsLi{
+	width:154px;
+	height:27px;
+	margin:7px 4px;
+	line-height:23px;
+	text-align:center;
+	background:url(../images/HotelsBg.jpg) no-repeat;
+}
+.Aviation{
+	margin:auto 12px;
+}

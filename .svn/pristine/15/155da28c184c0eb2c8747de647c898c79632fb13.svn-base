@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<body class="easyui-layout">
+		<form method="post" target="hideFrame">
+			<div region="center" class="easyui-panel" title="角色内容" data-options="iconCls:'icon-edit'">
+			<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="1">
+							<tr>
+								<td colspan="2" class="home_title_line">
+									<table width="100%" border="0" cellpadding="0" cellspacing="1">
+    									<tr>
+										<td class="head" noWrap style="text-align: right">角色编号</td>
+											<td><input class="easyui-validatebox" id="roleId" name="role.roleId" data-options ="required:true" /> <font size="2.5" color="red">*字母简拼用下滑线_间隔</font></td>
+                                        </tr>
+										<tr>
+    										<td class="head" noWrap style="text-align: right">角色名称</td>
+											<td><input class="easyui-validatebox" id="roleName" name="role.roleName" data-options ="required:true" /></td>
+                                    	</tr>
+										<tr>
+    										<td class="head" noWrap style="text-align: right" style="width:200px;">描述</td>
+											<td><input class="easyui-validatebox" id="descn" name="role.descn" data-options ="required:true" /></td>
+                                    	</tr>
+										<tr>
+    									<td class="head" noWrap style="text-align: right" style="width:200px;">角色类型</td>
+										<td><input id="roleType" name="role.roleType" class="easyui-combobox"   data-options="valueField:'itemName',textField:'itemName',required:true,url:appUrl + '/roleAction!getCustTypeList.jspa'" />
+										</td>
+                                    	</tr>
+										<tr>
+    									<td class="head" noWrap style="text-align: right">角色标记</td>
+										<td><select class="easyui-combobox" id="ownFlag" name="role.ownFlag" data-options ="required:true"/>
+										  <option value="Y">必备</option>
+										  <option value="N">可选</option>    
+										 <option value="Y" selected></option>
+										 </select>
+										  </td>
+										 
+                                    	</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+		    <div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+				<a class="easyui-linkbutton" icon="icon-ok" href="javascript:submit()">Submit</a>
+			</div>
+		</form>
+	  <iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+	</body>
+<script >
+targetValue = '$!{role.ownFlag}';
+</script>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/role/createRole.js"></script>
+</html>

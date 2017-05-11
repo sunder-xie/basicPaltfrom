@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>系统首页</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style", "homepage"])
+		#JSM(["jquery","easyui","jquery.tools"])
+		#JS_ENV_VAL()
+		<style type=text/css>
+		.fontStyle{
+			font-family:courier;
+			font-size:12px;
+			color:green
+		}
+		</style>
+	</head>
+	<body class="easyui-layout">
+	<ul id="navigation">
+		<!--li class="home"><a href="#" onclick="navigation4MenuTree(1);"><span style="font-weight: bold;color:black">主页</span></a></li-->
+	</ul>
+	
+	<div data-options="region:'north',border:false"
+		style="height:26px;background:#3D92D9;'); padding: 1px">
+		<div style="float: left;">
+			<font size='4' style="font-weight: bold;font-style:italic;color:#FFFFFF;">&nbsp;&nbsp;香飘飘企业信息集成系统</font></div>
+		</div>
+	</div>
+    <div id="menuTree" data-options="region:'west',split:true,title:'[ $!{passport} - $!{name} ]',tools:'#all'" style="width:180px;padding:0px;">
+	<div id='all'>
+		<!--a href="javascript:void(0)" class="icon-expand" onclick="expandAll()"></a-->
+		<a href="javascript:void(0)" class="icon-collapse" onclick="collapseAll()"></a>
+	</div>
+    <ul id="rootTree" class="easyui-tree" style="height:96%;position:relative;overflow-y:auto;overflow-x:hidden">
+	</ul>
+    <div><font size='3' style="font-weight: bold;font-style:italic;color:gray;">&nbsp;当前在线人数:&nbsp;$!{onLine}</font></div>
+	</div>
+    <div id="work" data-options="iconCls:'icon-edit',tools:'#tool',region:'center',title:'工作台'"/>
+	<div id="tabs" class="easyui-tabs" data-options="fit:true"> 
+	</div>
+	<div id="tabsMenu" class="easyui-menu" style="width:120px;"> 
+    <div name="close">关闭</div> 
+    <div name="other">关闭其他</div> 
+    <div name="all">关闭所有</div>
+	</div> 
+	</div>
+	<div id="tool">
+		<a href="#" onclick="javascript:reloadOA()" class="icon-reload" ></a>
+		<a href="javascript:void(0)" class="icon-blank"></a>
+		<a href="loginAction!logout.jspa?action=logout" class="icon-logout" ></a>
+		<a href="javascript:void(0)" class="icon-blank"></a>
+	</div>
+	<div data-options="region:'south',border:false" style="height: 10px; background:#3D92D9; color: #327195; text-align: center; padding-top: 1px;">
+	</div>
+	<!-- 在线客服开始 -->
+	<div id="online_qq_layer">
+	<div id="online_qq_tab">
+		<div class="online_icon">
+			<a title id="floatShow" style="display: block;" href="javascript:void(0);">&nbsp;</a>
+			<a title id="floatHide" style="display: none;" href="javascript:void(0);">&nbsp;</a>
+		</div>
+		<!--online_icon end--></div>
+	<div id="onlineService">
+		<div class="online_windows overz">
+			<div class="online_w_top">
+			</div>
+			<!--online_w_top end-->
+			<div class="online_w_c overz">
+				<div class="online_bar expand" id="onlineSort1">
+					<h2><a onclick="changeOnline(1)">联系方式</a></h2>
+					<div class="online_content overz" id="onlineType1">
+						<ul class="overz">
+							<li><a class="qq_icon" target="_block" href="http://wpa.qq.com/msgrd?v=3&uin=532310187&site=qq&menu=yes">在线客服1</a></li>
+							<li><a class="qq_icon" target="_block" href="http://wpa.qq.com/msgrd?v=3&uin=178333688&site=qq&menu=yes">在线客服2</a></li>
+							<li><a class="qq_icon" target="_block" href="http://wpa.qq.com/msgrd?v=3&uin=990014673&site=qq&menu=yes">在线客服3</a></li>
+							<li><a class="qq_icon" target="_block" href="http://wpa.qq.com/msgrd?v=3&uin=871886385&site=qq&menu=yes">在线客服4</a></li>
+							<li>QQ群：316257628</li>
+							<li>短号：721151</li>
+							<li>手机：18657270151</li>
+							<li>座机：057128806887</li>
+						</ul>
+					</div>
+					<!--online_content end--></div>
+				<!--online_bar end-->
+			<!--online_w_c end-->
+			<div class="online_w_bottom">在线时间：8:30-20:00</div>
+			<!--online_w_bottom end--></div>
+		<!--online_windows end--></div>
+	</div>
+	<!-- 在线客服结束 -->
+</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/login/homeXppPage.js">
+</script>
+</html>

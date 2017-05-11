@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="report">
+	<typeAlias alias="reportStructure"
+		type="com.kintiger.platform.report.pojo.ReportStructure" />
+		
+	<select id="getContent" parameterClass="Long" resultClass="reportStructure">
+		select * from basis.CRM_TB_REPORT_STRUCTURE where CRM_TB_REPORT_STRUCTURE_ID = #structureID#
+	</select>
+	<!--	 selectBySql    -->
+	 <select id="selectBySql" resultClass="java.util.HashMap"
+        remapResults="true"
+        parameterClass="java.util.HashMap">
+        <isNotEmpty property="sql">$sql$</isNotEmpty>
+    </select>  
+</sqlMap>

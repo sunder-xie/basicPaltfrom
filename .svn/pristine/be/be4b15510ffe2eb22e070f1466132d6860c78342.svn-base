@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="station">
+
+	<typeAlias alias="station" type="com.kintiger.platform.station.pojo.Station" />
+	<typeAlias alias="allUsers" type="com.kintiger.platform.allUser.pojo.AllUsers" />
+	<typeAlias alias="stationOrg" type="com.kintiger.platform.station.pojo.StationOrg" />
+	
+	<typeAlias alias="stationRole"
+		type="com.kintiger.platform.station.pojo.StationRole" />
+	<select id="getCompanyJsonList" resultClass="com.kintiger.platform.org.pojo.Borg">
+	<![CDATA[
+		select t.org_id as orgId,
+			   t.org_name as  orgName
+			  from basis.basis_tb_org t
+			 where t.state = 'Y'
+			 and t.organise_type = 'X'
+			 and t.org_city in ('C')
+			ORDER BY t.org_id
+	]]>
+	</select>
+	<select id="getStaffStationcount" resultClass="java.lang.Integer" parameterClass="station">
+	<![CDATA[
+		select            count(*)
+					  from basis.BASIS_TB_STAFFAMOUNT t
+					  left join basis.basis_tb_station_user p
+						on t.station_id = p.station_id
+					 where t.state = 'U' 
+					 and p.station_id=#stationId#
+	]]>   
+	</select>
+	<select id="getStaffStationAmount" resultClass="java.lang.Integer" parameterClass="station">
+	<![CDATA[
+		 select t.amount  from basis.BASIS_TB_STAFFAMOUNT t where t.station_id=#stationId# and t.state='U'
+	]]>   
+	</select>
+	<select id="getStationJsonListCount" parameterClass="station"
+		resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(t.station_id)
+		  from basis.basis_tb_stations t, basis.basis_tb_org  tt
+		 where t.station_type = tt.org_id(+)
+		   and t.status = 'U'
+		   and tt.state = 'Y'
+	]]>
+		<dynamic>
+			<isNotEmpty property="stationId" prepend="and">
+			<![CDATA[t.station_id like #stationId,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="stationName" prepend="and">
+			<![CDATA[t.station_name like #stationName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="stationType" prepend="and">
+			<![CDATA[t.station_type = #stationType#]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="getStationJsonListCountForSelect" parameterClass="station"
+		resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(s.id) from basis.basis_tb_station_user s 
+		left join basis.basis_tb_salesemp_info b on s.user_id= b.emp_id
+		left join  basis.basis_tb_stations st on s.station_id= st.station_id
+		left join basis.basis_tb_org   o on o.org_id= st.station_type 
+		where st.status='U' and (s.user_id is null or b.emp_state='N') and (s.IS_MAIN_STATION <> 'S' or s.IS_MAIN_STATION is null)
+	]]>
+		<dynamic>
+			<isNotEmpty property="orgId" prepend="and">
+			<![CDATA[ s.org_id = #orgId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="stationId" prepend="and">
+			<![CDATA[ (st.station_id like #stationId,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="stationName" prepend="or">
+			<![CDATA[ st.station_name like #stationName,handler=wildcard# escape '\' )]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="getStationJsonListForSelect" parameterClass="station"
+		resultClass="station">
+		<include refid="global.paginationStart" />
+	<![CDATA[
+		select s.id id,
+		s.station_id stationId,
+		st.station_name stationName,
+		o.org_name orgName
+		from basis.basis_tb_station_user s 
+		left join basis.basis_tb_stations st on s.station_id= st.station_id
+		left join basis.basis_tb_org  o on o.org_id= st.station_type 
+		where st.status='U' and s.user_id is null  and (s.IS_MAIN_STATION <> 'S' or s.IS_MAIN_STATION is null)
+
+	]]>
+		<dynamic>
+			<isNotEmpty property="orgId" prepend="and">
+			<![CDATA[ s.org_id = #orgId# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="stationId" prepend="and">
+			<![CDATA[ (st.station_id like #stationId,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="stationName" prepend="or">
+			<![CDATA[ st.station_name like #stationName,handler=wildcard# escape '\' ) ]]>
+			</isNotEmpty>
+		</dynamic>
+		<include refid="global.orderBy" />
+		<include refid="global.paginationEnd" />
+	</select>
+
+	<select id="getStationJsonList" parameterClass="station"
+		resultClass="station">
+		<include refid="global.paginationStart" />
+	<![CDATA[
+		select t.station_id   	stationId,
+			   t.station_name 	stationName,
+			   t.station_type 	orgId,
+		  	   tt.org_name    orgName,
+		  	   d.item_name    as oatypeName,
+			   t.oatype       as oatype
+		from basis.basis_tb_stations t
+			 left join basis.basis_tb_org tt on t.station_type = tt.org_id
+			 left join  basis.basis_tb_dict d on t.oatype = d.item_id
+		where t.status = 'U'
+		and tt.state='Y'
+	]]>
+		<dynamic>
+			<isNotEmpty property="stationId" prepend="and">
+			<![CDATA[t.station_id like #stationId,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="stationName" prepend="and">
+			<![CDATA[t.station_name like #stationName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="stationType" prepend="and">
+			<![CDATA[t.station_type = #stationType#]]>
+			</isNotEmpty>
+			
+		</dynamic>
+		<![CDATA[ order by  t.modify_date  desc ]]>
+		<include refid="global.paginationEnd" />
+	</select>
+
+	<select id="getStationEntity" parameterClass="java.lang.String"
+		resultClass="station">
+	<![CDATA[
+		SELECT t.station_id   as stationId,
+			   t.station_name as  stationName,
+			   t.station_type as  orgId,
+			  t.OATYPE as oatype
+		  from basis.basis_tb_stations t
+		 where  t.station_id = #stationId#
+	]]>
+	</select>
+
+	<update id="updateStationEntity" parameterClass="station">
+	<![CDATA[
+		update basis.basis_tb_stations t
+		   set t.station_name = #stationName#,
+			   t.station_type = #orgId#,
+			   t.modify_date  = sysdate
+			   ,t.OATYPE=#oatype#
+		 where t.station_id = #stationId#
+	]]>
+
+	</update>
+
+	<update id="deleteStationEntity" parameterClass="java.lang.String">
+	<![CDATA[
+		update basis.basis_tb_stations t
+		   set t.status = 'D', t.modify_date = sysdate
+		 where t.station_id = #stationId#
+	]]>
+
+	</update>
+
+	<select id="getStationUser" parameterClass="java.lang.String"
+		resultClass="station">
+	<![CDATA[
+		select t.user_id userId
+		  from basis.basis_tb_stations_user t
+		 where t.station_id = #stationId#
+	]]>
+	</select>
+
+	<select id="getStationRole" parameterClass="java.lang.String"
+		resultClass="stationRole">
+	<![CDATA[
+		select t.station_role_id stationRoleId
+		  from basis.basis_tb_station_role t
+		 where t.station_id = #stationId#
+	]]>
+	</select>
+
+	<insert id="createStationEntity" parameterClass="station">
+		<selectKey resultClass="java.lang.String" keyProperty="stationId">
+		<![CDATA[	SELECT
+			#stationId# AS stationId FROM DUAL ]]>
+		</selectKey>
+	<![CDATA[
+		insert into basis.basis_tb_stations
+		  (STATION_ID, station_name, station_type, status, modify_date,OATYPE)
+		values
+		  (#stationId#, #stationName#, #orgId#, 'U', sysdate,#oatype#)
+	]]>
+	</insert>
+
+
+	<select id="searchStationUserCount" parameterClass="station"
+		resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(tt.user_id)
+		  from basis.basis_tb_station_user t
+		  left join basis.basis_vw_user_psw tt
+			on t.user_id = tt.user_id
+		 where t.station_id = #stationId#
+		  and tt.user_id is not null
+	]]>
+		<dynamic>
+			<isNotEmpty prepend="and" property="userId">
+			<![CDATA[tt.user_id=#userId#]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="userName">
+			<![CDATA[tt.user_name like #userName,handler=wildcard#  escape '\']]>
+			</isNotEmpty>
+		</dynamic>
+	<![CDATA[order by tt.user_id]]>
+	</select>
+
+	<select id="searchStationUser" parameterClass="station"
+		resultClass="station">
+		<include refid="global.paginationStart" />
+	<![CDATA[
+		select 
+		distinct
+		tt.user_id userId, tt.user_name userName
+		  from basis.basis_tb_station_user t
+		  left join basis.basis_vw_user_psw tt
+			on t.user_id = tt.user_id
+		 where t.station_id = #stationId#
+		 and tt.user_id is not null
+	]]>
+		<dynamic>
+			<isNotEmpty prepend="and" property="userId">
+			<![CDATA[tt.user_id=#userId#]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="userName">
+			<![CDATA[tt.user_name like #userName,handler=wildcard#  escape '\']]>
+			</isNotEmpty>
+		</dynamic>
+	<![CDATA[order by tt.user_id]]>
+		<include refid="global.paginationEnd" />
+	</select>
+
+	<delete id="deleteStationUser" parameterClass="station">
+	<![CDATA[
+		delete basis.basis_tb_station_user t
+		 where t.station_id = #stationId#
+		   and t.org_id = #orgId#
+	]]>
+	</delete>
+	<!--
+		<delete id="deleteStationUserById" parameterClass="station">
+		<![CDATA[
+			delete basis.basis_tb_station_user t
+			 where t.id = #compId#
+		]]>
+		</delete>-->
+	<select id="getDeleteStationCount" parameterClass="station" resultClass="station">
+	<![CDATA[
+		select t.id as compId  from basis.basis_tb_station_user t 
+		where t.station_id = #stationId#
+		   and t.org_id = #orgId#
+		   and t.user_id is  null
+		   and (t.IS_MAIN_STATION <> 'S'  or   t.IS_MAIN_STATION is null)
+	]]>
+	</select>
+	<!-- -->
+	<select id="getCustTypeList" resultClass="com.kintiger.platform.dict.pojo.CmsTbDict">
+	<![CDATA[
+		select t.item_name  as itemName,t.item_value  as itemValue
+		  from basis.basis_tb_dict t, basis.basis_tb_dict_type tt
+		 where t.dict_type_id = tt.dict_type_id
+		  and tt.dict_type_id = 5
+		   and t.item_state = 'U'
+	]]>
+	</select> 
+
+	<select id="searchUser" parameterClass="station" resultClass="station">
+		<include refid="global.paginationStart" />
+	<![CDATA[
+		select t.user_id userId,t.login_id userCode,t.user_name userName
+		from  basis.basis_vw_user_psw t where 1=1
+	]]>
+		<dynamic>
+			<isNotEmpty prepend="and" property="userCode">
+			<![CDATA[t.login_id=#userCode#]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="userName">
+			<![CDATA[t.user_name like #userName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+		</dynamic>
+	<![CDATA[order by t.login_id]]>
+		<include refid="global.paginationEnd" />
+	</select>
+
+	<select id="searchUserCount" parameterClass="station"
+		resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(t.user_id)
+		from  basis.basis_vw_user_psw t where 1=1
+	]]>
+		<dynamic>
+			<isNotEmpty prepend="and" property="userCode">
+			<![CDATA[t.login_id=#userCode#]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="userName">
+			<![CDATA[t.user_name like #userName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<insert id="createStationUser" parameterClass="allUsers">
+		<selectKey resultClass="java.lang.Long" keyProperty="id">
+		    <![CDATA[  SELECT  basis.basis_seq_role_menu.nextval as id FROM DUAL	]]>
+		</selectKey>
+	<![CDATA[
+		insert into basis.basis_tb_station_user
+		(id,
+		station_id,
+		user_id,
+		modify_date,
+		org_id)
+
+		values(
+		#id#,
+		#roleIds#,
+		#userId#,
+		sysdate,
+		#orgId#)
+	]]>
+	</insert>
+	<insert id="insertStationUser" parameterClass="station">
+		<selectKey resultClass="java.lang.Long" keyProperty="stationUserId">
+			select to_number(basis.basis_seq_role_menu.nextval) as stationUserId
+			  from dual
+		</selectKey>
+	<![CDATA[
+		insert into basis.basis_tb_station_user
+		values
+		  (#stationUserId#, #stationId#, #userId#, sysdate)
+	]]>
+	</insert>
+	
+	<select id="getStationUserCount" parameterClass="java.lang.String"
+		resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(t.station_id) from basis.basis_tb_station_user t where t.station_id = #stationId#
+	]]>
+	</select>
+	
+	<select id="getStationRoleCount" parameterClass="java.lang.String"
+		resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(1)
+		  from basis.basis_tb_station_role t
+		 where t.station_id = #stationId#
+	]]>
+	</select>
+	
+	<select id="getStationByEmpId" parameterClass="java.lang.Long"
+		resultClass="station">
+	<![CDATA[
+		select a.station_id   stationId,
+			   a.station_name stationName,
+			   o.org_id orgId,
+			   t.org_name    orgName,
+			   o.id id
+		from basis.basis_tb_stations a,basis.basis_tb_station_user o, basis.basis_tb_org  t
+		where a.station_id = o.station_id
+		   and o.org_id = t.org_id
+		   and a.status = 'U'
+		   and o.user_id = #empId#
+	]]>	
+	</select>
+	
+	
+	<update id="updateStationUser" parameterClass="allUsers">
+	<![CDATA[
+
+		update  basis.basis_tb_station_user s set s.user_id = #userId#,s.modify_date=sysdate
+		 where s.id=#ids# and s.user_id is  null
+
+	]]>
+	</update>
+	<select id="getStationCountByEmpId" parameterClass="allUsers"
+		resultClass="java.lang.Integer">
+			<![CDATA[
+		select count(*) from basis.basis_tb_station_user s where s.user_id=#userId#
+		]]>
+	</select>
+	
+	
+	<select id="searchStationUserMoreCount" parameterClass="station"
+		resultClass="java.lang.Integer">
+		<![CDATA[
+		select count(*)
+	from  basis.basis_tb_station_user  s 
+	left join basis.basis_tb_salesemp_info b on s.user_id= b.emp_id
+	 left join basis.basis_tb_stations t on s.station_id= t.station_id
+	left join basis.basis_tb_org  o on s.org_id= o.org_id
+	 where s.user_id=#userId#
+	 ]]>
+	</select>
+	
+	<select id="searchStationUserMore" parameterClass="station"
+		resultClass="station">
+		<![CDATA[
+	select b.emp_code as empCode,
+			b.emp_name as userName,
+			o.org_name as orgName,
+			t.station_name as stationName,
+			 t.station_id as stationId,
+			 s.id as  id
+	from basis.basis_tb_station_user s 
+	left join basis.basis_tb_salesemp_info b on s.user_id= b.emp_id
+	 left join basis.basis_tb_stations t on s.station_id= t.station_id
+	left join basis.basis_tb_org o on s.org_id= o.org_id
+	 where s.user_id=#userId#
+]]>
+	</select>
+	<update id="deleteStationUserById" parameterClass="station">
+	<![CDATA[
+
+		update  basis.basis_tb_station_user s set s.user_id = null,s.last_user_id = #userId#,s.modify_date=sysdate
+		 where s.id=#id#
+
+	]]>
+	</update>
+	<delete id="deleteStationUserById2" parameterClass="station">
+	<![CDATA[
+
+		delete basis.basis_tb_station_user s 
+		 where s.id=#compId#
+
+	]]>
+	</delete>
+	
+	<insert id="createStationOrg" parameterClass="stationOrg">
+		<selectKey resultClass="java.lang.Long" keyProperty="stationOrgId">
+		<![CDATA[	SELECT basis.basis_seq_station_org.nextval as stationOrgId from dual ]]>
+		</selectKey>
+	<![CDATA[
+		insert into basis.basis_tb_station_org
+		  (station_org_id, station_id, orgids, creator, creat_date,modifier,modifydate)
+		values
+		  (#stationOrgId#, #stationId#, #orgIds#, #creator#, sysdate,#modifier#,sysdate)
+	]]>
+	</insert>
+	
+	<select id="getStationOrgList" parameterClass="stationOrg"
+		resultClass="stationOrg">
+		<![CDATA[
+		select g.org_id as orgId, g.org_name as orgName
+  		from basis.basis_tb_org g
+ 		where INSTR((select ',' || t.orgids || ','
+               from basis.basis_tb_station_org t
+              where t.station_id = #stationId#),
+             ',' || TRIM(TO_CHAR(g.org_id)) || ',') > 0
+	]]>
+	</select>
+	
+	<update id="updateStationOrg" parameterClass="stationOrg">
+	<![CDATA[
+		update  basis.basis_tb_station_org s set s.orgids = #orgIds#,s.modifier = #modifier#,s.modifydate=sysdate
+		 where s.station_id=#stationId#
+	]]>
+	</update>
+	
+	<select id="getStationOrgCount" parameterClass="stationOrg"
+		resultClass="java.lang.Integer">
+		<![CDATA[
+		select count(*)
+  		from basis.basis_tb_station_org g
+ 		where g.station_id = #stationId#
+	]]>
+	</select>
+	
+	<select id="getOrgListByUserId" parameterClass="java.lang.String"
+		resultClass="java.lang.String">
+	<![CDATA[
+		select distinct t.org_id orgId
+  			from basis.basis_tb_station_user t
+		where  t.user_id = #userId#
+	]]>	
+	</select>
+	
+	<select id="getPermissionByUserId" parameterClass="java.lang.String"
+		resultClass="java.lang.Integer">
+		<![CDATA[
+		select count(1)
+		  	from basis.basis_tb_station_user t
+		left join basis.basis_tb_station_role r
+		 	 on t.station_id=r.station_id
+		 where r.role_id = 'org_search_all'
+		 	and t.user_id= #userId#
+		]]>
+	</select>
+</sqlMap>

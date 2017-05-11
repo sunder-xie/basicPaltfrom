@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<body >
+		<form id="formq" action="" method="post">
+									<div region="center" class="easyui-panel" title="查询条件" >
+									<table width="100%" border="0" cellpadding="0" cellspacing="1" >
+    									<tr>
+    										<td class="head" noWrap style="text-align: center">
+    											公司类型
+    										</td>
+                                     		<td class="even" noWrap >
+    											<input type="text" name="kunnrSign" id="kunnrSign" class="easyui-combobox" data-options="valueField:'itemValue',textField:'itemName',url:appUrl + '/station!getCustTypeList.jspa'" />
+    			    						</td>
+											<td class="head" noWrap style="text-align: center">
+    											用户信息
+    										</td>
+                                     		<td class="even" noWrap >
+    											<input type="text" name="searchKey" id="searchKey" />
+    			    						</td>
+											<td class="even" noWrap>
+												<a href="javascript:search()" class="easyui-linkbutton" >ID查询</a>
+											</td>
+											<td class="even" noWrap>
+												<a href="javascript:searchName()" class="easyui-linkbutton" >名称查询</a>
+											</td>
+                                    	</tr>
+									</table>
+									</div>
+											
+        							
+			<table id="choosedatagrid" style="height:300px"></table> 
+		</form>
+	<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+	</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/station/choostStationUser.js"></script>

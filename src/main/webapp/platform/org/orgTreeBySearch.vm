@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body>
+		<form method="post">
+			<div style="overflow:auto;width:280px;float:left">
+			<input type="hidden" id="orgId" name="orgId"></input>
+	            <input type="hidden" id="orgName" name="orgName"></input>
+				<ul id="orgTree" class="easyui-tree"/>
+				<div id="treeMenu" class="easyui-menu" style="width:120px;"> 
+					<div name="update">select</div>
+				</div> 
+							</div>
+			<div style="width:325px;float:left;margin-top:20px;"> 
+			<input class="easyui-searchbox" searcher="searchOrg"  prompt="输入名称检索" style="width:200px"></input>
+				<table id="datagrid">  
+				</table> 
+			</div>
+			
+		</form>
+	</body>
+	<script type="text/javascript" src="$!{env.imgUrl}/js/platform/org/orgTreeBySearch.js"></script>
+	<!--<script type="text/javascript">
+    	var from = '$!{from}';
+	</script>-->
+</html>

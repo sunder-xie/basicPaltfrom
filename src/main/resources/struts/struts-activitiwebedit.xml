@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="activitiWebEdit" extends="kintiger-default"  >
+		<action name="deployProcessDefinition" class="deployProcessDefinition">
+			<result name="create">/platform/activitiWebEdit/deployProcessDefinition.vm</result>
+			<result name="createPrepare">/platform/activitiWebEdit/workflowDesign.vm</result>
+			<result name="taskproperties">/platform/activitiWebEdit/taskProperties.vm</result>
+			<result name="flowproperties">/platform/activitiWebEdit/flowProperties.vm</result>
+			<result name="processproperties">/platform/activitiWebEdit/processProperties.vm</result>
+			<result name="exclusiveGatewayProperties">/platform/activitiWebEdit/exclusiveGatewayProperties.vm</result>
+		</action>
+		
+	</package>
+		<package name="allRole" extends="kintiger-default">
+		<action name="allRoleAction" class="deployProcessDefinition">
+			<result name="toSerachRoles">/platform/activitiWebEdit/roles.vm</result>		   
+		</action>
+	</package>
+	
+</struts>

@@ -1,0 +1,130 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		  #JS_ENV_VAL()	
+		  #WORKFLOW()
+	</head>
+	<body>
+<script type="text/javascript">
+var task = window.parent.task;//workflow.getFigure(window.parent.tid);
+window.task=task;
+jq(function(){
+
+var data=[{'text':'-请选择-','value':''},{'text':'组织追溯开始','value':'com.exp.activiti.listeners.TraceFlagTrueListener'},{'text':'组织追溯结束','value':'com.exp.activiti.listeners.TraceFlagFalseListener'},{'text':'岗位追溯开始','value':'com.exp.activiti.listeners.StationOrgFlagTrueListener'},{'text':'岗位追溯结束','value':'com.exp.activiti.listeners.StationOrgFlagFalseListener'},
+{'text':'组织追溯开始岗位追溯结束','value':'com.exp.activiti.listeners.StationOrgFlagFalseTraceFlagTrueListener'},{'text':'组织追溯结束岗位追溯结束','value':'com.exp.activiti.listeners.StationOrgFlagFalseTraceFlagFalseListener'},{'text':'组织追溯开始岗位追溯开始','value':'com.exp.activiti.listeners.StationOrgFlagTrueTraceFlagTrueListener'},{'text':'组织追溯结束岗位追溯开始','value':'com.exp.activiti.listeners.StationOrgFlagTrueTraceFlagFalseListener'}];
+	
+	jq('#listenerServiceClass').combobox(
+			{
+				data:data,
+				multiple:false,
+				valueField : 'value',
+				textField : 'text',
+				onLoadSuccess : function() {
+				},
+				editable : false
+			});
+	jq('#hiddenid').val(window.tid);
+	jq('#rolename').combobox({
+						textField : 'rolename',
+						valueField : 'rolename',
+						delay :500,
+						onChange : function(newValue, oldValue) {
+							if (newValue != null) {
+								var urlStr = appUrl
+										+ "/allRole/allRoleAction!serachRoles.jspa?rolename="
+										+ encodeURIComponent(newValue);
+								jq("#rolename").combobox("reload", urlStr);
+							}
+						},
+						onSelect : function(r) {
+							jq("#id").val(r.roleid);
+							jq("#name").val(r.rolename);
+						}
+					});
+
+					
+	populateTaskProperites();
+	
+});
+
+function saveTaskProperties(){
+	if(jq('#id').val()!=null)
+		task.taskId=jq('#id').val();
+	if(jq('#name').val()!=null){
+		task.taskName=jq('#name').val();
+		task.setContent(jq('#name').val());
+	}
+	
+	if(jq("#listenerServiceClass").combobox('getValue')!=null&&jq("#listenerServiceClass").combobox('getValue')!=''){
+     task.deleteListener(task.taskId)
+	 task.addListener('<activiti:taskListener event="create" class="'+jq("#listenerServiceClass").combobox('getValue')+'"></activiti:taskListener>');
+
+	}else{
+	  task.deleteListener(task.taskId);
+	}
+	jq.messager.show({
+		title:'title',
+		msg:'保存成功!',
+		timeout:500,
+		showType:'slide'
+	});
+  
+
+}
+function populateTaskProperites(){
+	if(task != null){
+		jq('#id').val(task.taskId);
+		jq('#name').val(task.taskName);
+	}else{
+	    //jq('#rolename').combobox('select', window.parent.tname);
+		jq('#id').val(window.parent.tid);
+		jq('#name').val(window.parent.tname);
+	}
+}
+</script>
+<div id="task-properties-layout" class="easyui-layout" fit="true">
+
+	<div id="task-properties-toolbar-panel" region="north" border="false" style="height:30px;background:#E1F0F2;">
+		<a href="javascript:;" id="sb2" class="easyui-linkbutton" plain="true" iconCls="icon-save" onclick="saveTaskProperties()">保存节点属性</a>
+	</div>
+	<div id="task-properties-panel" region="center" border="true">
+			<input type="hidden" id="hiddenid" value=""/>
+		<div id="task-properties-accordion" class="easyui-accordion" fit="true" border="false">
+			<div id="general" title="节点属性" selected="true" class="properties-menu">
+				<table id="general-properties">
+					
+					<tr>
+						<td align="right"  >审批角色名称:</td>
+						<td><select id="rolename" name="rolename" size="15" class="easyui-combobox" style="width:150px;" data-options="required:true"/></td>
+						
+					</tr>
+					<tr>
+						<td align="right"  >审批角色ID:</td>
+						<td><input type="text" id="id" name="id" size="15" value="" readOnly="true"/></td>
+						
+						<!--<td><a id="btn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" >Search</a></td>-->
+					</tr>
+
+					<tr>
+						<td align="right"  >名称:</td>
+						<td><input type="text" id="name" name="name" size="15" value=""/></td>
+					</tr>
+					<tr>
+			<td id="listenerServiceLabel" align="right">监听:</td>
+			<td>
+				<input id="listenerServiceClass" name="listenerServiceClass"  class="easyui-combobox" style="width:150px;" data-options="required:false,editable:false"/>
+				<input type="text" id="listenerServiceExpression" name="listenerServiceExpression" size="80" style="display: none;" value=""  />
+			</td>
+		</tr>
+				</table>
+			</div>
+		
+		</div>
+	</div>
+</div>
+
+</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/activitiWebEdit/taskProperties.js"></script>
+</html>

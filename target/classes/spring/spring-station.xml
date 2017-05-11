@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+<!-- 	-->
+	<bean id="stationAction" class="com.kintiger.platform.station.action.StationAction"
+		parent="baseAction" scope="request">
+		<property name="stationService" ref="stationService"></property>
+		<property name="dictService" ref="dictService"></property>
+	</bean>
+
+	<bean id="stationService"
+		class="com.kintiger.platform.station.service.impl.StationServiceImpl">
+		<property name="stationDao" ref="stationDao" />
+
+	</bean>
+	<bean id="stationDao" class="com.kintiger.platform.station.dao.impl.StationDaoImpl"
+		parent="baseDao"></bean>
+	
+</beans>

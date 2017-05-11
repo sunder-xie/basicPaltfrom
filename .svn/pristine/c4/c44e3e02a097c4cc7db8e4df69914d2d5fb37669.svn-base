@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="menu">
+	<typeAlias alias="menu" type="com.kintiger.platform.menu.pojo.Menu" />
+
+	<select id="getMenuTreeList" parameterClass="menu" resultClass="menu">
+	<![CDATA[
+		select a.id, a.name, a.url,a.redirectUrl, a.target ,a.is_first isFirst,a.order_by as orderBy
+		  from (select distinct t4.id       as id,
+						t4.NAME     as name,
+						t4.URL      as url,
+						t4.redirect_url as redirectUrl,
+						t4.TARGET   as target,
+						t4.order_by,
+						t4.is_first
+		  from basis.basis_tb_station_user t1
+		  left join basis.basis_tb_station_role t2
+			on t1.station_id = t2.station_id
+		  left join basis.basis_tb_role_menu t3
+			on t2.role_id = t3.role_id
+		  right join basis.basis_tb_menu_items t4
+			on t3.menu_id = t4.id
+		 where t4.PID = #pid#
+	]]>
+
+		<dynamic>
+			<isEmpty property="flag">
+				<isNotEmpty property="userId" prepend="and">
+				<![CDATA[ t1.USER_ID = #userId# ]]>
+				</isNotEmpty>
+			</isEmpty>
+		</dynamic>	
+	<![CDATA[		 
+		   ) a
+			 order by a.order_by
+	]]>
+	</select>
+
+	<select id="getMenuKunnrTreeList" parameterClass="menu"
+		resultClass="menu">
+	<![CDATA[
+		select a.id, a.name, a.url,a.redirectUrl, a.target ,a.is_first isFirst,a.order_by as orderBy
+		  from (select distinct t4.id       as id,
+            t4.NAME     as name,
+            t4.URL      as url,
+            t4.redirect_url as redirectUrl,
+            t4.TARGET   as target,
+            t4.order_by,
+            t4.is_first
+      from basis.basis_tb_user_role t2
+      left join basis.basis_tb_role_menu t3
+      on t2.role_id = t3.role_id
+      right join basis.basis_tb_menu_items t4
+      on t3.menu_id = t4.id
+		 where t4.PID = #pid#
+	]]>
+		<dynamic>
+			<isEmpty property="flag">
+				<isNotEmpty property="userId" prepend="and">
+				<![CDATA[  t2.user_id= #userId# ]]>
+				</isNotEmpty>
+			</isEmpty>
+		</dynamic>	
+	<![CDATA[		 
+		   ) a
+			 order by a.order_by
+	]]>
+	</select>
+
+	<select id="getMenuCount" parameterClass="menu" resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(t.id)
+		  from basis.basis_tb_menu_items t, basis.basis_tb_menu_items p
+		 where t.pid = p.id
+	]]>
+		<dynamic>
+			<isNotEmpty property="id" prepend="and">
+			<![CDATA[ t.id = #id# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="pid" prepend="and">
+			<![CDATA[ t.pid = #pid# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="name" prepend="and">
+			<![CDATA[ t.name like #name,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="pname" prepend="and">
+			<![CDATA[ p.name like #pname,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="search" prepend="and">
+			<![CDATA[
+				  ( t.id like #search,handler=wildcard# escape '\'
+				 or t.name like #search,handler=wildcard# escape '\' )
+			]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="getMenuList" parameterClass="menu" resultClass="menu">
+		<include refid="global.paginationStart" />
+	<![CDATA[
+		select t.id,
+			   t.pid,
+			   t.name,
+			   t.url,
+			   t.target,
+			   t.redirect_url as redirectUrl,
+			   p.name         as pname,
+			   s.sso_user as ssoUser,
+			   s.sso_pwd  as ssoPwd,
+			   s.VALIDATE_TYPE as validateType
+		  from basis.basis_tb_menu_items t left join basis.basis_tb_menu_items p
+			 on t.pid = p.id left join basis.BASIS_TB_MENU_SSO s
+			 on t.id=s.menu_id and s.user_id=#userId# where 1=1
+	]]>
+		<dynamic>
+			<isNotEmpty property="id" prepend="and">
+			<![CDATA[ t.id = #id# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="pid" prepend="and">
+			<![CDATA[ t.pid = #pid# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="name" prepend="and">
+			<![CDATA[ t.name like #name,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="pname" prepend="and">
+			<![CDATA[ p.name like #pname,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+			<isNotEmpty property="search" prepend="and">
+			<![CDATA[
+				  ( t.id like #search,handler=wildcard# escape '\'
+				 or t.name like #search,handler=wildcard# escape '\' )
+			]]>
+			</isNotEmpty>
+			<isEmpty property="sort">
+			<![CDATA[ order by T.LAST_MODIFY DESC,t.pid desc, t.id desc ]]>
+			</isEmpty>
+		</dynamic>
+		<include refid="global.orderBy" />
+		<include refid="global.paginationEnd" />
+	</select>
+
+	<insert id="createMenu" parameterClass="menu">
+		<selectKey resultClass="java.lang.Long" keyProperty="id">
+		<![CDATA[
+			select basis.basis_seq_menu_items.NEXTVAL as id from dual
+		]]>
+		</selectKey>
+	<![CDATA[
+		insert into basis.basis_tb_menu_items
+		  (ID,
+		   PID,
+		   NAME,
+		   URL,
+		   TARGET,
+		   ORDER_BY,
+		   ISKUUNR_MENU,
+		   ISOFFICE_MENU,
+		   ISCLIENT_MENU,
+		   ISCUST_MENU,
+		   LAST_MODIFY,
+		   REDIRECT_URL)
+		values
+		  (#id:NUMBER#,
+		   #pid:NUMBER#,
+		   #name:VARCHAR#,
+	]]>
+		<dynamic>
+			<isNotEmpty property="redirectUrl">
+			<![CDATA[
+				   #url:VARCHAR# || #id:NUMBER#,
+			]]>
+			</isNotEmpty>
+			<isEmpty property="redirectUrl">
+			<![CDATA[
+				   #url:VARCHAR#,
+			]]>
+			</isEmpty>
+		</dynamic>
+	<![CDATA[
+		   #target:VARCHAR#,
+		   #orderBy:NUMBER#,
+		   #isKuunrMenu:VARCHAR#,
+		   #isOfficeMenu:VARCHAR#,
+		   #isClientMenu:VARCHAR#,
+		   #isCustMenu:VARCHAR#,
+		   sysdate,
+		   #redirectUrl:VARCHAR#)
+	]]>
+	</insert>
+
+	<select id="getMenuById" parameterClass="java.lang.Long"
+		resultClass="menu">
+	<![CDATA[
+		select t.id,
+			   t.pid,
+			   tt.name pname,
+			   t.name,
+			   t.url,
+			   t.target,
+			   t.order_by      as orderBy,
+			   t.iskuunr_menu  as isKuunrMenu,
+			   t.isoffice_menu as isOfficeMenu,
+			   t.isclient_menu as isClientMenu,
+			   t.iscust_menu   as isCustMenu,
+			   t.redirect_url  as redirectUrl
+		  from basis.basis_tb_menu_items t left join  basis.basis_tb_menu_items tt on t.pid=tt.id
+		 where t.id = #id#
+	]]>
+	</select>
+
+	<select id="getMenu" parameterClass="menu" resultClass="menu">
+	<![CDATA[
+		select t.id,
+			   t.pid,
+			   tt.name pname,
+			   t.name,
+			   t.url,
+			   t.target,
+			   t.order_by      as orderBy,
+			   t.iskuunr_menu  as isKuunrMenu,
+			   t.isoffice_menu as isOfficeMenu,
+			   t.isclient_menu as isClientMenu,
+			   t.iscust_menu   as isCustMenu,
+			   t.redirect_url  as redirectUrl,
+			   s.sso_user as ssoUser,
+			   s.sso_pwd as ssoPwd,
+				 s.validate_type as validateType
+		  from basis.basis_tb_menu_items t left join  basis.basis_tb_menu_items tt on t.pid=tt.id
+		  left join basis.BASIS_TB_MENU_SSO s
+			 on t.id=s.menu_id and s.user_id=#userId#
+		 where t.id = #id#
+	]]>
+	</select>
+
+	<update id="updateMenu" parameterClass="menu">
+	<![CDATA[
+		update basis.basis_tb_menu_items t
+		   set t.last_modify   = sysdate,
+			   t.pid           = #pid#,
+			   t.name          = #name#,
+			   t.url           = #url#,
+			   t.target        = #target#,
+			   t.order_by      = #orderBy#,
+			   t.iskuunr_menu  = #isKuunrMenu#,
+			   t.iscust_menu   = #isCustMenu#,
+			   t.redirect_url  = #redirectUrl#
+		 where t.id = #id#
+	]]>
+	</update>
+
+	<delete id="deleteMenu" parameterClass="menu">
+	<![CDATA[
+		delete basis.basis_tb_menu_items t
+		 where t.id in
+	]]>
+		<iterate property="codes" open="(" close=")" conjunction=",">#codes[]#
+		</iterate>
+	<![CDATA[
+		   and not exists (select 1 from basis.basis_tb_role_menu p where t.id = p.menu_id)
+		   and not exists (select 1 from basis.basis_tb_menu_items q where t.id = q.pid)
+	]]>
+	</delete>
+
+	<select id="getSelectedMenu4RoleCount" parameterClass="menu"
+		resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(t.id)
+		  from basis.basis_tb_role_menu t, basis.basis_tb_menu_items p
+		 where t.menu_id = p.id
+		   and t.role_id = #roleId#
+	]]>
+		<dynamic>
+			<isNotEmpty property="id" prepend="and">
+			<![CDATA[ p.id = #id# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="name" prepend="and">
+			<![CDATA[ p.name like #name,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="getSelectedMenu4RoleList" parameterClass="menu"
+		resultClass="menu">
+		<include refid="global.paginationStart" />
+	<![CDATA[
+		select t.id           as roleMenuId,
+			   p.id,
+			   p.pid,
+			   p.name,
+			   t.role_id      as roleId,
+			   p.url,
+			   p.target,
+			   p.redirect_url as redirectUrl
+		  from basis.basis_tb_role_menu t, basis.basis_tb_menu_items p
+		 where t.menu_id = p.id
+		   and t.role_id = #roleId#
+	]]>
+		<dynamic>
+			<isNotEmpty property="id" prepend="and">
+			<![CDATA[ p.id = #id# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="name" prepend="and">
+			<![CDATA[ p.name like #name,handler=wildcard# escape '\' ]]>
+			</isNotEmpty>
+		</dynamic>
+		<include refid="global.orderBy" />
+		<include refid="global.paginationEnd" />
+	</select>
+
+	<delete id="deleteSelectedMenu4Role" parameterClass="menu">
+	<![CDATA[
+		delete basis.basis_tb_role_menu t
+		 where t.role_id = #roleId#
+		   and t.menu_id in
+	]]>
+		<iterate property="codes" open="(" close=")" conjunction=",">#codes[]#
+		</iterate>
+	</delete>
+
+	<select id="checkSelectedMenu4Role" parameterClass="java.util.Map"
+		resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(t.id)
+		  from basis.basis_tb_role_menu t
+		 where t.role_id = #roleId#
+		   and t.menu_id = #menuId#
+	]]>
+	</select>
+
+	<insert id="selectMenu4Role" parameterClass="java.util.Map">
+		<selectKey resultClass="java.lang.Long" keyProperty="id">
+		<![CDATA[
+			select basis.basis_seq_role_menu.nextval as id from dual
+		]]>
+		</selectKey>
+	<![CDATA[
+		insert into basis.basis_tb_role_menu
+		  (ID, ROLE_ID, MENU_ID, LAST_MODIFY)
+		values
+		  (#id#, #roleId#, #menuId#, sysdate)
+	]]>
+	</insert>
+
+	<select id="getParentMenuId4Role" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+	<![CDATA[
+		select t.pid
+		  from basis.basis_tb_menu_items t
+		 where not exists (select 1
+				  from basis.basis_tb_role_menu p
+				 where t.pid = p.menu_id
+				   and p.role_id = #roleId#)
+		   and t.pid <> -1
+		   and t.id = #menuId#
+	]]>
+	</select>
+
+	<select id="getChildMenuId4Role" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+	<![CDATA[
+		select t.menu_id
+		  from basis.basis_tb_role_menu t, basis.basis_tb_menu_items p
+		 where t.menu_id = p.id
+		   and t.role_id = #roleId#
+		   and p.pid = #menuId#
+	]]>
+	</select>
+
+	<select id="blurSearchMenu" parameterClass="menu" resultClass="menu">
+	<![CDATA[
+		select p.id as pid,
+			   p.name as pname
+		  from basis.basis_tb_menu_items p
+		 where p.name like #name,handler=prefix# escape '\' 
+	]]>
+	</select>
+
+
+	<select id="searchSsoCount" parameterClass="menu" resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(*)
+		  from basis.BASIS_TB_MENU_SSO s
+		 where s.menu_id = #id#
+		  and s.user_id = #userId#
+	]]>
+	</select>
+
+	<insert id="createSso" parameterClass="menu">
+	<![CDATA[
+		insert into basis.BASIS_TB_MENU_SSO s
+		values
+		(#id#, #userId#, #ssoUser#, #ssoPwd#，#validateType#)
+	]]>
+	</insert>
+
+
+	<update id="updateSso" parameterClass="menu">
+	<![CDATA[
+		update basis.BASIS_TB_MENU_SSO s
+		set s.sso_user = #ssoUser#, s.sso_pwd = #ssoPwd#,s.validate_Type=#validateType#
+		where s.menu_id = #id#
+		and s.user_id = #userId#
+	]]>
+	</update>
+
+	<insert id="menuClickLog" parameterClass="menu">
+		<![CDATA[
+		insert into basis.Basis_Tb_Menulog
+		values(#ssoUser#,#name#,#redirectUrl#,to_char(sysdate,'yyyy-MM-dd hh24:ss'))
+		]]>
+	</insert>
+
+
+</sqlMap>

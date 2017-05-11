@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>系统登录页面</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+	    #CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<style type="text/css">
+		div{ padding:0; margin:0}
+		body{ background:url($!{env.imgUrl}/images/login/bg.jpg) no-repeat center top;  height:auto!important;height:655px; position:relative}
+		.login{ width:650px; height:290px; position:absolute; left:50%; margin-left:-325px; top:205px}
+		.loginBox{ width:350px; position:relative; left:310px; top:123px}
+		.loginBox td{ font:12px/22px "宋体"; color:#000; padding:10px 0}
+		.loginBox td input{ width:160px; height:20px; border:1px solid #0465ff; font:12px/20px Arial, "宋体"; color:#666; padding-left:3px; margin:0}
+		.loginBox td input.submit{ width:67px; height:22px; background:url($!{env.imgUrl}/images/login/input01.jpg) no-repeat; padding:0; cursor:pointer; border:0}
+		.loginBox td input.reset{ background:url($!{env.imgUrl}/images/login/input02.jpg) no-repeat}
+</style>
+<body>
+	<form action="loginAction!login.jspa" method="post">
+	<div class="login">
+		<div class="loginBox">
+			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>用&nbsp;户&nbsp;名：</td>
+                    <td>
+						<input type="text" maxLength='50' id='passport' name='passport' autocomplete="on" value="$!{passport}"></input>
+					</td>
+				</tr>
+				<tr>
+					<td>密&nbsp;&nbsp;&nbsp;&nbsp;码：</td>
+					<td><input type="password"  maxLength='50' name='password' autocomplete="off"/>
+						<font size="2.5px" >
+							<a href="javascript:forget()" ><b>忘记密码？</b></a>
+						</font>
+					</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>
+						<input type="submit" value="" class="submit" />
+						<input type="reset" value="" class="submit reset"/>
+					</td>
+				</tr>
+				<tr>
+								<div align="center" id="logfail">
+									<font size="1px" >
+										$!{failMessage}
+                                    </font>
+                           </div>
+			  </tr>
+			</table>
+		</div>
+	</div>
+   </form>
+    <div id="Email"/>  
+</body>
+
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/login/login.js?js_version=20150109093026"></script>
+
+</html>

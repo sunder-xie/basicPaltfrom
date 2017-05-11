@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body>
+		<!-- 权限点查询 -->
+	        <form method="post">
+			<div id="p_search" class="easyui-panel" title="查询条件"
+				style="padding: 2px; background: #fafafa;" data-options="collapsible:true,iconCls:'icon-search'">
+				<table width="100%" border="0" cellpadding="0" cellspacing="1">
+				<tr>
+				<input type="hidden" id="ids" name="ids"/>
+                    <td class="head" noWrap><label for="con1">权限点ID</label> </td>
+                    <td><input type="text" id="con_id" name="con_id"></input></td>
+                    <td class="head" noWrap><label for="con2">权限点名称</label></td>
+					<td><input type="text" id="con_name" name="con_name" ></input></td>
+                    <td class="head" noWrap><label for="con3">权限点编号</label></td>
+                    <td><input type="text" id="con_num" name="con_num"></input></td> 
+					<td class="head" noWrap><label for="con4">点击查询</label></td>
+					<td>
+						<a id="con_search" href="javascript:search()" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
+                    				<a href="javascript:clearValue()" class="easyui-linkbutton" iconCls="icon-clear">重置</a> 	
+
+					</td>
+                </tr>
+                </table>
+				</div>
+			</div>
+			<table id="con_list"></table>
+	</form>
+	</div>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+		<div id="maintWindow"/> 
+	</body>
+
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/conpoint/searchConpoint.js"></script>
+</html>

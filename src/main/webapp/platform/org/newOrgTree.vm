@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>组织树</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body>
+	<input type="hidden" id="orgId" name="orgId" ></input>
+	<input type="hidden" id="orgName" name="orgName"></input>
+	<a class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="submit()" >确定</a>
+	&nbsp;&nbsp;&nbsp;&nbsp
+	<input  title="全选/反选" type="checkbox" id="selectAll" onClick="treeChecked(this,'orgTree')"/> 全选/反选
+	<br>
+	<input id="ss"></input>
+
+    <ul id="orgTree" class="easyui-tree"/>
+	</div> 
+	</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/org/newOrgTree.js?version=20170117"></script>
+</html>

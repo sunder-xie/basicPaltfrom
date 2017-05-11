@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body>
+		<form method="post">
+			<input type="hidden" id="total_id" name="total_id" value="$!{total_id}"/>
+			<input type="hidden" id="totalShow" name="totalShow" value="$!{totalShow}"/>
+			<div class="easyui-panel" title="条件查询" data-options="iconCls:'icon-search'" style="padding: 2px; background: #fafafa;">
+			<table width="100%" border="0" cellpadding="0" cellspacing="2">
+			<tr>
+				<td align="center">
+					<input id='total_Name' class="easyui-searchbox" data-options="prompt:'输入关键字查询',searcher:search" style="width:200px"></input>
+				</td>
+			</tr>
+		    </table>
+			</div>
+			<table id="datagrid">  
+			</table> 
+		</form>
+	</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/news/search.js"></script>
+</html>

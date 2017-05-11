@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="org" extends="kintiger-default">
+		<default-interceptor-ref name="kintigerInterceptor" />
+		<action name="orgTreeAjaxAction" class="orgTreeAjaxAction"></action>
+		<action name="orgAction" class="orgAction"> 
+			<result>/platform/org/orgMainManage.vm</result>
+			<result name="orgtree">/platform/org/orgTree.vm</result>
+			<result name="orgtree1">/platform/org/orgTree1.vm</result>
+			<result name="orgtree2">/platform/org/orgTree2.vm</result>
+			<result name="orgSAPTree">/platform/org/orgSAPTree.vm</result>
+			<result name="orgTreePage4Post">/platform/org/orgTreePage4Post.vm</result>
+			<result name="orgSynchroniz">/platform/org/orgSynchroniz.vm</result>
+			<result name="orgTreeAll">/platform/org/orgTreeAll.vm</result>
+			<result name="toOrgTreeBySearch">/platform/org/orgTreeBySearch.vm</result>
+		</action>
+		<action name="newOrgAction" class="newOrgAction">
+			<result name="newOrgTree">/platform/org/newOrgTree.vm</result>
+			<result name="newOrgTree2">/platform/org/newOrgTree2.vm</result>
+			<result name="newOrgTreeForDealer">/platform/org/newOrgTreeForDealer.vm</result>
+			<result name="orgTreeAll">/platform/org/orgTreeAll.vm</result>
+		</action>
+	</package>
+</struts>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="evtstatisticsAction" class="com.kintiger.platform.evtstatistics.action.EvtstatisticsAction"
+		parent="baseAction" scope="request">
+		<property name="evtstatisticsService" ref="evtstatisticsService"/>
+		<property name="orgService" ref="orgService" />
+	</bean>
+	
+	<bean id="evtstatisticsService" class="com.kintiger.platform.evtstatistics.service.impl.EvtstatisticsServiceImpl" >
+		<property name="evtstatisticsDao" ref="evtstatisticsDao"/>
+	</bean>
+	
+	<bean id="evtstatisticsDao" class="com.kintiger.platform.evtstatistics.dao.impl.EvtstatisticsDaoImpl" parent="baseDao">
+	</bean>
+</beans>

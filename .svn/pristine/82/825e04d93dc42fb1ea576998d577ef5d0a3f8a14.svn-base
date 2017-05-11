@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="monitor">
+	<typeAlias alias="hessianTotal"
+		type="com.kintiger.platform.monitor.pojo.HessianTotal" />
+	<typeAlias alias="hessianDetail"
+		type="com.kintiger.platform.monitor.pojo.HessianDetail" />
+	<select id="searchHessian" resultClass="hessianDetail">
+		<![CDATA[
+		select t.hessian_name hessianName, d.record_date recordDate, d.count
+		from basis.basis_tb_hessian_total t
+		left join basis.basis_tb_hessian_detail d
+		on t.id = d.total_id
+		where (to_date(d.record_date, 'yyyy-MM-dd') between
+		to_date(to_char(sysdate - 9, 'yyyy-MM-dd'), 'yyyy-MM-dd') and
+		to_date(to_char(sysdate, 'yyyy-MM-dd'), 'yyyy-MM-dd'))
+ 		order by t.hessian_name,d.record_date		
+ 		]]>
+	</select>
+
+</sqlMap>

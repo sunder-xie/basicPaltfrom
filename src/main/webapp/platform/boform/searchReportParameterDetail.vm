@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body class="easyui-layout">
+	
+	<form method="post" id="ff" target="hideFrame">
+		<div id="p_add" region="center" class="easyui-panel"
+			title="报表参数配置修改"
+			data-options="iconCls:'icon-edit'">
+			
+			<table id="table_01" width="100%" cellspacing="1" border="0">
+				<tr>
+    				<td class="head" nowrap>
+    											报表编号
+    										</td>
+											<td >
+												<input type='text' id='bid' name="reportParameter.bid" value='$!{reportParameter.bid}'  class="easyui-numberbox" data-options="required:true" />
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head" noWrap >
+    											表名
+    										</td>
+											<td >
+												<input class="easyui-validatebox" id='tableName' name="reportParameter.tableName" value='$!{reportParameter.tableName}' validType="length[0,100]" />
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head" nowrap>
+    											ID字段
+    										</td>
+											<td >
+												<input class="easyui-validatebox" id='zdid' name="reportParameter.zdid" value='$!{reportParameter.zdid}' validType="length[0,30]" />
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head" nowrap>
+    											描述字段
+    										</td>
+											<td >
+												<input class="easyui-validatebox" id='zdtxt' name="reportParameter.zdtxt" value='$!{reportParameter.zdtxt}' validType="length[0,30]"/>
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head" nowrap>
+    											查询Lable
+    										</td>
+											<td>
+												<input class="easyui-validatebox" id='memo' name="reportParameter.memo" value='$!{reportParameter.memo}'  data-options="required:true" validType="length[0,100]" />
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head" nowrap>
+    											参数可选数量
+    										</td>
+											<td>
+												<input type='text' id='amount' name="reportParameter.amount" value='$!{reportParameter.amount}' readonly />
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head" nowrap>
+    											有无描述
+    										</td>
+											<td >
+												<input type='text' id='txt' name="reportParameter.txt" value='$!{reportParameter.txt}' readonly />
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head" nowrap>
+    											是否必填
+    										</td>
+											<td >
+												<input type='text' id='che' name="reportParameter.che" value='$!{reportParameter.che}' readonly />
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head" nowrap>
+    											查询条件
+    										</td>
+											<td>
+												<input class="easyui-validatebox" id='d' name="reportParameter.d" value="$!{reportParameter.d}" validType="length[0,100]" />
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head" nowrap>
+    											别名
+    										</td>
+											<td >
+												<input class="easyui-validatebox" id='nickname' name="reportParameter.nickname" value='$!{reportParameter.nickname}' validType="length[0,30]" />
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head" nowrap>
+    											校验方式
+    										</td>
+											<td >
+												<input type='text' id='checkWay' name="reportParameter.checkWay" value='$!{reportParameter.checkWay}' readonly />
+											</td>
+                                    	</tr>
+				</table>
+			</div>
+			<input type='hidden' name='reportParameter.pid' value='$!{reportParameter.pid}'></input>
+		<div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+				<a class="easyui-linkbutton" icon="icon-ok" href="javascript:save()">确定</a>
+				<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:cencel()">取消</a>
+			</div>
+	</form>
+	<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+	</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/boform/searchReportParameterDetail.js"></script>
+</html>

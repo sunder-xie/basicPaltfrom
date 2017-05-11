@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>组织树</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body>
+	<input type="hidden" id="orgId" name="orgId"></input>
+	<input type="hidden" id="orgName" name="orgName"></input>
+    <input type="hidden" id="orgIdIn" name="orgIdIn" value="$!{orgIdIn}"></input>
+    <ul id="orgTree" class="easyui-tree"/>
+	<div id="treeMenu" class="easyui-menu" style="width:120px;"> 
+    <div name="update">select</div>
+	</div> 
+	</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/org/orgTree.js"></script>
+</html>

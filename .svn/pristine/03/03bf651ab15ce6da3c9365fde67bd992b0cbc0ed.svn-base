@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<body>
+		<form method="post" enctype="multipart/form-data" target="hideFrame">
+		<div class="easyui-panel" title="模板修改" data-options="iconCls:'icon-edit'">
+			<table width="100%"  border="0" cellpadding="0" cellspacing="1" id="modles">
+							<tr>
+    				<td class="head" noWrap style="text-align: right">
+    					ID
+    				</td>
+					<td noWrap>
+						<input id ='bid' class="easyui-validatebox" type='text' value='$!{modifytype.ID}' disabled />
+					</td>
+                </tr>
+				<tr>
+    				<td class="head" noWrap style="text-align: right">
+    					上传人
+    				</td>
+					<td noWrap>
+						<input  class="easyui-validatebox" type='text' value='$!{modifytype.UPLOADER}' disabled />
+					</td>
+                </tr>
+					<tr>
+    				<td class="head" noWrap style="text-align: right">
+    					上传时间
+    				</td>
+					<td noWrap>
+						<input class="easyui-validatebox" type='text' id="reportdate" value='$!{modifytype.UPLOADTIME}' disabled />
+					</td>
+                </tr>
+				<tr>
+    				<td class="head" noWrap style="text-align: right">
+    					报表名称
+    				</td>
+					<td noWrap>
+						<input class="easyui-validatebox" type='text' value='$!{modifytype.FILENAME}' disabled />
+					</td>
+                </tr>
+				
+				<tr>
+    				<td class="head" noWrap style="text-align: right">
+    					备注
+    				</td>
+					<td noWrap>
+						<input class="easyui-validatebox" type='text' id='remain' name="remain" data-options ="required:true, missingMessage:'不能为空'" value='$!{modifytype.REMAN}'/>
+					</td>
+                 </tr>
+				<td class="head" noWrap style="text-align: right">
+					是否分页查询
+				</td>
+				<td noWrap>
+					<input type="hidden" id='tempispag' value='$!{modifytype.is_pagination}'/>
+					<select id="is_pagination" name="is_pagination"onchange="selctPagination()">
+                      <option value ="1" >不分页</option>
+                      <option value ="0">分页</option>
+                    </select>
+			</td>
+			
+					<tr id="hiddentr">
+						<td class="head" noWrap style="text-align: right">分页数</td>
+						<td><input class="easyui-validatebox" type='text' id='pageNum' name="pageNum" data-options ="required:true, missingMessage:'只能填写数字'" value='$!{modifytype.pageNum}'/></td>
+					</tr>
+			
+		    </table>
+		</div>
+		<div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+			<a class="easyui-linkbutton" icon="icon-ok" href="javascript:modify()">确定</a>
+			<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:window.parent.colsewindow()">取消</a>
+		</div>
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+		<div id="maintEvent"/>
+	</body>
+	<script type="text/javascript" src="$!{env.imgUrl}/js/platform/ireport/modifyReport.js"></script>
+</html>

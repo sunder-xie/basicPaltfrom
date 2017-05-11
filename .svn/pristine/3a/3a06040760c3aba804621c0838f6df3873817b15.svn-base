@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<body>
+		<form method="post" target="hideFrame" enctype="multipart/form-data">
+			<div  class="easyui-panel" title="预算调整申请" data-options="iconCls:'icon-edit'">
+				<table width="100%" border="0" cellpadding="0" cellspacing="1">
+					<tr>
+						<td class="head" noWrap>流程模板：</td>
+						<td>
+							<input name="nextUserId" id="nextUserId" type="hidden"/>
+						    <input name="key" id="key" type="hidden"/>
+							#if($!{companyCode} == '6000')
+								#if($!{orgFlag} == '0')
+								<select name="modelId" id="modelId">
+									<option value="fix_yxznystz">营销公司职能预算调整</option>
+								</select>
+								#else
+								<select name="modelId" id="modelId">
+									<option value="fix_yxxsystz">营销公司销售预算调整</option>
+								</select>
+								#end
+							#else
+							<select name="modelId" id="modelId">
+							  <option value="fix_factoryBudget" >工厂预算调整</option> 
+							  <option value="fix_znxlystz" selected>职能预算调整</option>
+							</select>
+							#end
+						</td>
+					</tr>
+					<tr>
+						<td class="head" noWrap>标题：</td>
+						<td>
+							<input name="title" id="title" size="30"/>
+						</td>
+					</tr>
+					<tr>
+						<td class="head" noWrap>备注：</td>
+						<td>
+							<textarea name="bugetChange.comment" cols="60" rows="6">$!{comment}</textarea>
+						</td>
+					</tr>
+					<tr>
+						<td class="head" noWrap>是否调整总额：</td>
+						<td>
+                        <select name="bugetChange.isChangeMoney" id="isChangeMoney"><option value="N" selected>否</option> <option value="Y">是</option></select>
+						</td>
+					</tr>
+					<td class="head" noWrap style="text-align: right">
+                        附件上传：
+                    </td>
+                    <td noWrap>
+                        <div id="input">
+                            <input class="easyui-validatebox" name="upload" id="file0" type="file" value="添加附件" onchange="addFile()" />
+                            <font size="2.5" color="red">继续点击添加多个附件</font>
+                        </div>
+                        <div id="_file"></div>
+					</td>
+                </tr>
+				</table>
+			</div>
+			<div border="false" style="height:6px;"></div>
+			<div border="false" style="text-align:right;height:30px;line-height:30px;">
+				<a class="easyui-linkbutton" icon="icon-ok" href="javascript:submit()">确定</a>
+			</div>
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+	</body>
+	<script type="text/javascript" src="$!{env.imgUrl}/js/platform/account/toBugetChange.js"></script>
+	<script type="text/javascript" src="$!{env.imgUrl}/js/platform/upload.js"></script>
+</html>

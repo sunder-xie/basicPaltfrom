@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui", "upload"])
+		#JS_ENV_VAL()	
+	</head>
+	<body>
+		<form method="post" enctype="multipart/form-data" target="hideFrame">
+		<input type="hidden" id="num" name="num" value="$!{total}" />
+		<input type="hidden" id="defaultPayee" name="defaultPayee" value="$!{payeeInfo.payee}" />
+		<input type="hidden" id="defaultPayeeId" name="defaultPayeeId" value="$!{payeeInfo.id}" />
+		<div class="easyui-panel" title="出差旅费单提报" data-options="iconCls:'icon-edit'">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1">
+				<tr>
+    				<td class="head" noWrap style="text-align: right">
+    					事务标题
+    				</td>
+					<td noWrap>
+						<input class="easyui-validatebox" type='text' id='title' name="title" data-options ="required:true"/>
+					</td>
+                </tr>
+				<tr>
+    				<td class="head" noWrap style="text-align: right">
+    					提交人
+    				</td>
+					<td noWrap>
+						<input id="curUserName" name="userName" class="easyui-validatebox" type='text' value='$!{userName}' readonly />
+						<input id="curUserId" name="userId" type="hidden" value="$!{userId}" />
+						<input id="modelId" type="hidden" name="key"/>
+					</td>
+                 </tr>
+				 <tr>
+					<td class="head" noWrap style="text-align: right">
+						提交人部门
+                    </td>
+					<td>
+						<input name="singleTotal.org_name" type='text' value='$!{orgName}' class="easyui-validatebox" readonly/>
+						<input name="singleTotal.org_id" type='hidden' value='$!{orgId}' />
+                    </td>
+				 </tr>
+				 <tr>
+					<td class="head" no Wrap style="text-align : right">
+						参考创建
+					</td>
+					<td>
+						<input type="text" id="reference" name="reference" />
+					</td>
+				 </tr>
+				 <tr>
+    				<td class="head" noWrap style="text-align: right">
+    					附件上传
+    				</td>
+					<td colspan="3">
+						<div id="input">
+							<input class="easyui-validatebox" name="upload" id="file0" type="file" value="添加附件" onchange="addFile()" />
+							<font size="2.5" color="red">自备车出差等上传清单</font>
+						</div>
+						<div id="_file"></div>
+					</td>
+				 </tr>
+		    </table>
+		</div>
+		
+		<div region="south" border="false" style="height:12px;"></div>
+		
+		<div class="easyui-panel" title="报销单--总单信息" >
+			<table width="100%" border="0" cellpadding="0" cellspacing="1">
+				<tr>
+    				<td class="head" noWrap style="text-align: right">
+    					&nbsp;&nbsp;&nbsp;&nbsp;收款人
+    				</td>
+					<td>
+						<input type="text" id="payee" name="payee" />
+						<input type="hidden" id="pay_ee" name="singleTotal.pay_ee" />
+					</td>
+					<td class="head" noWrap style="text-align: right">
+						支付账号
+                    </td>
+					<td>
+						<input id="payAccount" name="payAccount" type='text' class="easyui-combobox" />
+						<input type="hidden" id="pay_account" name="singleTotal.pay_account" />
+						<a class="easyui-linkbutton" href="javascript:addNewAccount()">新增</a>
+                    </td>
+					<td class="head" noWrap style="text-align: right">
+						费用承担部门
+                    </td>
+					<td>
+						<input id="orgName" name="singleTotal.cost_org_name" type='text' value="$!{orgName}" class="easyui-validatebox"  />
+						<a class="easyui-linkbutton" href="javascript:selectOrgTree();">组织</a>
+						<input id="orgId" name="singleTotal.cost_org_id" type='hidden' value='$!{orgId}' /> 	
+					</td>
+                </tr>
+				<tr>
+    				<td class="head" noWrap style="text-align: right">
+    					项目
+    				</td>
+					<td>
+						<input id="costCenter" name="singleTotal.cost_center" />
+						<input id="costCenterName" name="singleTotal.cost_center_name" type="hidden" />
+					</td>
+					<td class="head" noWrap style="text-align: right">
+    					支付类型
+    				</td>
+					<td>
+                        <input type='radio' value="1" name="singleTotal.pay_type" >&nbsp;现金&nbsp;</input>
+                        <input type='radio' value="2" name="singleTotal.pay_type" checked >&nbsp;银行&nbsp;</input>
+                        <input type='radio' value="3" name="singleTotal.pay_type" >&nbsp;其他</input>
+					</td>
+					<td class="head" noWrap style="text-align: right">
+    					合计报销金额
+    				</td>
+					<td>
+						<input id="totalMoney" name="singleTotal.total_money" class="easyui-validatebox" type='text' value="0" readonly/>
+					</td>
+				</tr>
+				
+				<tr>
+    				<td class="head" noWrap style="text-align: right">
+    					说明
+    				</td>
+					<td colspan="5">
+						<input id="memo" name="singleTotal.memo" class="easyui-validatebox" type='text' data-options ="required:true" size="100"/>
+						<font size="2.5" color="red">报销单抬头说明(75字以内)</font>
+					</td>
+				 </tr>
+				 
+		    </table>
+		</div>
+		
+		<div region="south" border="false" style="height:6px;"></div>
+		
+		<div class="easyui-panel" title="报销单--明细信息" >
+			<div region="south" border="false" style="text-align:left;height:30px;line-height:30px;BACKGROUND-COLOR:#f4f4f4">
+				<font style="color:#cccccc">|</font><a class="easyui-linkbutton" plain="true" icon="icon-add" href="javascript:addRow()">添加行
+				</a><font style="color:#cccccc">|</font><a class="easyui-linkbutton" plain="true" icon="icon-remove" href="javascript:removeRow()">删除行
+				</a><font style="color:#cccccc">|</font>
+			</div>
+			<table id="myTab" width="100%" cellpadding="0" border="1px" bordercolor="#cccccc" cellspacing="0px" style="border-collapse:collapse">
+				
+				<tr style="height:25px;BACKGROUND-COLOR:#f4f4f4">
+					<td width="2%" style="text-align: center">
+						<input id="item_all" type="checkbox" onclick="checkAll();"/>
+					</td>
+					<!--
+					<td width="3%" style="text-align: center">
+						项次
+					</td> 
+					-->
+					<td width="10%" style="text-align: center">
+						费用类型
+                    </td>
+					<td width="8%" style="text-align: center">
+						费用日期
+                    </td>
+					<td width="14%"style="text-align: center">
+						开支用途
+                    </td>
+					<td width="8%" style="text-align: center">
+						发票张数
+                    </td>
+					<td width="10%" style="text-align: center">
+						发票金额
+                    </td>
+					<td width="20%" style="text-align: center">
+						备注
+                    </td>
+                </tr>
+
+		    </table>
+		</div>
+		
+		<div region="south" border="false" style="text-align:right;height:100px;line-height:100px;">
+			<a class="easyui-linkbutton" icon="icon-ok" href="javascript:submit()">确定</a>
+			<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:reset()">取消</a>
+		</div>
+		
+		<div id="toolbar" class="datagrid-toolbar" >
+			<input class="easyui-searchbox" searcher="searcher" prompt="请填写查询条件" style="width:300px"></input>		
+		</div>
+		
+		<div id="toolbar_payee" class="datagrid-toolbar" >
+			<input class="easyui-searchbox" searcher="searcher_payee" prompt="请填写查询条件" style="width:300px"></input>		
+		</div>
+		
+		<div id="toolbar_reference" class="datagrid-toolbar" >
+			<input class="easyui-searchbox" searcher="searcher_reference" prompt="请填写查询条件" style="width:300px"></input>		
+		</div>
+		
+		<div id="expTypeToolBar">
+        </div>
+		
+		<input id="detailJsonStr" name="detailJsonStr" type="hidden" />
+		<input id="nextUserId" name="nextUserId" type="hidden" />
+		<input id="projectId"  name="projectId" type="hidden"/>
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+        <div id="maintDiv"/>
+	</body>
+	<script type="text/javascript" src="$!{env.imgUrl}/js/platform/account/traReimbur.js"></script>
+</html>

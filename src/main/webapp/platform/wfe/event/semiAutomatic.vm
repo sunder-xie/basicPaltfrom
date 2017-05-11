@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body>
+	<form method="post">
+		<div>
+			<div  style="border:1px solid #95B8E7;float:left;min-height:379px;width:200px;">
+			<input class="easyui-searchbox" searcher="searchPerson"  prompt="输入名字检索" style="width:200px"></input> 
+				<input type="hidden" id="ids" name="ids"/>
+				<input  type="hidden"  id="eventId" name="eventId" value="$!{eventId}"/>
+				<input  type="hidden"  id="toDoDetail" name="toDoDetail" value="$!{toDoDetail}"/>
+				<input  type="hidden"  id="userList" name="userList"/>
+				<input  type="hidden"  id="type" name="type" value="$!{type}"/>
+				<!--<input type="hidden" id="orgId" name="orgId" />
+				<input type="hidden" id="orgName" name="orgName" />-->
+				<ul id="orgTree" class="easyui-tree"/>
+				<div id="treeMenu" class="easyui-menu" style="min-height:200px"> 
+					<div name="update">select</div>
+				</div> 
+			</div>
+			<div style="width:200px;float:left;min-height:379px"> 
+				<table id="datagrid">  
+				</table> 
+			</div>
+			<div style="border:1px solid #95B8E7;min-width:234px;min-height:379px;float:left;">
+                <div style="border:1px solid #95B8E7;min-height:25px">
+					<a id='save' href="javascript:save();" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+						
+				</div>
+				 <div style="border:1px solid #95B8E7;min-height:25px">
+						<font color='green' size="2">温馨提示：</font>
+						<font color='green' size="2">左边为抄送人列表,拖至右边删除.</font>
+				</div>
+				<div style="min-height:200px;">
+					<div id="source" style="border:1px solid #95B8E7;width:135px;height:324px;float:left;"> 
+        			</div>
+					<div id="target" style="border:1px solid #95B8E7;width:135px;height:324px;float:left;">
+        			</img>
+                </div>
+				</div>
+			</div>
+		</div>
+		</form>
+		<iframe id="hideFrameSemiAutomatic" name="hideFrameSemiAutomatic"  style="height: 0; width: 0"></iframe>
+	</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/wfe/event/semiAutomatic.js?version=20161108"></script>
+</html>

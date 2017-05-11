@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body>
+		<form method="post">
+			<div id="dd" style="overflow:auto;width:49%;float:left">
+				<div class="easyui-panel" title="报表角色" data-options="collapsible:true">
+					<table width="100%" border="0" cellpadding="0" cellspacing="1">
+					<tr>
+				    <td class="head" noWrap>角色编号:</td>
+				    <td><input class="easyui-validatebox" id="roleId1" name="roleId1"></td>
+                     </td>
+				    <td class="head" noWrap>清空:</td>
+			        <td><a href="javascript:clearValue_1()" class="easyui-linkbutton" iconCls="icon-clear">Clear</a>
+                  </td>
+				  </tr>
+				  <tr>
+                  <td class="head" noWrap>角色名称:</td>
+			     <td><input class="easyui-validatebox" id="roleName" name="roleName"></td>	
+				   <td class="head" noWrap>查询:</td>
+				      <td><a href="javascript:search_1()" class="easyui-linkbutton" iconCls="icon-search">Search</a>		
+						</td>
+					</tr>
+				</table>
+                </div>
+				<table id="datagrid_1"></table> 
+			</div>
+			
+			<div style="width:49%;float:right"> 
+				<div class="easyui-panel" title="报表角色配置" data-options="collapsible:true">
+					<table width="100%" border="0" cellpadding="0" cellspacing="1">
+					<tr>
+						<td class="head" noWrap>
+						   字段
+						</td>
+						<td>
+							<input class="easyui-validatebox" id="memo" name="memo"/>
+						</td>
+						<td class="head" noWrap>
+							清空
+						</td>
+						<td>
+							<a href="javascript:clearValue_2()" class="easyui-linkbutton" iconCls="icon-clear">Clear</a> 	
+						</td>
+						</tr>
+					   <tr>
+						<td class="head" noWrap>
+						     值
+						</td>
+						<td>
+							<input class="easyui-validatebox" id="value" name="value"/>
+						</td>
+             			<td class="head" noWrap>
+							查询
+						</td>
+						<td>
+							<a href="javascript:search_2()" class="easyui-linkbutton" iconCls="icon-search">Search</a>
+								
+						</td>
+					</tr>
+				</table>
+                </div>
+				<table id="datagrid_2">  
+				</table> 
+			</div>		
+			<input type="hidden" id="ids" name="ids"/>
+			<input type="hidden" id="ids1" name="ids1"/>
+			<input type="hidden" id="deleteType" name="deleteType"/>
+			<input type="hidden" id="roleId" name="roleId"/>
+			
+			<input type="hidden" id="instock_id" name="instock_id" />
+			<input type="hidden" id="instock_provide_id" name="instock_provide_id" />
+			<input type="hidden" id="instock_good_place" name="instock_good_place" />
+			<input type="hidden" id="custId" name="custId" />
+			<input type="hidden" id="matnr" name="matnr" />
+			<input type="hidden" id="deleteType" />
+			<!--  <div id="toolbar2" class="datagrid-toolbar" >
+		        <input id="ss" class="easyui-searchbox" searcher="searcher" prompt="请填写客户代码或客户名称" customer="#mm" style="width:300px"></input>		
+		     </div>
+			<div id="toolbar1" class="datagrid-toolbar" >
+		        <input id="ss" class="easyui-searchbox" searcher="searcher1" prompt="请填写物料号或物料名" customer="#mm" style="width:300px"></input>		
+			</div>-->
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+		<div id="maintModelAtt"/>
+	</body>
+	<script type="text/javascript" src="$!{env.imgUrl}/js/platform/boform/searchBoRole.js"></script>
+</html>

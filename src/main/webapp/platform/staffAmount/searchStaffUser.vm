@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<body class="easyui-layout">
+		<form id="form3" action="" method="post">
+			<div region="center"  class="easyui-panel" title="占编人员查看"  >
+			<input  type="hidden"  id="orgId" name="orgId" value='${orgId}'>
+			<input  type="hidden"  id="stationId" name="stationId" value='${stationId}'>
+			<input  type="hidden"  id="type" name="type" value='${type}'>
+			<table id="datagrid1" style="height:300px">  
+			</table> 
+			</div>
+		</form>
+	</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/staffAmount/searchStaffUser.js"></script>
+</html>

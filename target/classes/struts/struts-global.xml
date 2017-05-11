@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="kintiger-default" extends="struts-default, json-default">
+		<result-types>
+			<result-type name="json"
+				class="com.kintiger.platform.framework.util.JSONResult" />
+		</result-types>
+
+		<interceptors>
+			<interceptor name="authInterceptor"
+				class="com.kintiger.platform.framework.content.interceptor.AuthencationInterceptor" />
+
+			<interceptor name="permissionInterceptor"
+				class="com.kintiger.platform.framework.content.interceptor.PermissionIntercepter" />
+
+			<interceptor name="decodeParams"
+				class="com.kintiger.platform.framework.content.interceptor.DecodeParametersInterceptor" />
+
+			<interceptor-stack name="kintigerInterceptor">
+				<interceptor-ref name="defaultStack" />
+				<interceptor-ref name="decodeParams" />
+				<interceptor-ref name="authInterceptor" />
+				<interceptor-ref name="permissionInterceptor" />
+			</interceptor-stack>
+		</interceptors>
+
+		<default-interceptor-ref name="kintigerInterceptor"></default-interceptor-ref>
+
+		<global-results>
+			<result name="jsonresult" type="json"></result>
+			<result name="resultMessage">/platform/common/resultMessage.vm</result>
+			<result name="nopermission">/platform/common/onlyPermission4Search.vm</result>
+			<result name="logfail" type="redirect-action">loginAction!logout.jspa?failMessage=${failMessage}
+			</result>
+			<result name="logout">/platform/login/login.vm</result>
+			<result name="logintimeout">/platform/login/loginTimeout.vm</result>
+		</global-results>
+	</package>
+</struts>

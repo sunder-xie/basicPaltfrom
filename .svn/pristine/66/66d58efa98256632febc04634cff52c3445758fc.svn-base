@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body class="easyui-layout">
+	         <form method="post" target="hideFrame">
+			<div>
+			  <input type="hidden" id="dictTypeId" name="dictTypeId" value="$!{dictTypeId}" />
+			</div>
+			<div region="center" ><table id="dict_list"></table></div>
+	</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+			 <div id="maintWindow"/> 
+	</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/dict/searchDict.js"></script>
+</html>

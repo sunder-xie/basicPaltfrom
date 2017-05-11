@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="index" extends="struts-default">
+		<action name="index" class="loginAction" method="index">
+			<result name="index">/platform/login/login_xpp.vm</result>
+			<result name="initCon">/platform/login/initCon.vm</result>
+		</action>
+	</package>
+
+	<package name="login" extends="struts-default">
+		<action name="loginAction" class="loginAction">
+			<result name="index">/platform/login/login_xpp.vm</result>
+			<result name="changePassword">/platform/login/changePassword.vm</result>
+			<result name="kunnrchangePassword">/platform/login/kunnrchangePassword.vm</result>
+			<result name="success">/platform/login/homePage_xpp.vm</result>
+			<result name="kunnrsuccess">/platform/login/homePage_kunnrxpp.vm</result>
+			<result name="logfail">/platform/login/login_xpp.vm</result>
+			<result name="logout" type="redirect">/index.jspa</result>
+			<result name="logintimeout">/platform/login/loginTimeout.vm</result>
+		</action>
+	</package>
+</struts>

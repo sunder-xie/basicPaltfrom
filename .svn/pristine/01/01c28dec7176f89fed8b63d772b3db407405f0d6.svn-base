@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="wfe" extends="kintiger-default" namespace="/wfe">
+		<action name="eventAction" class="eventAction">
+			<result name="createPrepare">/platform/wfe/event/createEvent.vm</result>
+			<result name="searchEventDetail">/platform/wfe/event/searchEventDetail.vm</result>
+			<result name="updateEventContentPrepare">/platform/wfe/event/eventContent.vm</result>
+			<result name="updateEventAttributeContentPrepare">/platform/wfe/event/eventAttributeContent.vm</result>
+			<result name="searchEventContent">/platform/wfe/event/searchEventContent.vm</result>
+			<result name="toSearchProcessEvent">/platform/wfe/event/searchProcessEvent.vm</result>
+			<result name="toSearchEvent">/platform/wfe/event/searchEvent.vm</result>
+			<result name="toSearchProcessedEvent">/platform/wfe/event/searchProcessedEvent.vm</result>
+			<result name="toProcessEvent">/platform/wfe/event/processEvent.vm</result>
+			<result name="toProcessEventFix_signsample">/platform/wfe/event/processEventFix_signsample.vm</result>
+			<result name="toSemiAutomatic">/platform/wfe/event/semiAutomatic.vm</result>
+			<result name="toSearchAuthorizeEvent">/platform/wfe/authorizeEvent/searchAuthorizeEvent.vm</result>
+			<result name="searchLinkMan">/platform/wfe/event/searchLinkMan.vm</result>
+			<result name="searchBackUser">/platform/wfe/event/searchBackUser.vm</result>
+			<result name="toSearchStationId">/platform/wfe/event/searchStationId.vm</result>
+			<result name="toBusinessTripApply">/platform/wfe/event/businessTripApply.vm</result>
+			<result name="searchBusinessTripApply">/platform/wfe/event/searchBusinessTripApply.vm</result>
+			<result name="toCcSearchInit">/platform/wfe/event/searchCc.vm</result>
+			<result name="toTripApply">/platform/wfe/event/searchTripApplyList.vm</result>
+			<result name="toRepalyMemo">/platform/wfe/event/repalyMemo.vm</result>
+			<result name="toCaSearchInit">/platform/wfe/event/searchCa.vm</result>
+			<result name="toAdminsearchEvent">/platform/wfe/event/adminsearchEvent.vm</result>
+			<result name="toSearchUser">/platform/wfe/event/searchUser.vm</result>
+			<result name="toEventPrintPre">/platform/wfe/event/eventPrintPre.vm</result>
+			<result name="toCc">/platform/wfe/event/cc.vm</result>
+			<result name="toSearchCrmEvent">/platform/wfe/event/searchCrmEvent.vm</result>
+			<result name="toSearchRoleEvent">/platform/wfe/event/searchRoleEvent.vm</result>
+			<result name="toProcessEvent_unplan">/platform/wfe/event/processEvent_unplan.vm</result>
+		</action>
+		
+		<action name="processChooseAction" class="processChooseAction"></action>
+		
+		<action name="authorizeEventAction" class="authorizeEventAction">
+			<result name="toSearchEventReader">/platform/wfe/authorizeEvent/searchEventReader.vm</result>
+			<result name="toAuthorizeAddMain">/platform/wfe/authorizeEvent/authorizeAddMain.vm</result>
+			<result name="toAuthorizationCreate">/platform/wfe/authorizeEvent/authorizationCreate.vm</result>
+			<result name="orgTreeAjax">/platform/wfe/authorizeEvent/orgTreeAjax.vm</result>
+			<result name="toMain">/platform/wfe/authorizeEvent/main.vm</result>
+		</action>
+		
+		<action name="modelAttributeAction" class="modelAttributeAction">
+			<result name="searchModelAttribute">/platform/wfe/modelAttribute/searchModelAttribute.vm</result>
+			<result name="createPrepare">/platform/wfe/modelAttribute/createModelAttribute.vm</result>
+			<result name="createAttDetailPrepare">/platform/wfe/modelAttribute/createAttDetail.vm</result>
+			
+			
+			<result name="updatePrepare">/platform/wfe/modelAttribute/searchModelAttributeDetail.vm</result>
+			
+		</action>
+	</package>
+</struts>

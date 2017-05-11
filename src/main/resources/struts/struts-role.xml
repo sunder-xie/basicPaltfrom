@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="role" extends="kintiger-default">
+		<action name="roleAction" class="roleAction">
+			<result name="searchRole">/platform/role/searchRole.vm</result>
+			<result name="createPrepare">/platform/role/createRole.vm</result>
+			<result name="updatePrepare">/platform/role/searchRoleDetail.vm</result>
+			<result name="searchSelectedRole">/platform/role/searchSelectedRole.vm</result>
+			<result name="searchRole4Config">/platform/role/searchRole4Menu.vm</result>
+			<result name="searchPositionType4Role">/platform/positionType/searchPositionType4Role.vm</result>
+		</action>
+	</package>
+</struts>

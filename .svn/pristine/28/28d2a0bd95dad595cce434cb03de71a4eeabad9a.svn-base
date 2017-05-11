@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body>	
+		 <form action="" method="post">
+		 </form>
+ <input type="hidden" id="bid" name="bid" value="$!{bid}"/>	
+ <input type="hidden" id="parameters" name="parameters" value="$!{parameters}"/>	
+	<div style="text-align:center;margin:auto;">
+<table style="margin:auto;">
+<tr>
+<td>
+	<div id="htmltable" style="border-style:solid;border-width:1pt; border-color:#95B8E7;"></div>
+</td>
+</tr>
+</table>
+</div>
+	
+
+
+<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+    </body>
+	
+		<script type="text/javascript" src="$!{env.imgUrl}/js/platform/ireport/ireport.js"></script>
+</html>

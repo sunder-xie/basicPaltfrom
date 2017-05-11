@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="station" extends="kintiger-default">
+		<action name="station" class="stationAction">
+			<result>/platform/station/searchStation.vm</result>
+			<result name="createpre">/platform/station/createStation.vm</result>
+			<result name='updatepre'>/platform/station/updateStation.vm</result>
+			<result name='configpre'>/platform/station/configStationUser1.vm</result>
+			<result name='choosepre'>/platform/station/chooseStationUser.vm</result>
+			<result name='toStationOrgPre'>/platform/station/stationOrgPre.vm</result>
+			<result name='toSearchStation'>/platform/station/searchOrgStation.vm</result>
+		</action>
+	</package>
+	
+</struts>

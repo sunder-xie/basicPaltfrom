@@ -1,0 +1,32 @@
+$(document).ready(function() {
+	$('#hideFrame').bind('load', promgtMsg);
+});
+
+function submit() {
+	var url;
+	if(!($('#payAccount').validatebox('isValid') && $('#payBank').validatebox('isValid'))) {
+		return;
+	}
+	var form = window.document.forms[0];
+	form.action = appUrl + "/account/accountAction!addPayeeInfo.jspa";
+	form.submit();
+	
+}
+
+function close() {
+	window.parent.closeMaintWindow();
+}
+
+function promgtMsg() {
+	var hideFrame = document.getElementById("hideFrame");
+	var failResult = hideFrame.contentWindow.failResult;
+	var successResult = hideFrame.contentWindow.successResult;
+	if (failResult) {
+		$.messager.alert('Tips', failResult, 'warning');
+	} else if (successResult) {
+		$.messager.alert('Tips', successResult, 'info', function() {
+			window.parent.closeMaintWindow();
+			window.parent.payAccountReload();
+		});
+	}
+}

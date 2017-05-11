@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+	
+	<bean id="accountAction" class="com.kintiger.platform.account.action.AccountAction"
+		parent="baseAction" scope="request">
+		<property name="webService" ref="webService" />
+		<property name="accountService" ref="accountService" />
+		<property name="eventService" ref="eventService" />
+		<property name="orgService" ref="orgService" />
+		<property name="xmlFilePath">
+			<value>${wfe.xml.filePath}</value>
+		</property>
+		<property name="appUrl">
+			<value>${appUrl}</value>
+		</property>
+	</bean>
+		
+	<bean id="accountService" class="com.kintiger.platform.account.service.impl.AccountServiceImpl">
+		<property name="accountDao" ref="accountDao" />
+		<property name="downloadPath">
+			<value>${wfe.upload.filePath}</value>
+		</property>
+	</bean>
+
+	<bean id="accountDao" class="com.kintiger.platform.account.dao.impl.AccountDaoImpl"
+		parent="baseDao">
+	</bean>
+	
+</beans>

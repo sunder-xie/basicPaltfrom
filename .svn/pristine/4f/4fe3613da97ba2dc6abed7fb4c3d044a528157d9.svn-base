@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<body class="easyui-layout">
+		<form method="post" id="aForm"  target="hideFrame">
+			<div region="center" class="easyui-panel" title="信息维护" data-options="iconCls:'icon-edit'">
+			<table width="100%" border="0" cellpadding="0" cellspacing="1">
+			<tr>
+			  <td class="head" noWrap>
+					 栏目名称<FONT color="#ff0000">*</FONT>	</td>
+			  <td class="even" noWrap>
+			  <input type="text" id="totalName" name="totalName" style="width:150px;" value="$!{totalName}">
+			  <input type="hidden" id="totalId" name="totalId" value="$!{totalId}"/>
+			 </td>
+		    </tr>
+			<tr>
+                <td class="head" noWrap>
+					文件上传:									
+				</td>
+				<td class="even" noWrap>
+					#if($!{totalUploadSign} == "Y")
+					<label><input type="radio" name="totalUploadSign" value="Y" checked="checked">是</label>
+					<label><input type="radio" name="totalUploadSign" value="N" >否</label>
+					#else
+					<label><input type="radio" name="totalUploadSign" value="Y" >是</label>
+					<label><input type="radio" name="totalUploadSign" value="N" checked="checked">否</label>
+					#end
+				</td>
+			</tr>
+			#if($!{totalShow_flag} == "true")
+			<tr >
+                 <td class="head" noWrap>
+					图片显示:								
+				</td>
+				<td class="even" noWrap>
+					<input type="hidden" id="flag" name="flag" value="$!{totalShow}" checked="checked" />
+					#if($!{totalShow} == "Y")
+					<label><input type="radio" name="totalShow" value="Y" checked="checked" >是</label>
+					<label><input type="radio" name="totalShow" value="N"  >否</label>
+					#else
+					<label><input type="radio" name="totalShow" value="Y" >是</label>
+					<label><input type="radio" name="totalShow" value="N" checked="checked" >否</label>
+					#end
+				</td>
+			</tr>
+			#end
+			<tr >
+				<td class="head" noWrap>
+					跑马灯显示:	
+				</td>
+				<td class="even" noWrap colspan="3">
+					#if($!{totalSign} == "Y")
+ 					<label><input type="radio" name="totalSign" value="Y" checked="checked">是</label>
+					<label><input type="radio" name="totalSign" value="N" >否</label>
+					#else
+					<label><input type="radio" name="totalSign" value="Y">是</label>
+					<label><input type="radio" name="totalSign" value="N" checked="checked">否</label>
+					#end
+				</td>
+			</tr>
+			<tr >
+				<td class="head" noWrap>
+					排序码<FONT color="#ff0000">*</FONT>											</td>
+				<td >
+					<input class="easyui-numberspinner" data-options="min:1,max:20,required:true" id="totalCode" name="totalCode" value="$!{totalCode}" style="width:150px;"/>
+				</td>
+			</tr>
+		    </table>
+			</div>
+			<div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+				<a class="easyui-linkbutton" icon="icon-ok" href="javascript:submit()">确定</a>
+				<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:close()">取消</a>
+			</div>
+		
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+		<div id="maintNews"/>
+	</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/news/updateNewsTotal.js"></script>
+</html>

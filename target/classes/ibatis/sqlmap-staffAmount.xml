@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="staffamount">
+	<typeAlias alias="staffAmount"
+		type="com.kintiger.platform.staffAmount.pojo.StaffAmount" />
+	<typeAlias alias="station" type="com.kintiger.platform.station.pojo.Station" />
+	<typeAlias alias="positionType"
+		type="com.kintiger.platform.position.pojo.BpositionType" />
+
+	<select id="getStaffAmountsCount" parameterClass="staffAmount"
+		resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(t.p_id) from basis.basis_tb_staffamount t
+  			left join basis.basis_tb_stations p on t.station_id = p.station_id
+  			left join basis.basis_tb_org g on t.org_id = g.org_id
+ 			where t.state = 'U'
+	]]>
+		<dynamic>
+			<isNotEmpty property="orgId" prepend="and">
+			<![CDATA[  t.org_id =#orgId#]]>
+			</isNotEmpty>
+			<isNotEmpty property="orgName" prepend="and">
+			<![CDATA[  g.org_name =#orgName#]]>
+			</isNotEmpty>
+			<isNotEmpty property="positionTypeName" prepend="and">
+			<![CDATA[ p.station_name like #positionTypeName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="orgIdarrs" prepend="and">
+			<![CDATA[ g.org_id in ]]>
+				<iterate property="orgIdarrs" open="(" close=")"
+					conjunction=",">#orgIdarrs[]#
+				</iterate>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<select id="getStaffAmountCount" parameterClass="staffAmount"
+		resultClass="java.lang.Integer">
+	<![CDATA[
+		 select count(1) from  basis.basis_tb_staffamount s where s.state='U'
+	]]>
+		<dynamic>
+			<isNotEmpty property="stationId" prepend="and">
+			<![CDATA[  s.STATION_ID =#stationId#]]>
+			</isNotEmpty>
+			<isNotEmpty property="orgId" prepend="and">
+			<![CDATA[  s.ORG_ID =#orgId#]]>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="getStaffAmounts" parameterClass="staffAmount"
+		resultClass="staffAmount">
+		<include refid="global.paginationStart" /> 
+	<![CDATA[
+	
+     select am.PId,
+       am.stationId,
+       am.amount,
+       am.lastModify,
+       am.state,
+       am.orgParentName,
+       am.orgName,
+       am.orgId,
+       am.positionTypeName,
+       nvl(an.mountU,0) as amountU,
+       nvl(ak.mountC, 0) as mountC
+       from
+(
+select t.p_id         as PId,
+       t.station_id   as stationId,
+       t.amount       as amount,
+       t.last_modify  as lastModify,
+       t.state        as state,
+       s.org_name     as orgParentName,
+       g.org_name     as orgName,
+       t.org_id       as orgId,
+       p.station_name as positionTypeName
+  from basis.basis_tb_staffamount t
+  left join basis.basis_tb_org g
+    on t.org_id = g.org_id
+  left join basis.basis_tb_org s
+    on g.org_parent_id = s.org_id
+  left join basis.basis_tb_stations p
+    on t.station_id = p.station_id
+ where t.state = 'U'
+
+
+	]]>
+		<dynamic>
+			<isNotEmpty property="orgId" prepend="and">
+			<![CDATA[  t.org_id =#orgId#]]>
+			</isNotEmpty>
+			<isNotEmpty property="orgName" prepend="and">
+			<![CDATA[  g.org_name like #orgName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="positionTypeName" prepend="and">
+			<![CDATA[ p.station_name like #positionTypeName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="orgIdarrs" prepend="and">
+			<![CDATA[ g.org_id in ]]>
+				<iterate property="orgIdarrs" open="(" close=")"
+					conjunction=",">#orgIdarrs[]#
+				</iterate>
+			</isNotEmpty>
+		</dynamic>
+	 <![CDATA[
+	) am
+ left join 
+ (select t.p_id  as PId,
+       count(a.user_id) as mountU
+  from basis.basis_tb_staffamount t
+  left join basis.basis_tb_station_user a
+    on t.station_id = a.station_id
+     left join basis.basis_tb_salesemp_info b on a.user_id=b.emp_id
+ where t.state = 'U' and b.emp_state in ('W','S','Y')
+   and a.org_id = t.org_id    
+   and a.is_main_station = 'Y'
+group by t.p_id) an on am.pid=an.pid
+left join (select t1.p_id as PId, count(a1.user_id) as mountC
+               from basis.basis_tb_staffamount t1
+               left join basis.basis_tb_station_user a1
+                 on t1.station_id = a1.station_id
+               left join basis.basis_tb_salesemp_info b1
+                 on a1.user_id = b1.emp_id
+              where t1.state = 'U'
+                and b1.emp_state in ('W','S','Y')
+                and a1.org_id = t1.org_id
+                and a1.is_main_station = 'N'
+              group by t1.p_id) ak
+    on am.pid = ak.pid
+order by am.PId
+	]]>
+		<!-- <include refid="global.orderBy" /> -->
+		<include refid="global.paginationEnd" />
+	</select>
+
+	<select id="exportStaffAmounts" parameterClass="staffAmount"
+		resultClass="staffAmount">
+	<![CDATA[
+     select t.p_id as PId,
+           t.station_id as stationId,
+           t.amount as amount,
+           t.last_modify as lastModify,
+           t.state as state,          
+           s.org_name as orgParentName,
+           g.org_name as orgName,
+           t.org_id as orgId,
+           '' as positionTypeName
+        from basis.basis_tb_staffamount t
+        left join basis.basis_tb_org  g
+        on t.org_id =g.org_id
+        left join  basis.basis_tb_org  s  
+        on g.org_parent_id = s.org_id
+       where t.state = 'U'
+
+	]]>
+		<dynamic>
+			<isNotEmpty property="orgId" prepend="and">
+			<![CDATA[  t.org_id =#orgId#]]>
+			</isNotEmpty>
+			<isNotEmpty property="orgName" prepend="and">
+			<![CDATA[  g.org_name like #orgName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="positionTypeName" prepend="and">
+			<![CDATA[ p.position_type_name like #positionTypeName,handler=wildcard# escape '\']]>
+			</isNotEmpty>
+			<isNotEmpty property="orgIdarrs" prepend="and">
+			<![CDATA[ g.org_id in ]]>
+				<iterate property="orgIdarrs" open="(" close=")"
+					conjunction=",">#orgIdarrs[]#
+				</iterate>
+			</isNotEmpty>
+		</dynamic>
+		<![CDATA[ order by t.org_id ]]>
+	</select>
+
+	<update id="updateStaffAmounts" parameterClass="staffAmount">
+	<![CDATA[
+		  update basis.basis_tb_staffamount t set t.last_modify =sysdate  
+	]]>
+		<dynamic>
+			<isNotEmpty property="amount" prepend=",">
+			<![CDATA[ t.amount =#amount# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="state" prepend=",">
+			<![CDATA[ t.STATE =#state# ]]>
+			</isNotEmpty>
+		</dynamic>
+	<![CDATA[
+		 where t.p_id in
+	]]>
+		<dynamic>
+			<iterate property="PIds" open="(" close=")" conjunction=",">#PIds[]#
+			</iterate>
+		</dynamic>
+	</update>
+
+	<update id="updateStaffAmount" parameterClass="staffAmount">
+	<![CDATA[
+		  update basis.basis_tb_staffamount t set t.last_modify =sysdate  
+	]]>
+		<dynamic>
+			<isNotEmpty property="amount" prepend=",">
+			<![CDATA[ t.amount =#amount# ]]>
+			</isNotEmpty>
+			<isNotEmpty property="state" prepend=",">
+			<![CDATA[ t.STATE =#state# ]]>
+			</isNotEmpty>
+		</dynamic>
+	<![CDATA[
+		 where t.org_id=#orgId# and t.station_id=#stationId#
+	]]>
+	</update>
+
+	<insert id="createStaffAmount" parameterClass="staffAmount">
+		<selectKey resultClass="java.lang.Long" keyProperty="PId">
+		<![CDATA[
+			select basis.basis_seq_staffamount.NEXTVAL as PId from dual
+		]]>
+		</selectKey>
+	<![CDATA[
+		insert into basis.basis_tb_staffamount
+		  (P_ID,
+		   ORG_ID,
+		   STATION_ID,
+		   AMOUNT,
+		   STATE,
+		   LAST_MODIFY
+		  )
+		values
+		  (#PId#,
+		   #orgId#,
+		   #stationId#,
+		   #amount#,
+		   'U',
+		   sysdate
+		 )
+	]]>
+	</insert>
+	<select id="blurSearchStaff" parameterClass="station"
+		resultClass="station">
+	<![CDATA[
+		select t.STATION_ID as stationId, t.STATION_NAME as stationName
+  		from basis.basis_tb_stations t, basis.basis_tb_org o
+		where t.station_type = o.org_id
+ 		and t.status = 'U'
+     	and t.STATION_NAME like #stationName,handler=prefix# escape '\'
+	]]>
+	</select>
+	<select id="getStaffAmountCountU" parameterClass="staffAmount"
+		resultClass="java.lang.Integer">
+	<![CDATA[
+		select count(*) from basis.basis_tb_staffamount a 
+		left join basis.basis_tb_station_user b on a.station_id = b.station_id
+		left join basis.basis_tb_salesemp_info c on b.user_id=c.emp_id
+		where c.emp_state = 'Y'  and a.org_id=b.org_id and a.p_id in
+	]]>
+		<dynamic>
+			<iterate property="PIds" open="(" close=")" conjunction=",">#PIds[]#
+			</iterate>
+		</dynamic>
+	</select>
+	<select id="getStaffAmountByPid" parameterClass="staffAmount"
+		resultClass="staffAmount">
+	<![CDATA[
+		select t.org_id as orgId, 
+               t.station_id as stationId,
+               t.amount as amount
+              from basis.basis_tb_staffamount t
+              where t.p_id in
+	]]>
+		<dynamic>
+			<iterate property="PIds" open="(" close=")" conjunction=",">#PIds[]#
+			</iterate>
+		</dynamic>
+	</select>
+
+	<select id="geStaffUser" parameterClass="station" resultClass="station">
+		<![CDATA[
+		select i.emp_id userId, 
+		i.emp_code userCode,
+		 i.emp_user_id empUserCode, 
+		 i.emp_name userName
+		from basis.basis_tb_station_user t
+		inner join basis.basis_tb_salesemp_info i
+		on t.user_id = i.emp_id
+		where t.org_id = #orgId#
+		and t.station_id = #stationId#
+		and t.is_main_station = #custType#
+		]]>
+	</select>
+
+
+</sqlMap>

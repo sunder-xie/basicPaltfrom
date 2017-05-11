@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>EXP系统初始化连接</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+	    #CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<style type="text/css">
+		div{ padding:0; margin:0}
+		body{ background:url($!{env.imgUrl}/images/login/initCon.jpg) no-repeat center top;  height:auto!important;height:100%; position:relative}
+		.init{ width:650px; height:100px; position:absolute; left:50%; margin-left:-240px; top:280px}
+</style>
+<body style="color:brown">
+	<form  method="post">
+		<div id="pdiv" style="margin:10px 460px;display:none">
+		<div id="p" class="easyui-progressbar" style="width:450px;"></div>
+		</div>
+		<div class="init">
+			<table width="480px" border="0" cellpadding="0" cellspacing="0">
+				<th>Oracle连接参数配置|加入AD?<input type="checkbox" id="inAd" onclick="inad()"></th>
+				<tr>
+                    <td>
+						<font size='4' style="font-weight: bold">Oracle Url:</font> <input type="text" id="jdbcUrl" name="jdbcUrl" value="$!{jdbcUrl}" data-options="required:true" class="easyui-validatebox" style="width:300px;font-size: 13pt; color: #4D0000;font-weight: bold;"/>
+					</td>
+				</tr>
+				<tr>
+                    <td>
+						<font size='4' style="font-weight: bold">Sid:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</font> <input type="text" id="jdbcSid" name="jdbcSid" value="$!{jdbcSid}" data-options="required:true" class="easyui-validatebox" style="width:300px;font-size: 13pt; color: #4D0000;font-weight: bold;"/>
+					</td>
+				</tr>
+				<tr>
+                    <td>
+						<font size='4' style="font-weight: bold">User:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</font> <input type="text" id="jdbcUsername" name="jdbcUsername" value="$!{jdbcUsername}" data-options="required:true" class="easyui-validatebox" style="width:300px;font-size: 13pt; color: #4D0000;font-weight: bold;"/>
+					</td>
+				</tr>
+				<tr>
+                    <td>
+						<font size='4' style="font-weight: bold">Password:&nbsp&nbsp</font> <input type="password" id="jdbcPassword" name="jdbcPassword" value="$!{jdbcPassword}" data-options="required:true" class="easyui-validatebox" style="width:300px;font-size: 13pt; color: #4D0000;font-weight: bold;"/>
+					</td>
+				</tr>
+			</table>
+			<table id="ad"  style="display:none" width="480px" border="0" cellpadding="0" cellspacing="0">
+				<th>AD域连接参数配置</th>
+				<tr>
+                    <td>
+						<font size='4' style="font-weight: bold">AD Url:&nbsp&nbsp&nbsp&nbsp</font> <input type="text" id="ldapHost" name="ldapHost"  data-options="required:true" class="easyui-validatebox" style="width:300px;font-size: 13pt; color: #4D0000;font-weight: bold;"/>
+					</td>
+				</tr>
+				<tr>
+                    <td>
+						<font size='4' style="font-weight: bold">Domain:&nbsp&nbsp&nbsp&nbsp</font> <input type="text" id="ldapDomain" name="ldapDomain" data-options="required:true" class="easyui-validatebox" style="width:300px;font-size: 13pt; color: #4D0000;font-weight: bold;"/>
+					</td>
+				</tr>
+				<tr>
+                    <td>
+						<font size='4' style="font-weight: bold">User:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</font> <input type="text" id="ldapUser" name="ldapUser" data-options="required:true" class="easyui-validatebox" style="width:300px;font-size: 13pt; color: #4D0000;font-weight: bold;" value="Administrators" readonly />
+					</td>
+				</tr>
+				<tr>
+                    <td>
+						<font size='4' style="font-weight: bold">Password:&nbsp&nbsp</font> <input type="password" id="ldapPassword" name="ldapPassword" data-options="required:true" class="easyui-validatebox" style="width:300px;font-size: 13pt; color: #4D0000;font-weight: bold;" />
+					</td>
+				</tr>
+			</table>
+			<table width="480px" border="0" cellpadding="0" cellspacing="0">
+			<tr id="connect">
+                    <td align="center" style="height:60px">
+					<a class="easyui-linkbutton" icon="icon-connect" href="javascript:connect()">&nbsp;&nbsp;连接Connect...&nbsp&nbsp</a>
+					</td>
+			</tr>
+            </table>
+	</div>	
+   </form>
+</body>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/login/initCon.js"></script>
+
+</html>

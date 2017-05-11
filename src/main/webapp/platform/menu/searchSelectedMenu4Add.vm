@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body>
+		<form method="post"  >
+			<input type="hidden" id="ids" name="ids"/> 
+			<input type="hidden" id="pageIds" name="pageIds"/>
+			<input type="hidden" id="pageIds1" name="pageIds1"/>
+			<input type="hidden" id="menuIds1" name="menuIds1"/>
+			<div class="easyui-panel" title="条件查询" >
+			<table width="90%" border="0" cellpadding="0" cellspacing="1">
+			<tr>
+				<td class="head" noWrap>菜单编号:</td>
+				<td><input class="easyui-numberbox" id="id" name="id"></td>
+				<td class="head" noWrap>菜单名称:</td>
+				<td><input class="easyui-validatebox" id="name" name="name"></td>
+				<td class="head" noWrap>点击查询:</td>
+				<td>			
+				<a href="javascript:search()" class="easyui-linkbutton" iconCls="icon-search">Search</a>
+				</td>
+			</tr>
+		    </table>
+			</div>
+			<div class="easyui-panel" title="已选菜单" >
+				<table width="90%" border="0" cellpadding="0" cellspacing="1">
+				<td class="head" noWrap>已选菜单编号:</td>
+				<td><input class="easyui-numberbox" id="menuIds" name="menuIds"  size="53"></td>
+				<td class="head" noWrap>保存:</td>
+				<td>			
+				<a href="javascript:selectMenu4Role()" class="easyui-linkbutton" iconCls="icon-save">Save</a>
+				</td>	
+                </table>
+			</div>
+			<table id="datagrid">  
+			</table> 
+			</form>		
+	 <iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+	 <!--维护菜单DIV-->
+	</body>
+	<script type="text/javascript"   >
+    </script>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/menu/searchSelectedMenu4Add.js"></script>
+</html>

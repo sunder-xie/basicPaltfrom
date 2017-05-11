@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://www.springframework.org/schema/aop  
+	http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+	<!--context:annotation-config / -->
+
+	<bean id="env"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="/WEB-INF/env.properties" />
+	</bean>
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>/WEB-INF/env.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="dataSource" destroy-method="close"
+		class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<!--maxActive: 最大连接数量-->    
+		<property name="maxActive" value="150"/>  
+		<!--minIdle: 最小空闲连接-->    
+		<property name="minIdle" value="5"/>  
+		<!--maxIdle: 最大空闲连接-->    
+		<property name="maxIdle" value="20"/>  
+		<!-- 连接被泄露时是否打印 -->  
+		<property name="logAbandoned" value="true"/>  
+		<!--removeAbandoned: 是否自动回收超时连接-->    
+		<property name="removeAbandoned"  value="true"/>  
+		<!--removeAbandonedTimeout: 超时时间(以秒数为单位)-->    
+		<property name="removeAbandonedTimeout" value="10"/>  
+		<!--maxWait: 超时等待时间以毫秒为单位 1000等于60秒-->  
+		<property name="maxWait" value="1000"/>  
+		<!-- 在空闲连接回收器线程运行期间休眠的时间值,以毫秒为单位. -->  
+		<property name="timeBetweenEvictionRunsMillis" value="10000"/>  
+		<!--  在每次空闲连接回收器线程(如果有)运行时检查的连接数量 -->  
+		<property name="numTestsPerEvictionRun" value="10"/>  
+		<!-- 1000 * 60 * 30  连接在池中保持空闲而不被空闲连接回收器线程-->  
+		<property name="minEvictableIdleTimeMillis" value="10000"/> 
+	</bean>
+
+	<!--配置ibatis的资源文件载入 -->
+	<bean id="lobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler"
+		lazy-init="true" />
+
+	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation">
+			<value>classpath:ibatis/ibatis-config.xml</value>
+		</property>
+		<property name="dataSource" ref="dataSource" />
+		<property name="lobHandler">   
+			<ref local="oracleLobHandler"/>   
+		</property>
+	</bean>
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource">
+			<ref local="dataSource" />
+		</property>
+	</bean>
+
+	<bean id="transactionTemplate"
+		class="org.springframework.transaction.support.TransactionTemplate">
+		<property name="transactionManager">
+			<ref local="transactionManager" />
+		</property>
+	</bean>
+
+
+	<bean id="contextSource" class="org.springframework.ldap.core.support.LdapContextSource">
+		<property name="url">
+			<value>${ldap.ldapHost}</value>
+		</property>
+		<property name="base">
+			<value>${ldap.base}</value>
+		</property>
+		<property name="userDn">
+			<value>${ldap.userDn}</value>
+		</property>
+		<property name="password">
+			<value>${ldap.password}</value>
+		</property>
+		<property name="referral" value="follow" />
+	</bean>
+
+
+	<bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
+		<constructor-arg ref="contextSource" />
+	</bean>
+
+
+	<bean id="LDAPService"
+		class="com.kintiger.platform.login.service.impl.LDAPServiceImpl">
+		<property name="ldapTemplate" ref="ldapTemplate" />
+		<property name="orgService" ref="orgService" />
+		<property name="domain">
+			<value>${ldap.domain}</value>
+		</property>
+		<property name="url">
+			<value>${ldap.ldapHost2}</value>
+		</property>
+		<property name="userDn">
+			<value>${ldap.userDn}</value>
+		</property>
+		<property name="pwd">
+			<value>${ldap.password}</value>
+		</property>
+		<property name="base">
+			<value>${ldap.base}</value>
+		</property>
+		<property name="emailaddress">
+			<value>${allUser.emailaddress}</value>
+		</property>
+		<property name="emailpassword">
+			<value>${allUser.emailpassword}</value>
+		</property>
+		<property name="smtpServer">
+			<value>${allUser.smtpServer}</value>
+		</property>
+		<property name="from">
+			<value>${allUser.from}</value>
+		</property>
+		<property name="displayName">
+			<value>${allUser.displayName}</value>
+		</property>
+	</bean>
+
+
+
+	<bean id="baseAction" class="com.kintiger.platform.base.action.BaseAction">
+		<property name="env" ref="env" />
+	</bean>
+
+	<bean id="baseDao" class="com.kintiger.platform.base.dao.impl.BaseDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<bean id="nativeJdbcExtractor" class="org.springframework.jdbc.support.nativejdbc.CommonsDbcpNativeJdbcExtractor" lazy-init="true" />   
+	<bean id="oracleLobHandler" class="org.springframework.jdbc.support.lob.OracleLobHandler" lazy-init="true">  
+		<property name="nativeJdbcExtractor">   
+			<ref local="nativeJdbcExtractor" />   
+		</property>   
+	</bean> 
+
+
+ 
+</beans>

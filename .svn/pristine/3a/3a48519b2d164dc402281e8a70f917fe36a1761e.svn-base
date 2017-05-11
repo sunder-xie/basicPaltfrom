@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<body>
+		<form method="post">
+			<input type="hidden" id="empId" value="$!{empId}" />
+			<div class="easyui-panel" title="数据上载" data-options="collapsible:true,iconCls:'icon-edit'" style="padding: 8px; background: #fafafa;">
+				<table width="100%" border="0" cellpadding="0" cellspacing="1">
+					<tr>
+						<td class="head" width="20%" noWrap>表名：</td>
+						<td>
+							<input id="tableName" name="tableName" />
+							&nbsp;&nbsp;<a class="easyui-linkbutton" icon="icon-download" href="javascript:exportDataTemplate()">模板下载</a>
+							&nbsp;&nbsp;<a class="easyui-linkbutton" icon="icon-excel" href="javascript:toDataImport()">数据上载</a>
+							&nbsp;&nbsp;<a class="easyui-linkbutton" icon="icon-download" href="javascript:exportData()">数据导出</a>
+							&nbsp;&nbsp;<a class="easyui-linkbutton" icon="icon-clear" href="javascript:deleteData()">清空数据</a>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<table id="datagrid">  
+			</table>
+			<div id="toolbar" class="datagrid-toolbar" >
+				<input class="easyui-searchbox" searcher="searcher" prompt="请填写查询条件" style="width:300px"></input>		
+			</div>
+		</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+		<div id="maintWindow"/>
+	</body>
+	<script type="text/javascript" src="$!{env.imgUrl}/js/platform/data/dataOperate.js"></script>
+</html>

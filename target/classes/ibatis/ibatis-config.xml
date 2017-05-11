@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE sqlMapConfig
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+	<settings useStatementNamespaces="true" enhancementEnabled="true" />
+
+	<!-- 为传入参数加上%后缀，执行前缀查询 -->
+	<typeAlias alias="prefix"
+		type="com.kintiger.platform.framework.ibatis.PrefixTypeHanlderCallback" />
+
+	<!-- 为传入参数加上%前缀，执行后缀查询 -->
+	<typeAlias alias="postfix"
+		type="com.kintiger.platform.framework.ibatis.PostfixTypeHanlderCallback" />
+
+	<!-- 为传入参数的前后都加上%，执行模糊查询 -->
+	<typeAlias alias="wildcard"
+		type="com.kintiger.platform.framework.ibatis.WildcardTypeHanlderCallback" />
+
+	<!-- 将java.util.Date类型的传入参数转化成yyyy-mm-dd hh24:mi:ss格式的字符串 -->
+	<typeAlias alias="dateTime"
+		type="ccom.kintiger.platform.framework.ibatis.DateTimeTypeHanlderCallback" />
+
+	<!-- 将java.util.Date类型的传入参数转化成yyyy-mm-dd格式的字符串 -->
+	<typeAlias alias="dateOnly"
+		type="com.kintiger.platform.framework.ibatis.DateOnlyTypeHanlderCallback" />
+
+	<!-- 根据传入的java.util.Date类型参数计算出前/后一天，并且转化成yyyy-mm-dd hh24:mi:ss格式的字符串。执行时间区间查询时，构造条件一般为：开始日期 
+		<= DateField < 结束日期的后一天 -->
+	<typeAlias alias="previousDate"
+		type="com.kintiger.platform.framework.ibatis.PreviousDateTypeHanlderCallback" />
+
+	<typeAlias alias="nextDate"
+		type="com.kintiger.platform.framework.ibatis.NextDateTypeHanlderCallback" />
+
+	<!-- 当执行in参数查询的时候替换“’”字符为空 -->
+	<typeAlias alias="charaRplace"
+		type="com.kintiger.platform.framework.ibatis.CharacterReplaceHanlderCallback" />
+	<typeHandler jdbcType="BLOB" javaType="[B" callback="org.springframework.orm.ibatis.support.BlobByteArrayTypeHandler" />
+	<sqlMap resource="ibatis/global.xml" />
+	<sqlMap resource="ibatis/sqlmap-menu.xml" />
+	<sqlMap resource="ibatis/sqlmap-alluser.xml" />
+	<sqlMap resource="ibatis/sqlmap-positionType.xml" />
+	<sqlMap resource="ibatis/sqlmap-org.xml" />
+	<sqlMap resource="ibatis/sqlmap-station.xml" />
+	<sqlMap resource="ibatis/sqlmap-role.xml" />
+	<sqlMap resource="ibatis/sqlmap-staffAmount.xml"/>
+	<sqlMap resource="ibatis/sqlmap-conpoint.xml" />
+	<sqlMap resource="ibatis/sqlmap-wfe.xml" />
+	<sqlMap resource="ibatis/sqlmap-dict.xml" />
+	<sqlMap resource="ibatis/sqlmap-news.xml" />
+	<sqlMap resource="ibatis/sqlmap-account.xml" />
+	<sqlMap resource="ibatis/sqlmap-monitor.xml" />
+	<sqlMap resource="ibatis/sqlmap-planAttribute.xml" />
+	<sqlMap resource="ibatis/sqlmap-workflow.xml"/>
+	<sqlMap resource="ibatis/sqlmap-files.xml" />
+	<sqlMap resource="ibatis/sqlmap-post.xml" />
+	<sqlMap resource="ibatis/sqlmap-ireport.xml" />
+	<sqlMap resource="ibatis/sqlmap-boform.xml" />
+	<sqlMap resource="ibatis/sqlmap-data.xml" />
+	<sqlMap resource="ibatis/sqlmap-addressList.xml" />
+	<sqlMap resource="ibatis/sqlmap-evtstatistics.xml" />
+</sqlMapConfig>

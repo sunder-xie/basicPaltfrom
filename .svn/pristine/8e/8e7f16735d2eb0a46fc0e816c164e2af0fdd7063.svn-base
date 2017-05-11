@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="account" extends="kintiger-default" namespace="/account">
+		
+		<action name="accountAction" class="accountAction">
+			<result name="createPrepare_Single">/platform/account/expenseSingle.vm</result>
+			<result name="createPrepare_Tra">/platform/account/traReimbur.vm</result>	
+			<result name="modifySingle">/platform/account/expenseSingle.vm</result>
+			<result name="searchExpenseForm">/platform/account/searchExpenseForm.vm</result>
+			<result name="searchTraReimburPrepare">/platform/account/searchTraReimbur.vm</result>
+			<result name="searchSingleDetailPrepare">/platform/account/searchSingleDetail.vm</result>
+			<result name="printTraReimbur">/platform/account/pringExpenseForm.vm</result>
+			<result name="toSearchPayeeInfo">/platform/account/searchPayeeInfo.vm</result>
+			<result name="payeeInfo">/platform/account/payeeInfo.vm</result>
+			<result name="toAddNewAccount">/platform/account/addNewAccount.vm</result>
+			<result name="toImportFinancialDocNum">/platform/account/importFinancialDocNum.vm</result>
+			<result name="toSearchReimburDetail">/platform/account/searchReimburDetail.vm</result>
+			<result name="toBugetChange">/platform/account/toBugetChange.vm</result>
+			<result name="searchBugetChange">/platform/account/searchBugetChange.vm</result>
+		</action>
+	</package>
+</struts>

@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()
+	</head>
+	<body class="easyui-layout">
+	<!-- 角色权限点配置 -->
+	<form method="post" target="hideFrame">
+		<div id="p_add" region="center" class="easyui-panel"
+			title="角色权限点修改"
+			data-options="iconCls:'icon-edit'">
+
+			<table id="table_01" width="100%" cellspacing="1" border="0">
+				<tr>
+					<td class="head" nowrap>角色ID</td>
+					<td><input type="text" id="roleId" name="point.roleId" value="$!{point.roleId}" readOnly></input>
+					<input type="hidden" id="roleConpointId" name="point.roleConpointId" value="$!{roleConpointId}"/>
+						</td>
+				</tr>
+				<tr>
+					<td class="head" nowrap>权限点名称</td>
+					<td>
+					<input type="hidden" id="conpointId" name="point.conpointId" value="$!{point.conpointId}"/>
+					<select id="conpointName" name="point.conpointName" class="easyui-combobox" data-options="required:true" style="width:150px;" >
+	          </td>
+				</tr>
+				<tr>
+    										<td class="head" nowrap width='45%'>
+    											权限点编号
+    										</td>
+											<td>
+												<input type='text' id='conpointNum' name="point.conpointNum" value="$!{point.conpointNum}" readOnly />
+											</td>
+                                    	</tr>
+									
+										<tr>
+    										<td class="head" nowrap>
+    											菜单ID
+    										</td>
+											<td>
+												<input type='text' id='menuId' name="point.menuId" value="$!{point.menuId}" readOnly />
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head" nowrap>
+    											菜单名称
+    										</td>
+											<td>
+												<input type='text' id='menuName' name="point.menuName" value="$!{point.menuName}"  readOnly />
+											</td>
+                                    	</tr>
+										<tr>
+    										<td class="head" nowrap>
+    											权限点开关
+    										</td>
+											<td>
+												<select class="easyui-combobox" id="closeFlag" name="point.closeFlag" style="width:100px;" data-options="required:true">
+						                                
+						                                  <option value="Y" >  开      </option>
+						                                  <option value="N">  关      </option>
+                                                 </select>
+											</td>
+                                    	</tr>
+				
+			</table>
+		</div>
+		<div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+				<a class="easyui-linkbutton" icon="icon-ok" href="javascript:save_role_con();">确定</a>
+				<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:cencel();">取消</a>
+			</div>
+	</form>
+		<iframe id="hideFrame" name="hideFrame"  style="height: 0; width: 0"></iframe>
+	</body>
+<script type="text/javascript">
+var con_name="$!{point.conpointName}";
+var close_flag="$!{point.closeFlag}";
+</script>
+<script type="text/javascript" src="$!{env.imgUrl}/js/platform/conpoint/updateRoleConpoint.js"></script>
+</html>

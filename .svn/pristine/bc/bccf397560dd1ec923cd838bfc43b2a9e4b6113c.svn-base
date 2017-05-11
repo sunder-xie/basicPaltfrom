@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<fieldset>
+		<table width="100%" border="0" cellpadding="0" cellspacing="1">
+			<tr>
+    			<td class="head" noWrap style="text-align: right" width="25%">
+    				所属部门
+    			</td>
+				<td class="even" style="text-align:left;font-size:14px" colspan=4>
+					$!{businessTripApply.orgName}
+				</td>
+            </tr>
+			<tr>
+    			<td class="head" noWrap style="text-align: right" width="25%">
+    				所属项目
+    			</td>
+				<td class="even" style="text-align:left;font-size:14px" colspan=4>
+					$!{businessTripApply.costCenter}
+				</td>
+            </tr>
+			<tr>
+    			<td class="head" noWrap style="text-align: right" width="25%">
+    				出差地点
+    			</td>
+				<td class="even" style="text-align:left;font-size:14px" colspan=4>
+					$!{businessTripApply.place}
+				</td>
+			</tr>
+			<tr>
+    			<td class="head" noWrap style="text-align: right" width="25%">
+    				拟出行方式
+    			</td>
+				<td class="even" style="text-align:left;font-size:14px" colspan=4>
+					$!{businessTripApply.tripWayName}
+				</td>
+			</tr>
+			#if($!{businessTripApply.tripWay} == "selfDriving")
+			<tr>
+				<td class="head" noWrap style="text-align: right" width="25%">
+						同行人员
+				</td>
+				<td class="even" style="text-align:left;font-size:14px" colspan=4>
+					$!{businessTripApply.peopleNames}
+				</td>
+			</tr>
+			<tr>
+				<td class="head" noWrap style="text-align: right" width="25%">
+					自驾里程
+				</td>
+				<td class="even" style="text-align:left;font-size:14px" colspan=4>
+					$!{businessTripApply.distance}
+				</td>
+			</tr>
+			#end
+			<tr>
+    			<td class="head" noWrap style="text-align: right" width="25%">
+    				开始时间
+    			</td>
+				<td class="even" style="text-align:left;font-size:14px" colspan=4>
+					$!dateUtil.datetime($!{businessTripApply.beginDate},'yyyy-MM-dd')
+				</td>
+			</tr>
+			<tr>
+    			<td class="head" noWrap style="text-align: right" width="25%">
+    				结束时间
+    			</td>
+				<td class="even" style="text-align:left;font-size:14px" colspan=4>
+					$!dateUtil.datetime($!{businessTripApply.endDate},'yyyy-MM-dd')
+				</td>
+			</tr>
+			<tr>
+				<td class="head" noWrap style="text-align: right" width="25%">
+    				出差事由
+    			</td>
+				<td class="even" style="text-align:left;font-size:14px" colspan=4>
+					$!{businessTripApply.reason}
+				</td>
+			</tr>
+		</table>
+	</fieldset>
+</html>

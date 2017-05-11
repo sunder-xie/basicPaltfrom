@@ -1,0 +1,89 @@
+cookie.domain=zjxpp.com
+jdbc.driverClassName=oracle.jdbc.driver.OracleDriver
+jdbc.url=jdbc:oracle:thin:osap/osap@10.0.5.16:1521:expdbtest
+jdbc.username=osap
+jdbc.password=osap
+#jdbc.url=jdbc:oracle:thin:exp/exp123@10.0.3.25:1521:expora
+#jdbc.username=exp
+#jdbc.password=exp123
+wxsendtime=60000
+appUrl = http://dev.exptest.zjxpp.com:7186/basisPlatform
+imgUrl = http://dev.exptest.zjxpp.com:7186/basisPlatform/statics
+hrUrl = http://dev.exptest.zjxpp.com:7186/hrPlatform
+#ad
+ldap.validate =false
+ldap.ldapHost =ldap://10.0.3.60:389
+ldap.ldapHost2 =ldap://10.0.3.60:636
+ldap.base =DC=zjxpp,DC=com
+ldap.userDn =cn=Administrator,cn=Users,DC=zjxpp,DC=com
+ldap.password =xpp2@13!
+ldap.domain =@zjxpp.com
+#email
+allUser.smtpServer=smtp.exmail.qq.com
+allUser.from=allen.yue@kintiger.com
+allUser.emailaddress=allen.yue@kintiger.com
+allUser.emailpassword=lezhiyi88
+allUser.displayName=kintiger
+
+#ws
+
+wfeUrl = http://10.0.5.15:7186/expWorkFlow
+#wfeUrl = http://10.0.3.31:7186/expWorkFlow
+
+#wfeUrl =http://wftmp.zjxpp.com:8188/expWorkFlow
+
+
+#bo4
+bo4.use = administrator
+bo4.pwd = kintiger169
+bo4.dev = bodev:6400
+bo4.enterp = secEnterprise
+bo4.reip = http://192.168.60.11:8080/BOE/OpenDocument/opendoc/openDocument.jsp
+
+#QQ E-mail key
+access_token = a027de5103e39101e886dd5411fc1d011
+
+# file
+news.filePath =/webapp/upload_file
+news.AllfilePath=http://exptest.zjxpp.com:7186/webapp/upload_file/
+wfe.xml.filePath = /upload_file/basis/xml
+wfe.upload.filePath = /upload_file/basis/slave
+irepot.upload.filePath= /upload_file/basis/ireport
+template.excel.filePath=
+img.preview.path = /img/preview
+open.office.home = /opt/openoffice4
+pdf2swf.home = pdf2swf
+read.online.path = /webapp/upload_file/readonline
+office.contract.path = /upload_file/hr/attments/photos
+
+#sap jco 400 y.chen 192.168.0.17  /600 Yue.chen 192.168.0.16
+sap.jdbc.poolName = xpp
+sap.jdbc.maximumConnectionCount = 100
+sap.jdbc.clientName = 700
+sap.jdbc.user = rfc
+sap.jdbc.password = poiuyt
+sap.jdbc.language = 1
+sap.jdbc.hostName = 192.168.0.16
+sap.jdbc.sysnr = 00
+sap.jdbc.group = Public
+sap.jdbc.repositoryName = osapRepository
+sap.jdbc.byGroup = 0
+sap.portal.host = 
+sap.portal.service = 
+sap.portal.client =
+
+#sap config
+#sap.jdbc.poolName = xpp
+#sap.jdbc.maximumConnectionCount = 100
+#sap.jdbc.clientName = 800
+#sap.jdbc.user = abaprfc
+#sap.jdbc.password = xpp2@12
+#sap.jdbc.language = 1
+#sap.jdbc.hostName = 192.168.0.12
+#sap.jdbc.sysnr = 00
+#sap.jdbc.group = Public
+#sap.jdbc.repositoryName = osapRepository
+#sap.jdbc.byGroup = 0
+#sap.portal.host = 
+#sap.portal.service = 
+#sap.portal.client =

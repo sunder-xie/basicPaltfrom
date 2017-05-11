@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#JS_ENV_VAL()	
+		#WORKFLOW()
+</head>
+<body>
+<script type="text/javascript">
+var process = workflow.process;
+var processVariablesEditCount = 0;
+jq(function(){
+	getRadioBoxValue("isOa","Y");
+	populateProcessProperites();
+});
+function saveProcessProperties(){
+	process.id=jq('#id').val();
+	process.name=jq('#name').val();
+	var obj = document.getElementsByName("isOa");
+    for(i = 0; i < obj.length; i++)
+    {  
+      if(obj[i].checked)
+      {  
+        	process.text=obj[i].value;
+      }  
+    }
+	process.category=jq('#category').val();
+	jq.messager.show({
+		title:'提示',
+		msg:'保存流程属性成功!',
+		timeout:500,
+		showType:'slide'
+	});//alert('提示','保存流程属性成功!','info');
+}
+function populateProcessProperites(){
+    if(process.id.substr(0,3) == "fix"){
+		jq('#id').val(process.id);
+		jq('#name').val(process.name);
+	}else{
+		jq('#id').val("fix_"+process.id);
+		jq('#name').val("fix_"+process.name);
+	}
+	getRadioBoxValue("isOa",process.text);
+	jq('#category').val(process.category);
+	//jq('#documentation').val(process.documentation);
+
+}
+
+function getRadioBoxValue(radioName, radiovalue)  
+  {  
+    var obj = document.getElementsByName(radioName);
+    for(i = 0; i < obj.length; i++)
+    {  
+
+      if(obj[i].value == radiovalue)
+      {  
+        obj[i].checked = true;
+      }  
+    }
+    
+    return true;
+ }
+
+
+</script>
+<div id="process-properties-layout" class="easyui-layout" fit="true">
+	<div id="task-properties-toolbar-panel" region="north" border="false" style="height:30px;background:#E1F0F2;">
+		<a href="#" id="sb2" class="easyui-linkbutton" plain="true" iconCls="icon-save" onclick="saveProcessProperties()">保存流程属性</a>
+	</div>
+	<div id="process-properties-panel" region="center" border="true">
+		<div class="easyui-accordion" fit="true" border="false">
+			<div id="general" title="流程属性" selected="true" class="properties-menu">
+				<table id="general-properties">
+					<tr>
+						<td align="right">Id:</td>
+						<td><input type="text" id="id" name="id" size="30" value=""/></td>
+					</tr>
+					<tr>
+						<td align="right">名称:</td>
+						<td><input type="text" id="name" name="name" size="30" value=""/></td>
+					</tr>
+					<input type="hidden" id="category" name="category" size="30" value="" />
+					<tr>
+						<td align="right" style="width:120px">OA流程:</td>
+						<td><input type="radio"  id="isOa" name="isOa"  value="Y" />是
+							<input type="radio"  id="isOa" name="isOa"  value="N" />否
+						</td>
+					</tr>
+				</table>
+			</div>
+
+		</div>
+	</div>
+</div>
+</body>
+</html>

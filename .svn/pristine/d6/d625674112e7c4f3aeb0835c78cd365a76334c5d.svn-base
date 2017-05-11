@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="IreportAction" extends="kintiger-default"  >
+		<action name="IreportAction" class="IreportAction">
+		<result name="succ">/platform/ireport/ireport.vm</result>
+		<result name="manager">/platform/ireport/uploadReportSerach.vm</result>
+		<result name="toupload">/platform/ireport/uploadReport.vm</result>
+		<result name="modify">/platform/ireport/modifyReport.vm</result>
+		</action>
+	</package>
+</struts>

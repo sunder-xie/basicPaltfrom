@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		#CSSM(["easyui","style"])
+		#JSM(["jquery", "easyui"])
+		#JS_ENV_VAL()	
+	</head>
+	<body>
+		<form action="" method="post" target="hideFrame">
+			<input type="hidden" id="rid" name="rid" value="$!{rid}" />
+			<div class="easyui-panel" title="属性明细创建" data-options="iconCls:'icon-edit'">
+				<table width="100%" border="0" cellpadding="0" cellspacing="1">
+				<tr>
+    				<td class="head" noWrap style="text-align: right">
+    					属性名称
+    				</td>
+					<td noWrap>
+						<input class="easyui-validatebox" id='planAttContent' name="planAttContent" data-options ="required:true" value="$!{attributeDetail.planAttContent}" />
+					</td>
+                 </tr>
+				 <tr>
+					<td class="head" noWrap style="text-align: right">
+    					数据类型
+    				</td>
+					<td noWrap>
+						<input id="planAttDataType" name="planAttDataType" />
+					</td>
+				</tr>
+				<tr>
+					<td class="head" noWrap style="text-align: right">
+    					是否可为空
+    				</td>
+					<td noWrap>
+						<input id="radio_Y" type="radio" name="planAttIsNull" value="Y" /> 是&nbsp;
+						<input id="radio_N" type="radio" name="planAttIsNull" value="N" /> 否
+					</td>
+                </tr>
+				<tr>
+					<td class="head" noWrap style="text-align: right">
+						流程变量名
+					</td>
+					<td>
+						<input class="easyui-validatebox" id="planAttKey" name="planAttKey" value="$!{attributeDetail.planAttKey}"/>
+					</td>
+				</tr>
+                </table>
+            </div>
+			<div region="south" border="false" style="text-align:right;height:30px;line-height:30px;">
+				<a class="easyui-linkbutton" icon="icon-ok" href="javascript:submit()">确定</a>
+				<a class="easyui-linkbutton" icon="icon-cancel" href="javascript:close()">取消</a>
+			</div>
+		</form>
+	  <iframe id="hideFrame" name="hideFrame" style="height: 0; width: 0" ></iframe>
+	</body>
+    <script type="text/javascript">
+		var planAttDataType = '$!{attributeDetail.planAttDataType}';
+		var planAttIsNull = '$!{attributeDetail.planAttIsNull}';
+		var type = '$!{type}';
+	</script>
+	<script type="text/javascript" src="$!{env.imgUrl}/js/platform/wfe/modelAttribute/createAttDetail.js"></script>
+</html>

@@ -1,0 +1,12 @@
+eclipse.preferences.version=1
+encoding//src/main/java=GBK
+encoding//src/main/resources=GBK
+encoding//src/main/webapp/platform/news/newsIndex.vm=GBK
+encoding//src/main/webapp/platform/news/news_det_add.vm=GBK
+encoding//src/main/webapp/platform/news/news_det_update.vm=GBK
+encoding//src/main/webapp/platform/news/oneNews.vm=GBK
+encoding//src/main/webapp/platform/news/updateNewsTotal.vm=GBK
+encoding//src/main/webapp/statics/js/platform/news/newsIndex.js=GBK
+encoding//src/main/webapp/statics/js/platform/news/news_det_add.js=GBK
+encoding//src/main/webapp/statics/js/platform/news/updateNewsTotal.js=GBK
+encoding//src/main/webapp/statics/js/platform/news/update_det_add.js=GBK

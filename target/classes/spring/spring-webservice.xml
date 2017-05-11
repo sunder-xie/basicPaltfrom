@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
+	default-lazy-init="true">
+	<bean id="clientFactory" class="org.apache.cxf.jaxws.endpoint.dynamic.JaxWsDynamicClientFactory" factory-method="newInstance"/>	
+	<bean id="wsdlUrl" class="java.net.URL">
+	    <constructor-arg value="http://10.0.5.15:7186/expWorkFlow/cxf/rest?wsdl">
+		<!--<constructor-arg value="http://10.0.5.15:7186/expWorkFlow/cxf/rest?wsdl">
+		  <constructor-arg value="http://192.168.60.106:7186/expWorkFlow/cxf/rest?wsdl">
+		  <constructor-arg value="http://10.0.3.31:7186/expWorkFlow/cxf/rest?wsdl">
+		 --></constructor-arg>
+	</bean>
+	<bean id="client" class="org.apache.cxf.endpoint.Client" factory-bean="clientFactory" factory-method="createClient" >
+		<constructor-arg ref="wsdlUrl"/>		
+	</bean>
+	<bean id="webService"
+		class="com.kintiger.platform.webservice.service.impl.WebServiceImpl">
+	</bean>
+</beans>
